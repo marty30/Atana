@@ -1,0 +1,10 @@
+# This file can be overridden by adding a file in the config directory
+
+debug = true
+
+[analysis]
+progress_endpoint = "http://localhost:8080/analyse/train/progress"
+use_thread_for_progress = false
+use_thread_for_training = false
+similarity_threshold = 0.75
+number_of_pairs_to_include_for_order = 1

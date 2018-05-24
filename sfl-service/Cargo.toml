@@ -1,0 +1,27 @@
+[package]
+name = "sfl-service"
+version = "0.1.0"
+authors = ["Martijn <m.j.willemsen@student.utwente.nl>"]
+
+[dependencies]
+rocket = { git = "http://github.com/SergioBenitez/Rocket", rev = "2bb343a" }
+rocket_codegen ={ git = "http://github.com/SergioBenitez/Rocket", rev = "2bb343a" }
+serde = "1.0"
+serde_json = "1.0"
+serde_derive = "1.0"
+uuid = { version = "0.6", features = ["serde", "v4"] }
+chrono = { version = "0.4", features = ["serde", "rustc-serialize"] }
+lazy_static = "1.0"
+prettytable-rs = "^0.6"
+indexmap = "1.0.0"
+rulinalg="0.4.2"
+reqwest = "0.8.5"
+config = "0.7"
+derivative = "1.0.0"
+glob = "0.2.11"
+
+[dependencies.rocket_contrib]
+git = "http://github.com/SergioBenitez/Rocket"
+rev = "2bb343a"
+default-features = false
+features = ["json", "uuid"]
