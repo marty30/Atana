@@ -1,0 +1,44 @@
+version: "2"
+services:
+    atana:
+        image: axini/atana:latest
+        ports:
+          - 8090:8080
+        environment:
+          - PROFILE=docker
+          - spring.datasource.url=jdbc:mysql://db:3306/atana?useSSL=false
+          - spring.datasource.username=root
+          - spring.datasource.password=developer
+        links:
+          - db:db
+        networks:
+            - default
+    db:
+        image: mysql
+        environment:
+          - MYSQL_DATABASE=atana
+          - MYSQL_USER=atana
+          - MYSQL_PASSWORD=developer
+          - MYSQL_RANDOM_ROOT_PASSWORD=yes
+        volumes:
+            - ./database_setup:/docker-entrypoint-initdb.d
+            - persistent:/var/lib/mysql
+        networks:
+            - default
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        links: 
+            - db:db
+        ports:
+            - 8081:80
+        environment:
+            MYSQL_USER: atana
+            MYSQL_PASSWORD: developer
+    sfl:
+        build: ../sfl-service/
+        ports:
+            - 8000:8000
+        networks:
+            - default
+volumes:
+    persistent:
