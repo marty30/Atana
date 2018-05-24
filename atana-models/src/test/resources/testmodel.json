@@ -1,0 +1,5208 @@
+{
+  "stss": [
+    {
+      "sts": null,
+      "children": [
+        {
+          "attributes": {
+            "label": "general_errors",
+            "hex_id": "67656e6572616c5f6572726f72735f36",
+            "type": "behavior"
+          },
+          "id": "general_errors_6"
+        },
+        {
+          "attributes": {
+            "label": "ss_off",
+            "hex_id": "73735f6f66665f31",
+            "type": "behavior"
+          },
+          "id": "ss_off_1"
+        },
+        {
+          "attributes": {
+            "label": "general_errors",
+            "hex_id": "67656e6572616c5f6572726f72735f37",
+            "type": "behavior"
+          },
+          "id": "general_errors_7"
+        }
+      ],
+      "return_transitions": [
+        {
+          "source": "general_errors_6",
+          "attributes": {
+            "label": ""
+          },
+          "target": "_10"
+        },
+        {
+          "source": "general_errors_7",
+          "attributes": {
+            "label": ""
+          },
+          "target": "_24"
+        }
+      ],
+      "start_states": [
+        {
+          "id": "unconnected"
+        }
+      ],
+      "transitions": [
+        {
+          "source": "unconnected",
+          "attributes": {
+            "label": "!C220_SCRP_READY",
+            "type": "observable"
+          },
+          "target": "_1"
+        },
+        {
+          "source": "_1",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_SIGN\"))",
+            "type": "observable"
+          },
+          "target": "_2"
+        },
+        {
+          "source": "_2",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_SIGN\") && (variable_value\n== \"SS_OFF\"))",
+            "type": "observable"
+          },
+          "target": "_10"
+        },
+        {
+          "source": "_2",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_SIGN\") && (variable_value\n== \"SS_HALT\"))",
+            "type": "observable"
+          },
+          "target": "_10"
+        },
+        {
+          "source": "_2",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_SIGN\") && (variable_value\n== \"SS_ON\"))",
+            "type": "observable"
+          },
+          "target": "_5"
+        },
+        {
+          "source": "_2",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_11"
+        },
+        {
+          "source": "_5",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_ACCNT\"))",
+            "type": "observable"
+          },
+          "target": "_6"
+        },
+        {
+          "source": "_6",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_ACCNT\") && (variable_value\n== \"AS_IDLE\"))",
+            "type": "observable"
+          },
+          "target": "_24"
+        },
+        {
+          "source": "_6",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_ACCNT\") && (variable_value\n== \"AS_OPEN\"))",
+            "type": "observable"
+          },
+          "target": "_14"
+        },
+        {
+          "source": "_6",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_ACCNT\") && (variable_value\n== \"AS_CLOSED\"))",
+            "type": "observable"
+          },
+          "target": "_20"
+        },
+        {
+          "source": "_6",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_ACCNT\") && (variable_value\n== \"AS_TRANSING\"))",
+            "type": "observable"
+          },
+          "target": "_21"
+        },
+        {
+          "source": "_6",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_ACCNT\") && (variable_value\n== \"AS_ENDING\"))",
+            "type": "observable"
+          },
+          "target": "_22"
+        },
+        {
+          "source": "_6",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_11"
+        },
+        {
+          "source": "_10",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_13"
+        },
+        {
+          "source": "_14",
+          "attributes": {
+            "label": "?CLOSE",
+            "type": "observable"
+          },
+          "target": "_15"
+        },
+        {
+          "source": "_15",
+          "attributes": {
+            "label": "!C212_ART_DESCRIPTION",
+            "type": "observable"
+          },
+          "target": "_15"
+        },
+        {
+          "source": "_15",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_18"
+        },
+        {
+          "source": "_18",
+          "attributes": {
+            "label": "!C230_ACCOUNT_CLOSED",
+            "type": "observable"
+          },
+          "target": "_20"
+        },
+        {
+          "source": "_20",
+          "attributes": {
+            "label": "?TRANS\nif ((trans_id == \"TM_FLUSH\"))",
+            "type": "observable"
+          },
+          "target": "_21"
+        },
+        {
+          "source": "_21",
+          "attributes": {
+            "label": "!C240_TRANS_SUCCEEDED",
+            "type": "observable"
+          },
+          "target": "_22"
+        },
+        {
+          "source": "_22",
+          "attributes": {
+            "label": "?IDLE",
+            "type": "observable"
+          },
+          "target": "_23"
+        },
+        {
+          "source": "_23",
+          "attributes": {
+            "label": "!C233_ACCOUNT_IDLED",
+            "type": "observable"
+          },
+          "target": "_24"
+        },
+        {
+          "source": "_23",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_26"
+        },
+        {
+          "source": "_24",
+          "attributes": {
+            "label": "?SIGNOFF",
+            "type": "observable"
+          },
+          "target": "_28"
+        },
+        {
+          "source": "_28",
+          "attributes": {
+            "label": "!C250_SIGNED_OFF",
+            "type": "observable"
+          },
+          "target": "_10"
+        },
+        {
+          "source": "_28",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_11"
+        },
+        {
+          "source": "_11",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "general_errors_6"
+        },
+        {
+          "source": "_13",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "ss_off_1"
+        },
+        {
+          "source": "_26",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "general_errors_7"
+        }
+      ],
+      "name": "main",
+      "states": [
+        {
+          "attributes": {
+            "label": "unconnected",
+            "type": "state"
+          },
+          "id": "unconnected"
+        },
+        {
+          "attributes": {
+            "label": "_1",
+            "type": "state"
+          },
+          "id": "_1"
+        },
+        {
+          "attributes": {
+            "label": "_2",
+            "type": "state"
+          },
+          "id": "_2"
+        },
+        {
+          "attributes": {
+            "label": "_5",
+            "type": "state"
+          },
+          "id": "_5"
+        },
+        {
+          "attributes": {
+            "label": "_6",
+            "type": "state"
+          },
+          "id": "_6"
+        },
+        {
+          "attributes": {
+            "label": "_10",
+            "type": "state"
+          },
+          "id": "_10"
+        },
+        {
+          "attributes": {
+            "label": "_11",
+            "type": "state"
+          },
+          "id": "_11"
+        },
+        {
+          "attributes": {
+            "label": "_13",
+            "type": "state"
+          },
+          "id": "_13"
+        },
+        {
+          "attributes": {
+            "label": "_14",
+            "type": "state"
+          },
+          "id": "_14"
+        },
+        {
+          "attributes": {
+            "label": "_15",
+            "type": "state"
+          },
+          "id": "_15"
+        },
+        {
+          "attributes": {
+            "label": "_18",
+            "type": "state"
+          },
+          "id": "_18"
+        },
+        {
+          "attributes": {
+            "label": "_20",
+            "type": "state"
+          },
+          "id": "_20"
+        },
+        {
+          "attributes": {
+            "label": "_21",
+            "type": "state"
+          },
+          "id": "_21"
+        },
+        {
+          "attributes": {
+            "label": "_22",
+            "type": "state"
+          },
+          "id": "_22"
+        },
+        {
+          "attributes": {
+            "label": "_23",
+            "type": "state"
+          },
+          "id": "_23"
+        },
+        {
+          "attributes": {
+            "label": "_24",
+            "type": "state"
+          },
+          "id": "_24"
+        },
+        {
+          "attributes": {
+            "label": "_26",
+            "type": "state"
+          },
+          "id": "_26"
+        },
+        {
+          "attributes": {
+            "label": "_28",
+            "type": "state"
+          },
+          "id": "_28"
+        }
+      ],
+      "return_state": null
+    },
+    {
+      "sts": "_general_errors_6_1",
+      "children": [],
+      "return_transitions": [],
+      "start_states": [
+        {
+          "id": "_general_errors_6_0"
+        }
+      ],
+      "transitions": [
+        {
+          "source": "_general_errors_6_0",
+          "attributes": {
+            "label": "!C502_COMMAND_FAILED",
+            "type": "observable"
+          },
+          "target": "_general_errors_6_1"
+        },
+        {
+          "source": "_general_errors_6_0",
+          "attributes": {
+            "label": "!C503_ERROR_STATE",
+            "type": "observable"
+          },
+          "target": "_general_errors_6_2"
+        },
+        {
+          "source": "_general_errors_6_2",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_EVENT\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_6_3"
+        },
+        {
+          "source": "_general_errors_6_3",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_INFO\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_6_1"
+        },
+        {
+          "source": "_general_errors_6_3",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_NONE\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_6_1"
+        },
+        {
+          "source": "_general_errors_6_1",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_10"
+        }
+      ],
+      "name": "general_errors",
+      "states": [
+        {
+          "attributes": {
+            "label": "_0",
+            "type": "state"
+          },
+          "id": "_general_errors_6_0"
+        },
+        {
+          "attributes": {
+            "label": "_2",
+            "type": "state"
+          },
+          "id": "_general_errors_6_2"
+        },
+        {
+          "attributes": {
+            "label": "_3",
+            "type": "state"
+          },
+          "id": "_general_errors_6_3"
+        },
+        {
+          "attributes": {
+            "label": "_1",
+            "type": "state"
+          },
+          "id": "_general_errors_6_1"
+        }
+      ],
+      "return_state": "_general_errors_6_1"
+    },
+    {
+      "sts": null,
+      "children": [
+        {
+          "attributes": {
+            "label": "as_idle",
+            "hex_id": "61735f69646c655f32",
+            "type": "behavior"
+          },
+          "id": "as_idle_2"
+        },
+        {
+          "attributes": {
+            "label": "general_errors",
+            "hex_id": "67656e6572616c5f6572726f72735f3138",
+            "type": "behavior"
+          },
+          "id": "general_errors_18"
+        },
+        {
+          "attributes": {
+            "label": "ss_off",
+            "hex_id": "73735f6f66665f31",
+            "type": "behavior"
+          },
+          "id": "ss_off_1"
+        }
+      ],
+      "return_transitions": [
+        {
+          "source": "general_errors_18",
+          "attributes": {
+            "label": ""
+          },
+          "target": "_ss_off_10"
+        }
+      ],
+      "start_states": [
+        {
+          "id": "_ss_off_0"
+        }
+      ],
+      "transitions": [
+        {
+          "source": "_ss_off_0",
+          "attributes": {
+            "label": "?SIGNON_EXIST",
+            "type": "observable"
+          },
+          "target": "_ss_off_1"
+        },
+        {
+          "source": "_ss_off_0",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_SIGN\"))",
+            "type": "observable"
+          },
+          "target": "_ss_off_14"
+        },
+        {
+          "source": "_ss_off_0",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_EVENT\"))",
+            "type": "observable"
+          },
+          "target": "_ss_off_20"
+        },
+        {
+          "source": "_ss_off_0",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_ss_off_10"
+        },
+        {
+          "source": "_ss_off_0",
+          "attributes": {
+            "label": "?RESUME",
+            "type": "observable"
+          },
+          "target": "_ss_off_27"
+        },
+        {
+          "source": "_ss_off_0",
+          "attributes": {
+            "label": "?RESETCR",
+            "type": "observable"
+          },
+          "target": "_ss_off_33"
+        },
+        {
+          "source": "_ss_off_1",
+          "attributes": {
+            "label": "!C251_SIGNED_ON",
+            "type": "observable"
+          },
+          "target": "_ss_off_2"
+        },
+        {
+          "source": "_ss_off_1",
+          "attributes": {
+            "label": "!C450_SIGNING_REJECTED",
+            "type": "observable"
+          },
+          "target": "_ss_off_10"
+        },
+        {
+          "source": "_ss_off_1",
+          "attributes": {
+            "label": "!C551_AUTH_FAILED",
+            "type": "observable"
+          },
+          "target": "_ss_off_10"
+        },
+        {
+          "source": "_ss_off_1",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_ss_off_12"
+        },
+        {
+          "source": "_ss_off_2",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_ACCNT\"))",
+            "type": "observable"
+          },
+          "target": "_ss_off_3"
+        },
+        {
+          "source": "_ss_off_3",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_ACCNT\") && (variable_value\n== \"AS_IDLE\"))",
+            "type": "observable"
+          },
+          "target": "_ss_off_4"
+        },
+        {
+          "source": "_ss_off_3",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_ss_off_12"
+        },
+        {
+          "source": "_ss_off_4",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_ss_off_5"
+        },
+        {
+          "source": "_ss_off_10",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_ss_off_44"
+        },
+        {
+          "source": "_ss_off_14",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_SIGN\") && (variable_value\n== \"SS_OFF\"))",
+            "type": "observable"
+          },
+          "target": "_ss_off_10"
+        },
+        {
+          "source": "_ss_off_14",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_SIGN\") && (variable_value\n== \"SS_HALT\"))",
+            "type": "observable"
+          },
+          "target": "_ss_off_10"
+        },
+        {
+          "source": "_ss_off_14",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_ss_off_12"
+        },
+        {
+          "source": "_ss_off_20",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_NONE\"))",
+            "type": "observable"
+          },
+          "target": "_ss_off_10"
+        },
+        {
+          "source": "_ss_off_20",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_INFO\"))",
+            "type": "observable"
+          },
+          "target": "_ss_off_10"
+        },
+        {
+          "source": "_ss_off_20",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_WARN\"))",
+            "type": "observable"
+          },
+          "target": "_ss_off_10"
+        },
+        {
+          "source": "_ss_off_20",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_ERROR\"))",
+            "type": "observable"
+          },
+          "target": "_ss_off_10"
+        },
+        {
+          "source": "_ss_off_27",
+          "attributes": {
+            "label": "!C201_RESUMED_OPERATION",
+            "type": "observable"
+          },
+          "target": "_ss_off_10"
+        },
+        {
+          "source": "_ss_off_27",
+          "attributes": {
+            "label": "!C503_ERROR_STATE",
+            "type": "observable"
+          },
+          "target": "_ss_off_10"
+        },
+        {
+          "source": "_ss_off_27",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_ss_off_12"
+        },
+        {
+          "source": "_ss_off_33",
+          "attributes": {
+            "label": "!C202_CASH_REGISTER_RESTORED",
+            "type": "observable"
+          },
+          "target": "_ss_off_10"
+        },
+        {
+          "source": "_ss_off_33",
+          "attributes": {
+            "label": "!C531_INVALID_ACCOUNT_STATE",
+            "type": "observable"
+          },
+          "target": "_ss_off_10"
+        },
+        {
+          "source": "_ss_off_33",
+          "attributes": {
+            "label": "!C501_SYNTAX_ERROR",
+            "type": "observable"
+          },
+          "target": "_ss_off_10"
+        },
+        {
+          "source": "_ss_off_33",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_ss_off_12"
+        },
+        {
+          "source": "_ss_off_5",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "as_idle_2"
+        },
+        {
+          "source": "_ss_off_12",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "general_errors_18"
+        },
+        {
+          "source": "_ss_off_44",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "ss_off_1"
+        }
+      ],
+      "name": "ss_off",
+      "states": [
+        {
+          "attributes": {
+            "label": "_0",
+            "type": "state"
+          },
+          "id": "_ss_off_0"
+        },
+        {
+          "attributes": {
+            "label": "_1",
+            "type": "state"
+          },
+          "id": "_ss_off_1"
+        },
+        {
+          "attributes": {
+            "label": "_2",
+            "type": "state"
+          },
+          "id": "_ss_off_2"
+        },
+        {
+          "attributes": {
+            "label": "_3",
+            "type": "state"
+          },
+          "id": "_ss_off_3"
+        },
+        {
+          "attributes": {
+            "label": "_4",
+            "type": "state"
+          },
+          "id": "_ss_off_4"
+        },
+        {
+          "attributes": {
+            "label": "_5",
+            "type": "state"
+          },
+          "id": "_ss_off_5"
+        },
+        {
+          "attributes": {
+            "label": "_10",
+            "type": "state"
+          },
+          "id": "_ss_off_10"
+        },
+        {
+          "attributes": {
+            "label": "_12",
+            "type": "state"
+          },
+          "id": "_ss_off_12"
+        },
+        {
+          "attributes": {
+            "label": "_14",
+            "type": "state"
+          },
+          "id": "_ss_off_14"
+        },
+        {
+          "attributes": {
+            "label": "_20",
+            "type": "state"
+          },
+          "id": "_ss_off_20"
+        },
+        {
+          "attributes": {
+            "label": "_27",
+            "type": "state"
+          },
+          "id": "_ss_off_27"
+        },
+        {
+          "attributes": {
+            "label": "_33",
+            "type": "state"
+          },
+          "id": "_ss_off_33"
+        },
+        {
+          "attributes": {
+            "label": "_44",
+            "type": "state"
+          },
+          "id": "_ss_off_44"
+        }
+      ],
+      "return_state": null
+    },
+    {
+      "sts": null,
+      "children": [
+        {
+          "attributes": {
+            "label": "general_errors",
+            "hex_id": "67656e6572616c5f6572726f72735f3235",
+            "type": "behavior"
+          },
+          "id": "general_errors_25"
+        },
+        {
+          "attributes": {
+            "label": "as_open",
+            "hex_id": "61735f6f70656e5f33",
+            "type": "behavior"
+          },
+          "id": "as_open_3"
+        },
+        {
+          "attributes": {
+            "label": "ss_off",
+            "hex_id": "73735f6f66665f31",
+            "type": "behavior"
+          },
+          "id": "ss_off_1"
+        },
+        {
+          "attributes": {
+            "label": "general_errors",
+            "hex_id": "67656e6572616c5f6572726f72735f3335",
+            "type": "behavior"
+          },
+          "id": "general_errors_35"
+        },
+        {
+          "attributes": {
+            "label": "as_idle",
+            "hex_id": "61735f69646c655f32",
+            "type": "behavior"
+          },
+          "id": "as_idle_2"
+        }
+      ],
+      "return_transitions": [
+        {
+          "source": "general_errors_25",
+          "attributes": {
+            "label": ""
+          },
+          "target": "_as_idle_17"
+        },
+        {
+          "source": "general_errors_35",
+          "attributes": {
+            "label": ""
+          },
+          "target": "_as_idle_10"
+        }
+      ],
+      "start_states": [
+        {
+          "id": "_as_idle_0"
+        }
+      ],
+      "transitions": [
+        {
+          "source": "_as_idle_0",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_SIGN\"))",
+            "type": "observable"
+          },
+          "target": "_as_idle_1"
+        },
+        {
+          "source": "_as_idle_0",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"AI_STAMP\"))",
+            "type": "observable"
+          },
+          "target": "_as_idle_6"
+        },
+        {
+          "source": "_as_idle_0",
+          "attributes": {
+            "label": "?ARTID_EXIST",
+            "type": "observable"
+          },
+          "target": "_as_idle_11"
+        },
+        {
+          "source": "_as_idle_0",
+          "attributes": {
+            "label": "?ARTID_WEIGHTED",
+            "type": "observable"
+          },
+          "target": "_as_idle_16"
+        },
+        {
+          "source": "_as_idle_0",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_EVENT\"))",
+            "type": "observable"
+          },
+          "target": "_as_idle_31"
+        },
+        {
+          "source": "_as_idle_0",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_idle_10"
+        },
+        {
+          "source": "_as_idle_0",
+          "attributes": {
+            "label": "?RHCOPY",
+            "type": "observable"
+          },
+          "target": "_as_idle_100"
+        },
+        {
+          "source": "_as_idle_0",
+          "attributes": {
+            "label": "?RESUME",
+            "type": "observable"
+          },
+          "target": "_as_idle_44"
+        },
+        {
+          "source": "_as_idle_0",
+          "attributes": {
+            "label": "?RESETCR",
+            "type": "observable"
+          },
+          "target": "_as_idle_50"
+        },
+        {
+          "source": "_as_idle_0",
+          "attributes": {
+            "label": "?OPEN",
+            "type": "observable"
+          },
+          "target": "_as_idle_58"
+        },
+        {
+          "source": "_as_idle_0",
+          "attributes": {
+            "label": "\nif (stored_account == true)",
+            "type": "unobservable"
+          },
+          "target": "_as_idle_64"
+        },
+        {
+          "source": "_as_idle_0",
+          "attributes": {
+            "label": "?SIGNOFF",
+            "type": "observable"
+          },
+          "target": "_as_idle_74"
+        },
+        {
+          "source": "_as_idle_0",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_ACCNT\"))",
+            "type": "observable"
+          },
+          "target": "_as_idle_80"
+        },
+        {
+          "source": "_as_idle_0",
+          "attributes": {
+            "label": "\nif (stored_account == true)",
+            "type": "unobservable"
+          },
+          "target": "_as_idle_85"
+        },
+        {
+          "source": "_as_idle_0",
+          "attributes": {
+            "label": "?PRINT_NEXIST",
+            "type": "observable"
+          },
+          "target": "_as_idle_100"
+        },
+        {
+          "source": "_as_idle_0",
+          "attributes": {
+            "label": "\nif (stored_account == true)",
+            "type": "unobservable"
+          },
+          "target": "_as_idle_99"
+        },
+        {
+          "source": "_as_idle_1",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_SIGN\") && (variable_value\n== \"SS_ON\"))",
+            "type": "observable"
+          },
+          "target": "_as_idle_10"
+        },
+        {
+          "source": "_as_idle_1",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_idle_104"
+        },
+        {
+          "source": "_as_idle_6",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"AI_STAMP\"))",
+            "type": "observable"
+          },
+          "target": "_as_idle_10"
+        },
+        {
+          "source": "_as_idle_6",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_idle_104"
+        },
+        {
+          "source": "_as_idle_10",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_idle_111"
+        },
+        {
+          "source": "_as_idle_11",
+          "attributes": {
+            "label": "!C213_ART_TEXT",
+            "type": "observable"
+          },
+          "target": "_as_idle_10"
+        },
+        {
+          "source": "_as_idle_11",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_idle_104"
+        },
+        {
+          "source": "_as_idle_16",
+          "attributes": {
+            "label": "!C213_ART_TEXT",
+            "type": "observable"
+          },
+          "target": "_as_idle_17"
+        },
+        {
+          "source": "_as_idle_16",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_idle_19"
+        },
+        {
+          "source": "_as_idle_17",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CERTDATA\"))",
+            "type": "observable"
+          },
+          "target": "_as_idle_22"
+        },
+        {
+          "source": "_as_idle_17",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_idle_10"
+        },
+        {
+          "source": "_as_idle_22",
+          "attributes": {
+            "label": "!C214_CERT_DATA",
+            "type": "observable"
+          },
+          "target": "_as_idle_17"
+        },
+        {
+          "source": "_as_idle_22",
+          "attributes": {
+            "label": "!C512_NO_STABLE_WEIGHT",
+            "type": "observable"
+          },
+          "target": "_as_idle_17"
+        },
+        {
+          "source": "_as_idle_22",
+          "attributes": {
+            "label": "!C531_INVALID_ACCOUNT_STATE",
+            "type": "observable"
+          },
+          "target": "_as_idle_17"
+        },
+        {
+          "source": "_as_idle_22",
+          "attributes": {
+            "label": "!C502_COMMAND_FAILED",
+            "type": "observable"
+          },
+          "target": "_as_idle_17"
+        },
+        {
+          "source": "_as_idle_31",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_NONE\"))",
+            "type": "observable"
+          },
+          "target": "_as_idle_10"
+        },
+        {
+          "source": "_as_idle_31",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_INFO\"))",
+            "type": "observable"
+          },
+          "target": "_as_idle_10"
+        },
+        {
+          "source": "_as_idle_31",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_WARN\"))",
+            "type": "observable"
+          },
+          "target": "_as_idle_10"
+        },
+        {
+          "source": "_as_idle_31",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_ERROR\"))",
+            "type": "observable"
+          },
+          "target": "_as_idle_10"
+        },
+        {
+          "source": "_as_idle_44",
+          "attributes": {
+            "label": "!C201_RESUMED_OPERATION",
+            "type": "observable"
+          },
+          "target": "_as_idle_10"
+        },
+        {
+          "source": "_as_idle_44",
+          "attributes": {
+            "label": "!C503_ERROR_STATE",
+            "type": "observable"
+          },
+          "target": "_as_idle_10"
+        },
+        {
+          "source": "_as_idle_44",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_idle_104"
+        },
+        {
+          "source": "_as_idle_50",
+          "attributes": {
+            "label": "!C202_CASH_REGISTER_RESTORED",
+            "type": "observable"
+          },
+          "target": "_as_idle_10"
+        },
+        {
+          "source": "_as_idle_50",
+          "attributes": {
+            "label": "!C531_INVALID_ACCOUNT_STATE",
+            "type": "observable"
+          },
+          "target": "_as_idle_10"
+        },
+        {
+          "source": "_as_idle_50",
+          "attributes": {
+            "label": "!C501_SYNTAX_ERROR",
+            "type": "observable"
+          },
+          "target": "_as_idle_10"
+        },
+        {
+          "source": "_as_idle_50",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_idle_104"
+        },
+        {
+          "source": "_as_idle_58",
+          "attributes": {
+            "label": "!C231_ACCOUNT_OPENED",
+            "type": "observable"
+          },
+          "target": "_as_idle_59"
+        },
+        {
+          "source": "_as_idle_58",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_idle_104"
+        },
+        {
+          "source": "_as_idle_59",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_idle_60"
+        },
+        {
+          "source": "_as_idle_64",
+          "attributes": {
+            "label": "?OPEN_EXIST",
+            "type": "observable"
+          },
+          "target": "_as_idle_65"
+        },
+        {
+          "source": "_as_idle_65",
+          "attributes": {
+            "label": "!C231_ACCOUNT_OPENED",
+            "type": "observable"
+          },
+          "target": "_as_idle_66"
+        },
+        {
+          "source": "_as_idle_65",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_idle_104"
+        },
+        {
+          "source": "_as_idle_65",
+          "attributes": {
+            "label": "!C500_UNKNOWN_COMMAND",
+            "type": "observable"
+          },
+          "target": "_as_idle_10"
+        },
+        {
+          "source": "_as_idle_65",
+          "attributes": {
+            "label": "!C501_SYNTAX_ERROR",
+            "type": "observable"
+          },
+          "target": "_as_idle_10"
+        },
+        {
+          "source": "_as_idle_66",
+          "attributes": {
+            "label": "\nthen (total = stored_total;)",
+            "type": "unobservable"
+          },
+          "target": "_as_idle_59"
+        },
+        {
+          "source": "_as_idle_74",
+          "attributes": {
+            "label": "!C250_SIGNED_OFF",
+            "type": "observable"
+          },
+          "target": "_as_idle_75"
+        },
+        {
+          "source": "_as_idle_74",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_idle_104"
+        },
+        {
+          "source": "_as_idle_75",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_idle_76"
+        },
+        {
+          "source": "_as_idle_80",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_ACCNT\") && (variable_value\n== \"AS_IDLE\"))",
+            "type": "observable"
+          },
+          "target": "_as_idle_10"
+        },
+        {
+          "source": "_as_idle_80",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_idle_104"
+        },
+        {
+          "source": "_as_idle_85",
+          "attributes": {
+            "label": "?PRINT_EXIST",
+            "type": "observable"
+          },
+          "target": "_as_idle_100"
+        },
+        {
+          "source": "_as_idle_99",
+          "attributes": {
+            "label": "?RHCOPY_EXIST",
+            "type": "observable"
+          },
+          "target": "_as_idle_100"
+        },
+        {
+          "source": "_as_idle_100",
+          "attributes": {
+            "label": "!C260_DATA_PRINTED",
+            "type": "observable"
+          },
+          "target": "_as_idle_10"
+        },
+        {
+          "source": "_as_idle_100",
+          "attributes": {
+            "label": "!C560_CR_PRINTING_INACTIVE",
+            "type": "observable"
+          },
+          "target": "_as_idle_10"
+        },
+        {
+          "source": "_as_idle_100",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_idle_104"
+        },
+        {
+          "source": "_as_idle_19",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "general_errors_25"
+        },
+        {
+          "source": "_as_idle_60",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "as_open_3"
+        },
+        {
+          "source": "_as_idle_76",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "ss_off_1"
+        },
+        {
+          "source": "_as_idle_104",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "general_errors_35"
+        },
+        {
+          "source": "_as_idle_111",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "as_idle_2"
+        }
+      ],
+      "name": "as_idle",
+      "states": [
+        {
+          "attributes": {
+            "label": "_0",
+            "type": "state"
+          },
+          "id": "_as_idle_0"
+        },
+        {
+          "attributes": {
+            "label": "_1",
+            "type": "state"
+          },
+          "id": "_as_idle_1"
+        },
+        {
+          "attributes": {
+            "label": "_6",
+            "type": "state"
+          },
+          "id": "_as_idle_6"
+        },
+        {
+          "attributes": {
+            "label": "_10",
+            "type": "state"
+          },
+          "id": "_as_idle_10"
+        },
+        {
+          "attributes": {
+            "label": "_11",
+            "type": "state"
+          },
+          "id": "_as_idle_11"
+        },
+        {
+          "attributes": {
+            "label": "_16",
+            "type": "state"
+          },
+          "id": "_as_idle_16"
+        },
+        {
+          "attributes": {
+            "label": "_17",
+            "type": "state"
+          },
+          "id": "_as_idle_17"
+        },
+        {
+          "attributes": {
+            "label": "_19",
+            "type": "state"
+          },
+          "id": "_as_idle_19"
+        },
+        {
+          "attributes": {
+            "label": "_22",
+            "type": "state"
+          },
+          "id": "_as_idle_22"
+        },
+        {
+          "attributes": {
+            "label": "_31",
+            "type": "state"
+          },
+          "id": "_as_idle_31"
+        },
+        {
+          "attributes": {
+            "label": "_44",
+            "type": "state"
+          },
+          "id": "_as_idle_44"
+        },
+        {
+          "attributes": {
+            "label": "_50",
+            "type": "state"
+          },
+          "id": "_as_idle_50"
+        },
+        {
+          "attributes": {
+            "label": "_58",
+            "type": "state"
+          },
+          "id": "_as_idle_58"
+        },
+        {
+          "attributes": {
+            "label": "_59",
+            "type": "state"
+          },
+          "id": "_as_idle_59"
+        },
+        {
+          "attributes": {
+            "label": "_60",
+            "type": "state"
+          },
+          "id": "_as_idle_60"
+        },
+        {
+          "attributes": {
+            "label": "_64",
+            "type": "state"
+          },
+          "id": "_as_idle_64"
+        },
+        {
+          "attributes": {
+            "label": "_65",
+            "type": "state"
+          },
+          "id": "_as_idle_65"
+        },
+        {
+          "attributes": {
+            "label": "_66",
+            "type": "state"
+          },
+          "id": "_as_idle_66"
+        },
+        {
+          "attributes": {
+            "label": "_74",
+            "type": "state"
+          },
+          "id": "_as_idle_74"
+        },
+        {
+          "attributes": {
+            "label": "_75",
+            "type": "state"
+          },
+          "id": "_as_idle_75"
+        },
+        {
+          "attributes": {
+            "label": "_76",
+            "type": "state"
+          },
+          "id": "_as_idle_76"
+        },
+        {
+          "attributes": {
+            "label": "_80",
+            "type": "state"
+          },
+          "id": "_as_idle_80"
+        },
+        {
+          "attributes": {
+            "label": "_85",
+            "type": "state"
+          },
+          "id": "_as_idle_85"
+        },
+        {
+          "attributes": {
+            "label": "_99",
+            "type": "state"
+          },
+          "id": "_as_idle_99"
+        },
+        {
+          "attributes": {
+            "label": "_100",
+            "type": "state"
+          },
+          "id": "_as_idle_100"
+        },
+        {
+          "attributes": {
+            "label": "_104",
+            "type": "state"
+          },
+          "id": "_as_idle_104"
+        },
+        {
+          "attributes": {
+            "label": "_111",
+            "type": "state"
+          },
+          "id": "_as_idle_111"
+        }
+      ],
+      "return_state": null
+    },
+    {
+      "sts": "_general_errors_25_1",
+      "children": [],
+      "return_transitions": [],
+      "start_states": [
+        {
+          "id": "_general_errors_25_0"
+        }
+      ],
+      "transitions": [
+        {
+          "source": "_general_errors_25_0",
+          "attributes": {
+            "label": "!C502_COMMAND_FAILED",
+            "type": "observable"
+          },
+          "target": "_general_errors_25_1"
+        },
+        {
+          "source": "_general_errors_25_0",
+          "attributes": {
+            "label": "!C503_ERROR_STATE",
+            "type": "observable"
+          },
+          "target": "_general_errors_25_2"
+        },
+        {
+          "source": "_general_errors_25_2",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_EVENT\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_25_3"
+        },
+        {
+          "source": "_general_errors_25_3",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_INFO\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_25_1"
+        },
+        {
+          "source": "_general_errors_25_3",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_NONE\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_25_1"
+        },
+        {
+          "source": "_general_errors_25_1",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_idle_17"
+        }
+      ],
+      "name": "general_errors",
+      "states": [
+        {
+          "attributes": {
+            "label": "_0",
+            "type": "state"
+          },
+          "id": "_general_errors_25_0"
+        },
+        {
+          "attributes": {
+            "label": "_2",
+            "type": "state"
+          },
+          "id": "_general_errors_25_2"
+        },
+        {
+          "attributes": {
+            "label": "_3",
+            "type": "state"
+          },
+          "id": "_general_errors_25_3"
+        },
+        {
+          "attributes": {
+            "label": "_1",
+            "type": "state"
+          },
+          "id": "_general_errors_25_1"
+        }
+      ],
+      "return_state": "_general_errors_25_1"
+    },
+    {
+      "sts": null,
+      "children": [
+        {
+          "attributes": {
+            "label": "general_errors",
+            "hex_id": "67656e6572616c5f6572726f72735f3339",
+            "type": "behavior"
+          },
+          "id": "general_errors_39"
+        },
+        {
+          "attributes": {
+            "label": "as_closed",
+            "hex_id": "61735f636c6f7365645f34",
+            "type": "behavior"
+          },
+          "id": "as_closed_4"
+        },
+        {
+          "attributes": {
+            "label": "general_errors",
+            "hex_id": "67656e6572616c5f6572726f72735f3437",
+            "type": "behavior"
+          },
+          "id": "general_errors_47"
+        },
+        {
+          "attributes": {
+            "label": "as_open",
+            "hex_id": "61735f6f70656e5f33",
+            "type": "behavior"
+          },
+          "id": "as_open_3"
+        }
+      ],
+      "return_transitions": [
+        {
+          "source": "general_errors_39",
+          "attributes": {
+            "label": ""
+          },
+          "target": "_as_open_17"
+        },
+        {
+          "source": "general_errors_47",
+          "attributes": {
+            "label": ""
+          },
+          "target": "_as_open_10"
+        }
+      ],
+      "start_states": [
+        {
+          "id": "_as_open_0"
+        }
+      ],
+      "transitions": [
+        {
+          "source": "_as_open_0",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_SIGN\"))",
+            "type": "observable"
+          },
+          "target": "_as_open_1"
+        },
+        {
+          "source": "_as_open_0",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"AI_STAMP\"))",
+            "type": "observable"
+          },
+          "target": "_as_open_6"
+        },
+        {
+          "source": "_as_open_0",
+          "attributes": {
+            "label": "?ARTID_EXIST",
+            "type": "observable"
+          },
+          "target": "_as_open_11"
+        },
+        {
+          "source": "_as_open_0",
+          "attributes": {
+            "label": "?ARTID_WEIGHTED",
+            "type": "observable"
+          },
+          "target": "_as_open_16"
+        },
+        {
+          "source": "_as_open_0",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_EVENT\"))",
+            "type": "observable"
+          },
+          "target": "_as_open_31"
+        },
+        {
+          "source": "_as_open_0",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_10"
+        },
+        {
+          "source": "_as_open_0",
+          "attributes": {
+            "label": "?RHCOPY",
+            "type": "observable"
+          },
+          "target": "_as_open_110"
+        },
+        {
+          "source": "_as_open_0",
+          "attributes": {
+            "label": "?RESUME",
+            "type": "observable"
+          },
+          "target": "_as_open_44"
+        },
+        {
+          "source": "_as_open_0",
+          "attributes": {
+            "label": "?RESETCR",
+            "type": "observable"
+          },
+          "target": "_as_open_50"
+        },
+        {
+          "source": "_as_open_0",
+          "attributes": {
+            "label": "?ARTREG_EXIST",
+            "type": "observable"
+          },
+          "target": "_as_open_58"
+        },
+        {
+          "source": "_as_open_0",
+          "attributes": {
+            "label": "?ARTREG",
+            "type": "observable"
+          },
+          "target": "_as_open_67"
+        },
+        {
+          "source": "_as_open_0",
+          "attributes": {
+            "label": "?ENDTOT",
+            "type": "observable"
+          },
+          "target": "_as_open_76"
+        },
+        {
+          "source": "_as_open_0",
+          "attributes": {
+            "label": "?CLOSE",
+            "type": "observable"
+          },
+          "target": "_as_open_85"
+        },
+        {
+          "source": "_as_open_0",
+          "attributes": {
+            "label": "?ARTRET_EXIST",
+            "type": "observable"
+          },
+          "target": "_as_open_95"
+        },
+        {
+          "source": "_as_open_0",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_ACCNT\"))",
+            "type": "observable"
+          },
+          "target": "_as_open_105"
+        },
+        {
+          "source": "_as_open_0",
+          "attributes": {
+            "label": "?PRINT_EXIST",
+            "type": "observable"
+          },
+          "target": "_as_open_110"
+        },
+        {
+          "source": "_as_open_0",
+          "attributes": {
+            "label": "?RHCOPY_EXIST",
+            "type": "observable"
+          },
+          "target": "_as_open_110"
+        },
+        {
+          "source": "_as_open_1",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_SIGN\") && (variable_value\n== \"SS_ON\"))",
+            "type": "observable"
+          },
+          "target": "_as_open_10"
+        },
+        {
+          "source": "_as_open_1",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_103"
+        },
+        {
+          "source": "_as_open_6",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"AI_STAMP\"))",
+            "type": "observable"
+          },
+          "target": "_as_open_10"
+        },
+        {
+          "source": "_as_open_6",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_103"
+        },
+        {
+          "source": "_as_open_10",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_126"
+        },
+        {
+          "source": "_as_open_11",
+          "attributes": {
+            "label": "!C213_ART_TEXT",
+            "type": "observable"
+          },
+          "target": "_as_open_10"
+        },
+        {
+          "source": "_as_open_11",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_103"
+        },
+        {
+          "source": "_as_open_16",
+          "attributes": {
+            "label": "!C213_ART_TEXT",
+            "type": "observable"
+          },
+          "target": "_as_open_17"
+        },
+        {
+          "source": "_as_open_16",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_19"
+        },
+        {
+          "source": "_as_open_17",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CERTDATA\"))",
+            "type": "observable"
+          },
+          "target": "_as_open_22"
+        },
+        {
+          "source": "_as_open_17",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_10"
+        },
+        {
+          "source": "_as_open_22",
+          "attributes": {
+            "label": "!C214_CERT_DATA",
+            "type": "observable"
+          },
+          "target": "_as_open_17"
+        },
+        {
+          "source": "_as_open_22",
+          "attributes": {
+            "label": "!C512_NO_STABLE_WEIGHT",
+            "type": "observable"
+          },
+          "target": "_as_open_17"
+        },
+        {
+          "source": "_as_open_22",
+          "attributes": {
+            "label": "!C531_INVALID_ACCOUNT_STATE",
+            "type": "observable"
+          },
+          "target": "_as_open_17"
+        },
+        {
+          "source": "_as_open_22",
+          "attributes": {
+            "label": "!C502_COMMAND_FAILED",
+            "type": "observable"
+          },
+          "target": "_as_open_17"
+        },
+        {
+          "source": "_as_open_31",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_NONE\"))",
+            "type": "observable"
+          },
+          "target": "_as_open_10"
+        },
+        {
+          "source": "_as_open_31",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_INFO\"))",
+            "type": "observable"
+          },
+          "target": "_as_open_10"
+        },
+        {
+          "source": "_as_open_31",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_WARN\"))",
+            "type": "observable"
+          },
+          "target": "_as_open_10"
+        },
+        {
+          "source": "_as_open_31",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_ERROR\"))",
+            "type": "observable"
+          },
+          "target": "_as_open_10"
+        },
+        {
+          "source": "_as_open_44",
+          "attributes": {
+            "label": "!C201_RESUMED_OPERATION",
+            "type": "observable"
+          },
+          "target": "_as_open_10"
+        },
+        {
+          "source": "_as_open_44",
+          "attributes": {
+            "label": "!C503_ERROR_STATE",
+            "type": "observable"
+          },
+          "target": "_as_open_10"
+        },
+        {
+          "source": "_as_open_44",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_103"
+        },
+        {
+          "source": "_as_open_50",
+          "attributes": {
+            "label": "!C202_CASH_REGISTER_RESTORED",
+            "type": "observable"
+          },
+          "target": "_as_open_10"
+        },
+        {
+          "source": "_as_open_50",
+          "attributes": {
+            "label": "!C531_INVALID_ACCOUNT_STATE",
+            "type": "observable"
+          },
+          "target": "_as_open_10"
+        },
+        {
+          "source": "_as_open_50",
+          "attributes": {
+            "label": "!C501_SYNTAX_ERROR",
+            "type": "observable"
+          },
+          "target": "_as_open_10"
+        },
+        {
+          "source": "_as_open_50",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_103"
+        },
+        {
+          "source": "_as_open_58",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_59"
+        },
+        {
+          "source": "_as_open_58",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_103"
+        },
+        {
+          "source": "_as_open_59",
+          "attributes": {
+            "label": "!C212_ART_DESCRIPTION\nthen (total = total + _price;)",
+            "type": "observable"
+          },
+          "target": "_as_open_59"
+        },
+        {
+          "source": "_as_open_59",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_61"
+        },
+        {
+          "source": "_as_open_61",
+          "attributes": {
+            "label": "!C232_ART_REGISTERED\nif (_total == total)",
+            "type": "observable"
+          },
+          "target": "_as_open_10"
+        },
+        {
+          "source": "_as_open_67",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_68"
+        },
+        {
+          "source": "_as_open_67",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_103"
+        },
+        {
+          "source": "_as_open_68",
+          "attributes": {
+            "label": "!C212_ART_DESCRIPTION",
+            "type": "observable"
+          },
+          "target": "_as_open_68"
+        },
+        {
+          "source": "_as_open_68",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_61"
+        },
+        {
+          "source": "_as_open_76",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_77"
+        },
+        {
+          "source": "_as_open_76",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_103"
+        },
+        {
+          "source": "_as_open_77",
+          "attributes": {
+            "label": "!C212_ART_DESCRIPTION",
+            "type": "observable"
+          },
+          "target": "_as_open_77"
+        },
+        {
+          "source": "_as_open_77",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_79"
+        },
+        {
+          "source": "_as_open_79",
+          "attributes": {
+            "label": "!C230_ACCOUNT_ENDTOTAL",
+            "type": "observable"
+          },
+          "target": "_as_open_10"
+        },
+        {
+          "source": "_as_open_85",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_86"
+        },
+        {
+          "source": "_as_open_85",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_103"
+        },
+        {
+          "source": "_as_open_86",
+          "attributes": {
+            "label": "!C212_ART_DESCRIPTION",
+            "type": "observable"
+          },
+          "target": "_as_open_86"
+        },
+        {
+          "source": "_as_open_86",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_88"
+        },
+        {
+          "source": "_as_open_88",
+          "attributes": {
+            "label": "!C230_ACCOUNT_CLOSED",
+            "type": "observable"
+          },
+          "target": "_as_open_90"
+        },
+        {
+          "source": "_as_open_90",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_91"
+        },
+        {
+          "source": "_as_open_95",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_96"
+        },
+        {
+          "source": "_as_open_95",
+          "attributes": {
+            "label": "!C511_NO_SUCH_ART",
+            "type": "observable"
+          },
+          "target": "_as_open_10"
+        },
+        {
+          "source": "_as_open_95",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_103"
+        },
+        {
+          "source": "_as_open_96",
+          "attributes": {
+            "label": "!C212_ART_DESCRIPTION\nthen (total = total + _price;)",
+            "type": "observable"
+          },
+          "target": "_as_open_96"
+        },
+        {
+          "source": "_as_open_96",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_61"
+        },
+        {
+          "source": "_as_open_105",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_ACCNT\") && (variable_value\n== \"AS_OPEN\"))",
+            "type": "observable"
+          },
+          "target": "_as_open_10"
+        },
+        {
+          "source": "_as_open_105",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_103"
+        },
+        {
+          "source": "_as_open_110",
+          "attributes": {
+            "label": "!C260_DATA_PRINTED",
+            "type": "observable"
+          },
+          "target": "_as_open_10"
+        },
+        {
+          "source": "_as_open_110",
+          "attributes": {
+            "label": "!C560_CR_PRINTING_INACTIVE",
+            "type": "observable"
+          },
+          "target": "_as_open_10"
+        },
+        {
+          "source": "_as_open_110",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_103"
+        },
+        {
+          "source": "_as_open_19",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "general_errors_39"
+        },
+        {
+          "source": "_as_open_91",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "as_closed_4"
+        },
+        {
+          "source": "_as_open_103",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "general_errors_47"
+        },
+        {
+          "source": "_as_open_126",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "as_open_3"
+        }
+      ],
+      "name": "as_open",
+      "states": [
+        {
+          "attributes": {
+            "label": "_0",
+            "type": "state"
+          },
+          "id": "_as_open_0"
+        },
+        {
+          "attributes": {
+            "label": "_1",
+            "type": "state"
+          },
+          "id": "_as_open_1"
+        },
+        {
+          "attributes": {
+            "label": "_6",
+            "type": "state"
+          },
+          "id": "_as_open_6"
+        },
+        {
+          "attributes": {
+            "label": "_10",
+            "type": "state"
+          },
+          "id": "_as_open_10"
+        },
+        {
+          "attributes": {
+            "label": "_11",
+            "type": "state"
+          },
+          "id": "_as_open_11"
+        },
+        {
+          "attributes": {
+            "label": "_16",
+            "type": "state"
+          },
+          "id": "_as_open_16"
+        },
+        {
+          "attributes": {
+            "label": "_17",
+            "type": "state"
+          },
+          "id": "_as_open_17"
+        },
+        {
+          "attributes": {
+            "label": "_19",
+            "type": "state"
+          },
+          "id": "_as_open_19"
+        },
+        {
+          "attributes": {
+            "label": "_22",
+            "type": "state"
+          },
+          "id": "_as_open_22"
+        },
+        {
+          "attributes": {
+            "label": "_31",
+            "type": "state"
+          },
+          "id": "_as_open_31"
+        },
+        {
+          "attributes": {
+            "label": "_44",
+            "type": "state"
+          },
+          "id": "_as_open_44"
+        },
+        {
+          "attributes": {
+            "label": "_50",
+            "type": "state"
+          },
+          "id": "_as_open_50"
+        },
+        {
+          "attributes": {
+            "label": "_58",
+            "type": "state"
+          },
+          "id": "_as_open_58"
+        },
+        {
+          "attributes": {
+            "label": "_59",
+            "type": "state"
+          },
+          "id": "_as_open_59"
+        },
+        {
+          "attributes": {
+            "label": "_61",
+            "type": "state"
+          },
+          "id": "_as_open_61"
+        },
+        {
+          "attributes": {
+            "label": "_67",
+            "type": "state"
+          },
+          "id": "_as_open_67"
+        },
+        {
+          "attributes": {
+            "label": "_68",
+            "type": "state"
+          },
+          "id": "_as_open_68"
+        },
+        {
+          "attributes": {
+            "label": "_76",
+            "type": "state"
+          },
+          "id": "_as_open_76"
+        },
+        {
+          "attributes": {
+            "label": "_77",
+            "type": "state"
+          },
+          "id": "_as_open_77"
+        },
+        {
+          "attributes": {
+            "label": "_79",
+            "type": "state"
+          },
+          "id": "_as_open_79"
+        },
+        {
+          "attributes": {
+            "label": "_85",
+            "type": "state"
+          },
+          "id": "_as_open_85"
+        },
+        {
+          "attributes": {
+            "label": "_86",
+            "type": "state"
+          },
+          "id": "_as_open_86"
+        },
+        {
+          "attributes": {
+            "label": "_88",
+            "type": "state"
+          },
+          "id": "_as_open_88"
+        },
+        {
+          "attributes": {
+            "label": "_90",
+            "type": "state"
+          },
+          "id": "_as_open_90"
+        },
+        {
+          "attributes": {
+            "label": "_91",
+            "type": "state"
+          },
+          "id": "_as_open_91"
+        },
+        {
+          "attributes": {
+            "label": "_95",
+            "type": "state"
+          },
+          "id": "_as_open_95"
+        },
+        {
+          "attributes": {
+            "label": "_96",
+            "type": "state"
+          },
+          "id": "_as_open_96"
+        },
+        {
+          "attributes": {
+            "label": "_103",
+            "type": "state"
+          },
+          "id": "_as_open_103"
+        },
+        {
+          "attributes": {
+            "label": "_105",
+            "type": "state"
+          },
+          "id": "_as_open_105"
+        },
+        {
+          "attributes": {
+            "label": "_110",
+            "type": "state"
+          },
+          "id": "_as_open_110"
+        },
+        {
+          "attributes": {
+            "label": "_126",
+            "type": "state"
+          },
+          "id": "_as_open_126"
+        }
+      ],
+      "return_state": null
+    },
+    {
+      "sts": "_general_errors_39_1",
+      "children": [],
+      "return_transitions": [],
+      "start_states": [
+        {
+          "id": "_general_errors_39_0"
+        }
+      ],
+      "transitions": [
+        {
+          "source": "_general_errors_39_0",
+          "attributes": {
+            "label": "!C502_COMMAND_FAILED",
+            "type": "observable"
+          },
+          "target": "_general_errors_39_1"
+        },
+        {
+          "source": "_general_errors_39_0",
+          "attributes": {
+            "label": "!C503_ERROR_STATE",
+            "type": "observable"
+          },
+          "target": "_general_errors_39_2"
+        },
+        {
+          "source": "_general_errors_39_2",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_EVENT\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_39_3"
+        },
+        {
+          "source": "_general_errors_39_3",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_INFO\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_39_1"
+        },
+        {
+          "source": "_general_errors_39_3",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_NONE\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_39_1"
+        },
+        {
+          "source": "_general_errors_39_1",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_17"
+        }
+      ],
+      "name": "general_errors",
+      "states": [
+        {
+          "attributes": {
+            "label": "_0",
+            "type": "state"
+          },
+          "id": "_general_errors_39_0"
+        },
+        {
+          "attributes": {
+            "label": "_2",
+            "type": "state"
+          },
+          "id": "_general_errors_39_2"
+        },
+        {
+          "attributes": {
+            "label": "_3",
+            "type": "state"
+          },
+          "id": "_general_errors_39_3"
+        },
+        {
+          "attributes": {
+            "label": "_1",
+            "type": "state"
+          },
+          "id": "_general_errors_39_1"
+        }
+      ],
+      "return_state": "_general_errors_39_1"
+    },
+    {
+      "sts": null,
+      "children": [
+        {
+          "attributes": {
+            "label": "general_errors",
+            "hex_id": "67656e6572616c5f6572726f72735f3534",
+            "type": "behavior"
+          },
+          "id": "general_errors_54"
+        },
+        {
+          "attributes": {
+            "label": "as_ending",
+            "hex_id": "61735f656e64696e675f35",
+            "type": "behavior"
+          },
+          "id": "as_ending_5"
+        },
+        {
+          "attributes": {
+            "label": "general_errors",
+            "hex_id": "67656e6572616c5f6572726f72735f3630",
+            "type": "behavior"
+          },
+          "id": "general_errors_60"
+        },
+        {
+          "attributes": {
+            "label": "as_closed",
+            "hex_id": "61735f636c6f7365645f34",
+            "type": "behavior"
+          },
+          "id": "as_closed_4"
+        }
+      ],
+      "return_transitions": [
+        {
+          "source": "general_errors_54",
+          "attributes": {
+            "label": ""
+          },
+          "target": "_as_closed_17"
+        },
+        {
+          "source": "general_errors_60",
+          "attributes": {
+            "label": ""
+          },
+          "target": "_as_closed_10"
+        }
+      ],
+      "start_states": [
+        {
+          "id": "_as_closed_0"
+        }
+      ],
+      "transitions": [
+        {
+          "source": "_as_closed_0",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_SIGN\"))",
+            "type": "observable"
+          },
+          "target": "_as_closed_1"
+        },
+        {
+          "source": "_as_closed_0",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"AI_STAMP\"))",
+            "type": "observable"
+          },
+          "target": "_as_closed_6"
+        },
+        {
+          "source": "_as_closed_0",
+          "attributes": {
+            "label": "?ARTID_EXIST",
+            "type": "observable"
+          },
+          "target": "_as_closed_11"
+        },
+        {
+          "source": "_as_closed_0",
+          "attributes": {
+            "label": "?ARTID_WEIGHTED",
+            "type": "observable"
+          },
+          "target": "_as_closed_16"
+        },
+        {
+          "source": "_as_closed_0",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_EVENT\"))",
+            "type": "observable"
+          },
+          "target": "_as_closed_106"
+        },
+        {
+          "source": "_as_closed_0",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_10"
+        },
+        {
+          "source": "_as_closed_0",
+          "attributes": {
+            "label": "?RHCOPY",
+            "type": "observable"
+          },
+          "target": "_as_closed_168"
+        },
+        {
+          "source": "_as_closed_0",
+          "attributes": {
+            "label": "?RESUME",
+            "type": "observable"
+          },
+          "target": "_as_closed_44"
+        },
+        {
+          "source": "_as_closed_0",
+          "attributes": {
+            "label": "?RESETCR",
+            "type": "observable"
+          },
+          "target": "_as_closed_50"
+        },
+        {
+          "source": "_as_closed_0",
+          "attributes": {
+            "label": "?TRANS\nif ((trans_id == \"TM_BANK\"))",
+            "type": "observable"
+          },
+          "target": "_as_closed_58"
+        },
+        {
+          "source": "_as_closed_0",
+          "attributes": {
+            "label": "?TRANS\nif ((trans_id == \"TM_BANK2\"))",
+            "type": "observable"
+          },
+          "target": "_as_closed_75"
+        },
+        {
+          "source": "_as_closed_0",
+          "attributes": {
+            "label": "?TRANS\nif ((trans_id == \"TM_CASH\"))",
+            "type": "observable"
+          },
+          "target": "_as_closed_97"
+        },
+        {
+          "source": "_as_closed_0",
+          "attributes": {
+            "label": "?TRANS\nif ((trans_id == \"TM_STORE\"))",
+            "type": "observable"
+          },
+          "target": "_as_closed_115"
+        },
+        {
+          "source": "_as_closed_0",
+          "attributes": {
+            "label": "?TRANS\nif ((trans_id == \"TM_FLUSH\"))",
+            "type": "observable"
+          },
+          "target": "_as_closed_129"
+        },
+        {
+          "source": "_as_closed_0",
+          "attributes": {
+            "label": "?ARTREG_LOYALTY",
+            "type": "observable"
+          },
+          "target": "_as_closed_143"
+        },
+        {
+          "source": "_as_closed_0",
+          "attributes": {
+            "label": "?STAMPREG\nif ((stamp_reg == 0))",
+            "type": "observable"
+          },
+          "target": "_as_closed_153"
+        },
+        {
+          "source": "_as_closed_0",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_ACCNT\"))",
+            "type": "observable"
+          },
+          "target": "_as_closed_163"
+        },
+        {
+          "source": "_as_closed_0",
+          "attributes": {
+            "label": "?PRINT_EXIST",
+            "type": "observable"
+          },
+          "target": "_as_closed_168"
+        },
+        {
+          "source": "_as_closed_0",
+          "attributes": {
+            "label": "?RHCOPY_EXIST",
+            "type": "observable"
+          },
+          "target": "_as_closed_168"
+        },
+        {
+          "source": "_as_closed_1",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_SIGN\") && (variable_value\n== \"SS_ON\"))",
+            "type": "observable"
+          },
+          "target": "_as_closed_10"
+        },
+        {
+          "source": "_as_closed_1",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_113"
+        },
+        {
+          "source": "_as_closed_6",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"AI_STAMP\"))",
+            "type": "observable"
+          },
+          "target": "_as_closed_10"
+        },
+        {
+          "source": "_as_closed_6",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_113"
+        },
+        {
+          "source": "_as_closed_10",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_184"
+        },
+        {
+          "source": "_as_closed_11",
+          "attributes": {
+            "label": "!C213_ART_TEXT",
+            "type": "observable"
+          },
+          "target": "_as_closed_10"
+        },
+        {
+          "source": "_as_closed_11",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_113"
+        },
+        {
+          "source": "_as_closed_16",
+          "attributes": {
+            "label": "!C213_ART_TEXT",
+            "type": "observable"
+          },
+          "target": "_as_closed_17"
+        },
+        {
+          "source": "_as_closed_16",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_19"
+        },
+        {
+          "source": "_as_closed_17",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CERTDATA\"))",
+            "type": "observable"
+          },
+          "target": "_as_closed_22"
+        },
+        {
+          "source": "_as_closed_17",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_10"
+        },
+        {
+          "source": "_as_closed_22",
+          "attributes": {
+            "label": "!C214_CERT_DATA",
+            "type": "observable"
+          },
+          "target": "_as_closed_17"
+        },
+        {
+          "source": "_as_closed_22",
+          "attributes": {
+            "label": "!C512_NO_STABLE_WEIGHT",
+            "type": "observable"
+          },
+          "target": "_as_closed_17"
+        },
+        {
+          "source": "_as_closed_22",
+          "attributes": {
+            "label": "!C531_INVALID_ACCOUNT_STATE",
+            "type": "observable"
+          },
+          "target": "_as_closed_17"
+        },
+        {
+          "source": "_as_closed_22",
+          "attributes": {
+            "label": "!C502_COMMAND_FAILED",
+            "type": "observable"
+          },
+          "target": "_as_closed_17"
+        },
+        {
+          "source": "_as_closed_44",
+          "attributes": {
+            "label": "!C201_RESUMED_OPERATION",
+            "type": "observable"
+          },
+          "target": "_as_closed_10"
+        },
+        {
+          "source": "_as_closed_44",
+          "attributes": {
+            "label": "!C503_ERROR_STATE",
+            "type": "observable"
+          },
+          "target": "_as_closed_10"
+        },
+        {
+          "source": "_as_closed_44",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_113"
+        },
+        {
+          "source": "_as_closed_50",
+          "attributes": {
+            "label": "!C202_CASH_REGISTER_RESTORED",
+            "type": "observable"
+          },
+          "target": "_as_closed_10"
+        },
+        {
+          "source": "_as_closed_50",
+          "attributes": {
+            "label": "!C531_INVALID_ACCOUNT_STATE",
+            "type": "observable"
+          },
+          "target": "_as_closed_10"
+        },
+        {
+          "source": "_as_closed_50",
+          "attributes": {
+            "label": "!C501_SYNTAX_ERROR",
+            "type": "observable"
+          },
+          "target": "_as_closed_10"
+        },
+        {
+          "source": "_as_closed_50",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_113"
+        },
+        {
+          "source": "_as_closed_58",
+          "attributes": {
+            "label": "!C240_TRANS_SUCCEEDED",
+            "type": "observable"
+          },
+          "target": "_as_closed_102"
+        },
+        {
+          "source": "_as_closed_58",
+          "attributes": {
+            "label": "!C541_TRANS_BUSY",
+            "type": "observable"
+          },
+          "target": "_as_closed_62"
+        },
+        {
+          "source": "_as_closed_58",
+          "attributes": {
+            "label": "!C542_TRANS_FAILED",
+            "type": "observable"
+          },
+          "target": "_as_closed_105"
+        },
+        {
+          "source": "_as_closed_58",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_113"
+        },
+        {
+          "source": "_as_closed_62",
+          "attributes": {
+            "label": "!C240_TRANS_SUCCEEDED",
+            "type": "observable"
+          },
+          "target": "_as_closed_103"
+        },
+        {
+          "source": "_as_closed_75",
+          "attributes": {
+            "label": "!C240_TRANS_SUCCEEDED",
+            "type": "observable"
+          },
+          "target": "_as_closed_102"
+        },
+        {
+          "source": "_as_closed_75",
+          "attributes": {
+            "label": "!C242_TRANS_SUCCEEDED",
+            "type": "observable"
+          },
+          "target": "_as_closed_103"
+        },
+        {
+          "source": "_as_closed_75",
+          "attributes": {
+            "label": "!C541_TRANS_BUSY",
+            "type": "observable"
+          },
+          "target": "_as_closed_81"
+        },
+        {
+          "source": "_as_closed_75",
+          "attributes": {
+            "label": "!C542_TRANS_FAILED",
+            "type": "observable"
+          },
+          "target": "_as_closed_105"
+        },
+        {
+          "source": "_as_closed_75",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_113"
+        },
+        {
+          "source": "_as_closed_81",
+          "attributes": {
+            "label": "!C240_TRANS_SUCCEEDED",
+            "type": "observable"
+          },
+          "target": "_as_closed_102"
+        },
+        {
+          "source": "_as_closed_81",
+          "attributes": {
+            "label": "!C242_TRANS_SUCCEEDED",
+            "type": "observable"
+          },
+          "target": "_as_closed_102"
+        },
+        {
+          "source": "_as_closed_97",
+          "attributes": {
+            "label": "!C240_TRANS_SUCCEEDED",
+            "type": "observable"
+          },
+          "target": "_as_closed_102"
+        },
+        {
+          "source": "_as_closed_97",
+          "attributes": {
+            "label": "!C541_TRANS_BUSY",
+            "type": "observable"
+          },
+          "target": "_as_closed_101"
+        },
+        {
+          "source": "_as_closed_97",
+          "attributes": {
+            "label": "!C542_TRANS_FAILED",
+            "type": "observable"
+          },
+          "target": "_as_closed_105"
+        },
+        {
+          "source": "_as_closed_97",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_113"
+        },
+        {
+          "source": "_as_closed_101",
+          "attributes": {
+            "label": "!C240_TRANS_SUCCEEDED",
+            "type": "observable"
+          },
+          "target": "_as_closed_102"
+        },
+        {
+          "source": "_as_closed_102",
+          "attributes": {
+            "label": "\nthen (stored_account = false;)",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_103"
+        },
+        {
+          "source": "_as_closed_103",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_100"
+        },
+        {
+          "source": "_as_closed_105",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_EVENT\"))",
+            "type": "observable"
+          },
+          "target": "_as_closed_106"
+        },
+        {
+          "source": "_as_closed_106",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_NONE\"))",
+            "type": "observable"
+          },
+          "target": "_as_closed_10"
+        },
+        {
+          "source": "_as_closed_106",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_INFO\"))",
+            "type": "observable"
+          },
+          "target": "_as_closed_10"
+        },
+        {
+          "source": "_as_closed_106",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_WARN\"))",
+            "type": "observable"
+          },
+          "target": "_as_closed_10"
+        },
+        {
+          "source": "_as_closed_106",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_ERROR\"))",
+            "type": "observable"
+          },
+          "target": "_as_closed_10"
+        },
+        {
+          "source": "_as_closed_115",
+          "attributes": {
+            "label": "!C240_TRANS_SUCCEEDED",
+            "type": "observable"
+          },
+          "target": "_as_closed_116"
+        },
+        {
+          "source": "_as_closed_115",
+          "attributes": {
+            "label": "!C542_TRANS_FAILED",
+            "type": "observable"
+          },
+          "target": "_as_closed_105"
+        },
+        {
+          "source": "_as_closed_115",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_113"
+        },
+        {
+          "source": "_as_closed_116",
+          "attributes": {
+            "label": "\nthen (stored_account = true;\nstored_total = total;)",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_103"
+        },
+        {
+          "source": "_as_closed_129",
+          "attributes": {
+            "label": "!C240_TRANS_SUCCEEDED",
+            "type": "observable"
+          },
+          "target": "_as_closed_102"
+        },
+        {
+          "source": "_as_closed_129",
+          "attributes": {
+            "label": "!C542_TRANS_FAILED",
+            "type": "observable"
+          },
+          "target": "_as_closed_105"
+        },
+        {
+          "source": "_as_closed_129",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_113"
+        },
+        {
+          "source": "_as_closed_143",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_144"
+        },
+        {
+          "source": "_as_closed_143",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_113"
+        },
+        {
+          "source": "_as_closed_144",
+          "attributes": {
+            "label": "!C212_ART_DESCRIPTION",
+            "type": "observable"
+          },
+          "target": "_as_closed_144"
+        },
+        {
+          "source": "_as_closed_144",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_146"
+        },
+        {
+          "source": "_as_closed_146",
+          "attributes": {
+            "label": "!C232_ART_REGISTERED",
+            "type": "observable"
+          },
+          "target": "_as_closed_10"
+        },
+        {
+          "source": "_as_closed_153",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_154"
+        },
+        {
+          "source": "_as_closed_153",
+          "attributes": {
+            "label": "!C511_NO_SUCH_ART",
+            "type": "observable"
+          },
+          "target": "_as_closed_10"
+        },
+        {
+          "source": "_as_closed_153",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_113"
+        },
+        {
+          "source": "_as_closed_154",
+          "attributes": {
+            "label": "!C212_ART_DESCRIPTION",
+            "type": "observable"
+          },
+          "target": "_as_closed_154"
+        },
+        {
+          "source": "_as_closed_154",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_146"
+        },
+        {
+          "source": "_as_closed_163",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_ACCNT\") && (variable_value\n== \"AS_CLOSED\"))",
+            "type": "observable"
+          },
+          "target": "_as_closed_10"
+        },
+        {
+          "source": "_as_closed_163",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_113"
+        },
+        {
+          "source": "_as_closed_168",
+          "attributes": {
+            "label": "!C260_DATA_PRINTED",
+            "type": "observable"
+          },
+          "target": "_as_closed_10"
+        },
+        {
+          "source": "_as_closed_168",
+          "attributes": {
+            "label": "!C560_CR_PRINTING_INACTIVE",
+            "type": "observable"
+          },
+          "target": "_as_closed_10"
+        },
+        {
+          "source": "_as_closed_168",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_113"
+        },
+        {
+          "source": "_as_closed_19",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "general_errors_54"
+        },
+        {
+          "source": "_as_closed_100",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "as_ending_5"
+        },
+        {
+          "source": "_as_closed_113",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "general_errors_60"
+        },
+        {
+          "source": "_as_closed_184",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "as_closed_4"
+        }
+      ],
+      "name": "as_closed",
+      "states": [
+        {
+          "attributes": {
+            "label": "_0",
+            "type": "state"
+          },
+          "id": "_as_closed_0"
+        },
+        {
+          "attributes": {
+            "label": "_1",
+            "type": "state"
+          },
+          "id": "_as_closed_1"
+        },
+        {
+          "attributes": {
+            "label": "_6",
+            "type": "state"
+          },
+          "id": "_as_closed_6"
+        },
+        {
+          "attributes": {
+            "label": "_10",
+            "type": "state"
+          },
+          "id": "_as_closed_10"
+        },
+        {
+          "attributes": {
+            "label": "_11",
+            "type": "state"
+          },
+          "id": "_as_closed_11"
+        },
+        {
+          "attributes": {
+            "label": "_16",
+            "type": "state"
+          },
+          "id": "_as_closed_16"
+        },
+        {
+          "attributes": {
+            "label": "_17",
+            "type": "state"
+          },
+          "id": "_as_closed_17"
+        },
+        {
+          "attributes": {
+            "label": "_19",
+            "type": "state"
+          },
+          "id": "_as_closed_19"
+        },
+        {
+          "attributes": {
+            "label": "_22",
+            "type": "state"
+          },
+          "id": "_as_closed_22"
+        },
+        {
+          "attributes": {
+            "label": "_44",
+            "type": "state"
+          },
+          "id": "_as_closed_44"
+        },
+        {
+          "attributes": {
+            "label": "_50",
+            "type": "state"
+          },
+          "id": "_as_closed_50"
+        },
+        {
+          "attributes": {
+            "label": "_58",
+            "type": "state"
+          },
+          "id": "_as_closed_58"
+        },
+        {
+          "attributes": {
+            "label": "_62",
+            "type": "state"
+          },
+          "id": "_as_closed_62"
+        },
+        {
+          "attributes": {
+            "label": "_75",
+            "type": "state"
+          },
+          "id": "_as_closed_75"
+        },
+        {
+          "attributes": {
+            "label": "_81",
+            "type": "state"
+          },
+          "id": "_as_closed_81"
+        },
+        {
+          "attributes": {
+            "label": "_97",
+            "type": "state"
+          },
+          "id": "_as_closed_97"
+        },
+        {
+          "attributes": {
+            "label": "_100",
+            "type": "state"
+          },
+          "id": "_as_closed_100"
+        },
+        {
+          "attributes": {
+            "label": "_101",
+            "type": "state"
+          },
+          "id": "_as_closed_101"
+        },
+        {
+          "attributes": {
+            "label": "_102",
+            "type": "state"
+          },
+          "id": "_as_closed_102"
+        },
+        {
+          "attributes": {
+            "label": "_103",
+            "type": "state"
+          },
+          "id": "_as_closed_103"
+        },
+        {
+          "attributes": {
+            "label": "_105",
+            "type": "state"
+          },
+          "id": "_as_closed_105"
+        },
+        {
+          "attributes": {
+            "label": "_106",
+            "type": "state"
+          },
+          "id": "_as_closed_106"
+        },
+        {
+          "attributes": {
+            "label": "_113",
+            "type": "state"
+          },
+          "id": "_as_closed_113"
+        },
+        {
+          "attributes": {
+            "label": "_115",
+            "type": "state"
+          },
+          "id": "_as_closed_115"
+        },
+        {
+          "attributes": {
+            "label": "_116",
+            "type": "state"
+          },
+          "id": "_as_closed_116"
+        },
+        {
+          "attributes": {
+            "label": "_129",
+            "type": "state"
+          },
+          "id": "_as_closed_129"
+        },
+        {
+          "attributes": {
+            "label": "_143",
+            "type": "state"
+          },
+          "id": "_as_closed_143"
+        },
+        {
+          "attributes": {
+            "label": "_144",
+            "type": "state"
+          },
+          "id": "_as_closed_144"
+        },
+        {
+          "attributes": {
+            "label": "_146",
+            "type": "state"
+          },
+          "id": "_as_closed_146"
+        },
+        {
+          "attributes": {
+            "label": "_153",
+            "type": "state"
+          },
+          "id": "_as_closed_153"
+        },
+        {
+          "attributes": {
+            "label": "_154",
+            "type": "state"
+          },
+          "id": "_as_closed_154"
+        },
+        {
+          "attributes": {
+            "label": "_163",
+            "type": "state"
+          },
+          "id": "_as_closed_163"
+        },
+        {
+          "attributes": {
+            "label": "_168",
+            "type": "state"
+          },
+          "id": "_as_closed_168"
+        },
+        {
+          "attributes": {
+            "label": "_184",
+            "type": "state"
+          },
+          "id": "_as_closed_184"
+        }
+      ],
+      "return_state": null
+    },
+    {
+      "sts": "_general_errors_54_1",
+      "children": [],
+      "return_transitions": [],
+      "start_states": [
+        {
+          "id": "_general_errors_54_0"
+        }
+      ],
+      "transitions": [
+        {
+          "source": "_general_errors_54_0",
+          "attributes": {
+            "label": "!C502_COMMAND_FAILED",
+            "type": "observable"
+          },
+          "target": "_general_errors_54_1"
+        },
+        {
+          "source": "_general_errors_54_0",
+          "attributes": {
+            "label": "!C503_ERROR_STATE",
+            "type": "observable"
+          },
+          "target": "_general_errors_54_2"
+        },
+        {
+          "source": "_general_errors_54_2",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_EVENT\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_54_3"
+        },
+        {
+          "source": "_general_errors_54_3",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_INFO\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_54_1"
+        },
+        {
+          "source": "_general_errors_54_3",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_NONE\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_54_1"
+        },
+        {
+          "source": "_general_errors_54_1",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_17"
+        }
+      ],
+      "name": "general_errors",
+      "states": [
+        {
+          "attributes": {
+            "label": "_0",
+            "type": "state"
+          },
+          "id": "_general_errors_54_0"
+        },
+        {
+          "attributes": {
+            "label": "_2",
+            "type": "state"
+          },
+          "id": "_general_errors_54_2"
+        },
+        {
+          "attributes": {
+            "label": "_3",
+            "type": "state"
+          },
+          "id": "_general_errors_54_3"
+        },
+        {
+          "attributes": {
+            "label": "_1",
+            "type": "state"
+          },
+          "id": "_general_errors_54_1"
+        }
+      ],
+      "return_state": "_general_errors_54_1"
+    },
+    {
+      "sts": null,
+      "children": [
+        {
+          "attributes": {
+            "label": "general_errors",
+            "hex_id": "67656e6572616c5f6572726f72735f3639",
+            "type": "behavior"
+          },
+          "id": "general_errors_69"
+        },
+        {
+          "attributes": {
+            "label": "general_errors",
+            "hex_id": "67656e6572616c5f6572726f72735f3731",
+            "type": "behavior"
+          },
+          "id": "general_errors_71"
+        },
+        {
+          "attributes": {
+            "label": "as_idle",
+            "hex_id": "61735f69646c655f32",
+            "type": "behavior"
+          },
+          "id": "as_idle_2"
+        },
+        {
+          "attributes": {
+            "label": "as_ending",
+            "hex_id": "61735f656e64696e675f35",
+            "type": "behavior"
+          },
+          "id": "as_ending_5"
+        }
+      ],
+      "return_transitions": [
+        {
+          "source": "general_errors_69",
+          "attributes": {
+            "label": ""
+          },
+          "target": "_as_ending_11"
+        },
+        {
+          "source": "general_errors_71",
+          "attributes": {
+            "label": ""
+          },
+          "target": "_as_ending_18"
+        }
+      ],
+      "start_states": [
+        {
+          "id": "_as_ending_0"
+        }
+      ],
+      "transitions": [
+        {
+          "source": "_as_ending_0",
+          "attributes": {
+            "label": "\nthen (total = 0.0;)",
+            "type": "unobservable"
+          },
+          "target": "_as_ending_1"
+        },
+        {
+          "source": "_as_ending_1",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_SIGN\"))",
+            "type": "observable"
+          },
+          "target": "_as_ending_2"
+        },
+        {
+          "source": "_as_ending_1",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"AI_STAMP\"))",
+            "type": "observable"
+          },
+          "target": "_as_ending_7"
+        },
+        {
+          "source": "_as_ending_1",
+          "attributes": {
+            "label": "?ARTID_EXIST",
+            "type": "observable"
+          },
+          "target": "_as_ending_12"
+        },
+        {
+          "source": "_as_ending_1",
+          "attributes": {
+            "label": "?ARTID_WEIGHTED",
+            "type": "observable"
+          },
+          "target": "_as_ending_17"
+        },
+        {
+          "source": "_as_ending_1",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_EVENT\"))",
+            "type": "observable"
+          },
+          "target": "_as_ending_32"
+        },
+        {
+          "source": "_as_ending_1",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_ending_11"
+        },
+        {
+          "source": "_as_ending_1",
+          "attributes": {
+            "label": "?RHCOPY",
+            "type": "observable"
+          },
+          "target": "_as_ending_39"
+        },
+        {
+          "source": "_as_ending_1",
+          "attributes": {
+            "label": "?RESUME",
+            "type": "observable"
+          },
+          "target": "_as_ending_45"
+        },
+        {
+          "source": "_as_ending_1",
+          "attributes": {
+            "label": "?RESETCR",
+            "type": "observable"
+          },
+          "target": "_as_ending_51"
+        },
+        {
+          "source": "_as_ending_1",
+          "attributes": {
+            "label": "?IDLE",
+            "type": "observable"
+          },
+          "target": "_as_ending_59"
+        },
+        {
+          "source": "_as_ending_1",
+          "attributes": {
+            "label": "?RECEIPT",
+            "type": "observable"
+          },
+          "target": "_as_ending_65"
+        },
+        {
+          "source": "_as_ending_1",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_ACCNT\"))",
+            "type": "observable"
+          },
+          "target": "_as_ending_71"
+        },
+        {
+          "source": "_as_ending_1",
+          "attributes": {
+            "label": "?PRINT_EXIST",
+            "type": "observable"
+          },
+          "target": "_as_ending_39"
+        },
+        {
+          "source": "_as_ending_1",
+          "attributes": {
+            "label": "?RHCOPY_EXIST",
+            "type": "observable"
+          },
+          "target": "_as_ending_39"
+        },
+        {
+          "source": "_as_ending_2",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_SIGN\") && (variable_value\n== \"SS_ON\"))",
+            "type": "observable"
+          },
+          "target": "_as_ending_11"
+        },
+        {
+          "source": "_as_ending_2",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_ending_10"
+        },
+        {
+          "source": "_as_ending_7",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"AI_STAMP\"))",
+            "type": "observable"
+          },
+          "target": "_as_ending_11"
+        },
+        {
+          "source": "_as_ending_7",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_ending_10"
+        },
+        {
+          "source": "_as_ending_11",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_ending_92"
+        },
+        {
+          "source": "_as_ending_12",
+          "attributes": {
+            "label": "!C213_ART_TEXT",
+            "type": "observable"
+          },
+          "target": "_as_ending_11"
+        },
+        {
+          "source": "_as_ending_12",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_ending_10"
+        },
+        {
+          "source": "_as_ending_17",
+          "attributes": {
+            "label": "!C213_ART_TEXT",
+            "type": "observable"
+          },
+          "target": "_as_ending_18"
+        },
+        {
+          "source": "_as_ending_17",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_ending_20"
+        },
+        {
+          "source": "_as_ending_18",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CERTDATA\"))",
+            "type": "observable"
+          },
+          "target": "_as_ending_23"
+        },
+        {
+          "source": "_as_ending_18",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_ending_11"
+        },
+        {
+          "source": "_as_ending_23",
+          "attributes": {
+            "label": "!C214_CERT_DATA",
+            "type": "observable"
+          },
+          "target": "_as_ending_18"
+        },
+        {
+          "source": "_as_ending_23",
+          "attributes": {
+            "label": "!C512_NO_STABLE_WEIGHT",
+            "type": "observable"
+          },
+          "target": "_as_ending_18"
+        },
+        {
+          "source": "_as_ending_23",
+          "attributes": {
+            "label": "!C531_INVALID_ACCOUNT_STATE",
+            "type": "observable"
+          },
+          "target": "_as_ending_18"
+        },
+        {
+          "source": "_as_ending_23",
+          "attributes": {
+            "label": "!C502_COMMAND_FAILED",
+            "type": "observable"
+          },
+          "target": "_as_ending_18"
+        },
+        {
+          "source": "_as_ending_32",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_NONE\"))",
+            "type": "observable"
+          },
+          "target": "_as_ending_11"
+        },
+        {
+          "source": "_as_ending_32",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_INFO\"))",
+            "type": "observable"
+          },
+          "target": "_as_ending_11"
+        },
+        {
+          "source": "_as_ending_32",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_WARN\"))",
+            "type": "observable"
+          },
+          "target": "_as_ending_11"
+        },
+        {
+          "source": "_as_ending_32",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_ERROR\"))",
+            "type": "observable"
+          },
+          "target": "_as_ending_11"
+        },
+        {
+          "source": "_as_ending_39",
+          "attributes": {
+            "label": "!C260_DATA_PRINTED",
+            "type": "observable"
+          },
+          "target": "_as_ending_11"
+        },
+        {
+          "source": "_as_ending_39",
+          "attributes": {
+            "label": "!C560_CR_PRINTING_INACTIVE",
+            "type": "observable"
+          },
+          "target": "_as_ending_11"
+        },
+        {
+          "source": "_as_ending_39",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_ending_10"
+        },
+        {
+          "source": "_as_ending_45",
+          "attributes": {
+            "label": "!C201_RESUMED_OPERATION",
+            "type": "observable"
+          },
+          "target": "_as_ending_11"
+        },
+        {
+          "source": "_as_ending_45",
+          "attributes": {
+            "label": "!C503_ERROR_STATE",
+            "type": "observable"
+          },
+          "target": "_as_ending_11"
+        },
+        {
+          "source": "_as_ending_45",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_ending_10"
+        },
+        {
+          "source": "_as_ending_51",
+          "attributes": {
+            "label": "!C202_CASH_REGISTER_RESTORED",
+            "type": "observable"
+          },
+          "target": "_as_ending_11"
+        },
+        {
+          "source": "_as_ending_51",
+          "attributes": {
+            "label": "!C531_INVALID_ACCOUNT_STATE",
+            "type": "observable"
+          },
+          "target": "_as_ending_11"
+        },
+        {
+          "source": "_as_ending_51",
+          "attributes": {
+            "label": "!C501_SYNTAX_ERROR",
+            "type": "observable"
+          },
+          "target": "_as_ending_11"
+        },
+        {
+          "source": "_as_ending_51",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_ending_10"
+        },
+        {
+          "source": "_as_ending_59",
+          "attributes": {
+            "label": "!C233_ACCOUNT_IDLED",
+            "type": "observable"
+          },
+          "target": "_as_ending_60"
+        },
+        {
+          "source": "_as_ending_59",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_ending_10"
+        },
+        {
+          "source": "_as_ending_60",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_ending_61"
+        },
+        {
+          "source": "_as_ending_65",
+          "attributes": {
+            "label": "!C561_SFU_PRINTING_INACTIVE",
+            "type": "observable"
+          },
+          "target": "_as_ending_66"
+        },
+        {
+          "source": "_as_ending_65",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_ending_10"
+        },
+        {
+          "source": "_as_ending_66",
+          "attributes": {
+            "label": "!C900_TIMEOUT",
+            "type": "observable"
+          },
+          "target": "_as_ending_11"
+        },
+        {
+          "source": "_as_ending_71",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_ACCNT\") && (variable_value\n== \"AS_ENDING\"))",
+            "type": "observable"
+          },
+          "target": "_as_ending_11"
+        },
+        {
+          "source": "_as_ending_71",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_ending_10"
+        },
+        {
+          "source": "_as_ending_10",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "general_errors_69"
+        },
+        {
+          "source": "_as_ending_20",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "general_errors_71"
+        },
+        {
+          "source": "_as_ending_61",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "as_idle_2"
+        },
+        {
+          "source": "_as_ending_92",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "as_ending_5"
+        }
+      ],
+      "name": "as_ending",
+      "states": [
+        {
+          "attributes": {
+            "label": "_0",
+            "type": "state"
+          },
+          "id": "_as_ending_0"
+        },
+        {
+          "attributes": {
+            "label": "_1",
+            "type": "state"
+          },
+          "id": "_as_ending_1"
+        },
+        {
+          "attributes": {
+            "label": "_2",
+            "type": "state"
+          },
+          "id": "_as_ending_2"
+        },
+        {
+          "attributes": {
+            "label": "_7",
+            "type": "state"
+          },
+          "id": "_as_ending_7"
+        },
+        {
+          "attributes": {
+            "label": "_10",
+            "type": "state"
+          },
+          "id": "_as_ending_10"
+        },
+        {
+          "attributes": {
+            "label": "_11",
+            "type": "state"
+          },
+          "id": "_as_ending_11"
+        },
+        {
+          "attributes": {
+            "label": "_12",
+            "type": "state"
+          },
+          "id": "_as_ending_12"
+        },
+        {
+          "attributes": {
+            "label": "_17",
+            "type": "state"
+          },
+          "id": "_as_ending_17"
+        },
+        {
+          "attributes": {
+            "label": "_18",
+            "type": "state"
+          },
+          "id": "_as_ending_18"
+        },
+        {
+          "attributes": {
+            "label": "_20",
+            "type": "state"
+          },
+          "id": "_as_ending_20"
+        },
+        {
+          "attributes": {
+            "label": "_23",
+            "type": "state"
+          },
+          "id": "_as_ending_23"
+        },
+        {
+          "attributes": {
+            "label": "_32",
+            "type": "state"
+          },
+          "id": "_as_ending_32"
+        },
+        {
+          "attributes": {
+            "label": "_39",
+            "type": "state"
+          },
+          "id": "_as_ending_39"
+        },
+        {
+          "attributes": {
+            "label": "_45",
+            "type": "state"
+          },
+          "id": "_as_ending_45"
+        },
+        {
+          "attributes": {
+            "label": "_51",
+            "type": "state"
+          },
+          "id": "_as_ending_51"
+        },
+        {
+          "attributes": {
+            "label": "_59",
+            "type": "state"
+          },
+          "id": "_as_ending_59"
+        },
+        {
+          "attributes": {
+            "label": "_60",
+            "type": "state"
+          },
+          "id": "_as_ending_60"
+        },
+        {
+          "attributes": {
+            "label": "_61",
+            "type": "state"
+          },
+          "id": "_as_ending_61"
+        },
+        {
+          "attributes": {
+            "label": "_65",
+            "type": "state"
+          },
+          "id": "_as_ending_65"
+        },
+        {
+          "attributes": {
+            "label": "_66",
+            "type": "state"
+          },
+          "id": "_as_ending_66"
+        },
+        {
+          "attributes": {
+            "label": "_71",
+            "type": "state"
+          },
+          "id": "_as_ending_71"
+        },
+        {
+          "attributes": {
+            "label": "_92",
+            "type": "state"
+          },
+          "id": "_as_ending_92"
+        }
+      ],
+      "return_state": null
+    },
+    {
+      "sts": "_general_errors_69_1",
+      "children": [],
+      "return_transitions": [],
+      "start_states": [
+        {
+          "id": "_general_errors_69_0"
+        }
+      ],
+      "transitions": [
+        {
+          "source": "_general_errors_69_0",
+          "attributes": {
+            "label": "!C502_COMMAND_FAILED",
+            "type": "observable"
+          },
+          "target": "_general_errors_69_1"
+        },
+        {
+          "source": "_general_errors_69_0",
+          "attributes": {
+            "label": "!C503_ERROR_STATE",
+            "type": "observable"
+          },
+          "target": "_general_errors_69_2"
+        },
+        {
+          "source": "_general_errors_69_2",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_EVENT\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_69_3"
+        },
+        {
+          "source": "_general_errors_69_3",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_INFO\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_69_1"
+        },
+        {
+          "source": "_general_errors_69_3",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_NONE\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_69_1"
+        },
+        {
+          "source": "_general_errors_69_1",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_ending_11"
+        }
+      ],
+      "name": "general_errors",
+      "states": [
+        {
+          "attributes": {
+            "label": "_0",
+            "type": "state"
+          },
+          "id": "_general_errors_69_0"
+        },
+        {
+          "attributes": {
+            "label": "_2",
+            "type": "state"
+          },
+          "id": "_general_errors_69_2"
+        },
+        {
+          "attributes": {
+            "label": "_3",
+            "type": "state"
+          },
+          "id": "_general_errors_69_3"
+        },
+        {
+          "attributes": {
+            "label": "_1",
+            "type": "state"
+          },
+          "id": "_general_errors_69_1"
+        }
+      ],
+      "return_state": "_general_errors_69_1"
+    },
+    {
+      "sts": "_general_errors_71_1",
+      "children": [],
+      "return_transitions": [],
+      "start_states": [
+        {
+          "id": "_general_errors_71_0"
+        }
+      ],
+      "transitions": [
+        {
+          "source": "_general_errors_71_0",
+          "attributes": {
+            "label": "!C502_COMMAND_FAILED",
+            "type": "observable"
+          },
+          "target": "_general_errors_71_1"
+        },
+        {
+          "source": "_general_errors_71_0",
+          "attributes": {
+            "label": "!C503_ERROR_STATE",
+            "type": "observable"
+          },
+          "target": "_general_errors_71_2"
+        },
+        {
+          "source": "_general_errors_71_2",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_EVENT\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_71_3"
+        },
+        {
+          "source": "_general_errors_71_3",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_INFO\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_71_1"
+        },
+        {
+          "source": "_general_errors_71_3",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_NONE\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_71_1"
+        },
+        {
+          "source": "_general_errors_71_1",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_ending_18"
+        }
+      ],
+      "name": "general_errors",
+      "states": [
+        {
+          "attributes": {
+            "label": "_0",
+            "type": "state"
+          },
+          "id": "_general_errors_71_0"
+        },
+        {
+          "attributes": {
+            "label": "_2",
+            "type": "state"
+          },
+          "id": "_general_errors_71_2"
+        },
+        {
+          "attributes": {
+            "label": "_3",
+            "type": "state"
+          },
+          "id": "_general_errors_71_3"
+        },
+        {
+          "attributes": {
+            "label": "_1",
+            "type": "state"
+          },
+          "id": "_general_errors_71_1"
+        }
+      ],
+      "return_state": "_general_errors_71_1"
+    },
+    {
+      "sts": "_general_errors_60_1",
+      "children": [],
+      "return_transitions": [],
+      "start_states": [
+        {
+          "id": "_general_errors_60_0"
+        }
+      ],
+      "transitions": [
+        {
+          "source": "_general_errors_60_0",
+          "attributes": {
+            "label": "!C502_COMMAND_FAILED",
+            "type": "observable"
+          },
+          "target": "_general_errors_60_1"
+        },
+        {
+          "source": "_general_errors_60_0",
+          "attributes": {
+            "label": "!C503_ERROR_STATE",
+            "type": "observable"
+          },
+          "target": "_general_errors_60_2"
+        },
+        {
+          "source": "_general_errors_60_2",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_EVENT\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_60_3"
+        },
+        {
+          "source": "_general_errors_60_3",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_INFO\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_60_1"
+        },
+        {
+          "source": "_general_errors_60_3",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_NONE\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_60_1"
+        },
+        {
+          "source": "_general_errors_60_1",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_closed_10"
+        }
+      ],
+      "name": "general_errors",
+      "states": [
+        {
+          "attributes": {
+            "label": "_0",
+            "type": "state"
+          },
+          "id": "_general_errors_60_0"
+        },
+        {
+          "attributes": {
+            "label": "_2",
+            "type": "state"
+          },
+          "id": "_general_errors_60_2"
+        },
+        {
+          "attributes": {
+            "label": "_3",
+            "type": "state"
+          },
+          "id": "_general_errors_60_3"
+        },
+        {
+          "attributes": {
+            "label": "_1",
+            "type": "state"
+          },
+          "id": "_general_errors_60_1"
+        }
+      ],
+      "return_state": "_general_errors_60_1"
+    },
+    {
+      "sts": "_general_errors_47_1",
+      "children": [],
+      "return_transitions": [],
+      "start_states": [
+        {
+          "id": "_general_errors_47_0"
+        }
+      ],
+      "transitions": [
+        {
+          "source": "_general_errors_47_0",
+          "attributes": {
+            "label": "!C502_COMMAND_FAILED",
+            "type": "observable"
+          },
+          "target": "_general_errors_47_1"
+        },
+        {
+          "source": "_general_errors_47_0",
+          "attributes": {
+            "label": "!C503_ERROR_STATE",
+            "type": "observable"
+          },
+          "target": "_general_errors_47_2"
+        },
+        {
+          "source": "_general_errors_47_2",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_EVENT\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_47_3"
+        },
+        {
+          "source": "_general_errors_47_3",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_INFO\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_47_1"
+        },
+        {
+          "source": "_general_errors_47_3",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_NONE\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_47_1"
+        },
+        {
+          "source": "_general_errors_47_1",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_open_10"
+        }
+      ],
+      "name": "general_errors",
+      "states": [
+        {
+          "attributes": {
+            "label": "_0",
+            "type": "state"
+          },
+          "id": "_general_errors_47_0"
+        },
+        {
+          "attributes": {
+            "label": "_2",
+            "type": "state"
+          },
+          "id": "_general_errors_47_2"
+        },
+        {
+          "attributes": {
+            "label": "_3",
+            "type": "state"
+          },
+          "id": "_general_errors_47_3"
+        },
+        {
+          "attributes": {
+            "label": "_1",
+            "type": "state"
+          },
+          "id": "_general_errors_47_1"
+        }
+      ],
+      "return_state": "_general_errors_47_1"
+    },
+    {
+      "sts": "_general_errors_35_1",
+      "children": [],
+      "return_transitions": [],
+      "start_states": [
+        {
+          "id": "_general_errors_35_0"
+        }
+      ],
+      "transitions": [
+        {
+          "source": "_general_errors_35_0",
+          "attributes": {
+            "label": "!C502_COMMAND_FAILED",
+            "type": "observable"
+          },
+          "target": "_general_errors_35_1"
+        },
+        {
+          "source": "_general_errors_35_0",
+          "attributes": {
+            "label": "!C503_ERROR_STATE",
+            "type": "observable"
+          },
+          "target": "_general_errors_35_2"
+        },
+        {
+          "source": "_general_errors_35_2",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_EVENT\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_35_3"
+        },
+        {
+          "source": "_general_errors_35_3",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_INFO\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_35_1"
+        },
+        {
+          "source": "_general_errors_35_3",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_NONE\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_35_1"
+        },
+        {
+          "source": "_general_errors_35_1",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_as_idle_10"
+        }
+      ],
+      "name": "general_errors",
+      "states": [
+        {
+          "attributes": {
+            "label": "_0",
+            "type": "state"
+          },
+          "id": "_general_errors_35_0"
+        },
+        {
+          "attributes": {
+            "label": "_2",
+            "type": "state"
+          },
+          "id": "_general_errors_35_2"
+        },
+        {
+          "attributes": {
+            "label": "_3",
+            "type": "state"
+          },
+          "id": "_general_errors_35_3"
+        },
+        {
+          "attributes": {
+            "label": "_1",
+            "type": "state"
+          },
+          "id": "_general_errors_35_1"
+        }
+      ],
+      "return_state": "_general_errors_35_1"
+    },
+    {
+      "sts": "_general_errors_18_1",
+      "children": [],
+      "return_transitions": [],
+      "start_states": [
+        {
+          "id": "_general_errors_18_0"
+        }
+      ],
+      "transitions": [
+        {
+          "source": "_general_errors_18_0",
+          "attributes": {
+            "label": "!C502_COMMAND_FAILED",
+            "type": "observable"
+          },
+          "target": "_general_errors_18_1"
+        },
+        {
+          "source": "_general_errors_18_0",
+          "attributes": {
+            "label": "!C503_ERROR_STATE",
+            "type": "observable"
+          },
+          "target": "_general_errors_18_2"
+        },
+        {
+          "source": "_general_errors_18_2",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_EVENT\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_18_3"
+        },
+        {
+          "source": "_general_errors_18_3",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_INFO\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_18_1"
+        },
+        {
+          "source": "_general_errors_18_3",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_NONE\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_18_1"
+        },
+        {
+          "source": "_general_errors_18_1",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_ss_off_10"
+        }
+      ],
+      "name": "general_errors",
+      "states": [
+        {
+          "attributes": {
+            "label": "_0",
+            "type": "state"
+          },
+          "id": "_general_errors_18_0"
+        },
+        {
+          "attributes": {
+            "label": "_2",
+            "type": "state"
+          },
+          "id": "_general_errors_18_2"
+        },
+        {
+          "attributes": {
+            "label": "_3",
+            "type": "state"
+          },
+          "id": "_general_errors_18_3"
+        },
+        {
+          "attributes": {
+            "label": "_1",
+            "type": "state"
+          },
+          "id": "_general_errors_18_1"
+        }
+      ],
+      "return_state": "_general_errors_18_1"
+    },
+    {
+      "sts": "_general_errors_7_1",
+      "children": [],
+      "return_transitions": [],
+      "start_states": [
+        {
+          "id": "_general_errors_7_0"
+        }
+      ],
+      "transitions": [
+        {
+          "source": "_general_errors_7_0",
+          "attributes": {
+            "label": "!C502_COMMAND_FAILED",
+            "type": "observable"
+          },
+          "target": "_general_errors_7_1"
+        },
+        {
+          "source": "_general_errors_7_0",
+          "attributes": {
+            "label": "!C503_ERROR_STATE",
+            "type": "observable"
+          },
+          "target": "_general_errors_7_2"
+        },
+        {
+          "source": "_general_errors_7_2",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_EVENT\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_7_3"
+        },
+        {
+          "source": "_general_errors_7_3",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_INFO\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_7_1"
+        },
+        {
+          "source": "_general_errors_7_3",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_EVENT\") && (variable_value\n== \"EV_NONE\"))",
+            "type": "observable"
+          },
+          "target": "_general_errors_7_1"
+        },
+        {
+          "source": "_general_errors_7_1",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          },
+          "target": "_24"
+        }
+      ],
+      "name": "general_errors",
+      "states": [
+        {
+          "attributes": {
+            "label": "_0",
+            "type": "state"
+          },
+          "id": "_general_errors_7_0"
+        },
+        {
+          "attributes": {
+            "label": "_2",
+            "type": "state"
+          },
+          "id": "_general_errors_7_2"
+        },
+        {
+          "attributes": {
+            "label": "_3",
+            "type": "state"
+          },
+          "id": "_general_errors_7_3"
+        },
+        {
+          "attributes": {
+            "label": "_1",
+            "type": "state"
+          },
+          "id": "_general_errors_7_1"
+        }
+      ],
+      "return_state": "_general_errors_7_1"
+    }
+  ]
+}
