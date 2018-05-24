@@ -1,0 +1,1114 @@
+{
+  "stss": [
+    {
+      "name": "main",
+      "states": [
+        {
+          "id": "unconnected",
+          "attributes": {
+            "label": "unconnected",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_1",
+          "attributes": {
+            "label": "_1",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_2",
+          "attributes": {
+            "label": "_2",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_5",
+          "attributes": {
+            "label": "_5",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_6",
+          "attributes": {
+            "label": "_6",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_7",
+          "attributes": {
+            "label": "_7",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_8",
+          "attributes": {
+            "label": "_8",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_10",
+          "attributes": {
+            "label": "_10",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_11",
+          "attributes": {
+            "label": "_11",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_13",
+          "attributes": {
+            "label": "_13",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_14",
+          "attributes": {
+            "label": "_14",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_15",
+          "attributes": {
+            "label": "_15",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_18",
+          "attributes": {
+            "label": "_18",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_20",
+          "attributes": {
+            "label": "_20",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_21",
+          "attributes": {
+            "label": "_21",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_22",
+          "attributes": {
+            "label": "_22",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_23",
+          "attributes": {
+            "label": "_23",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_24",
+          "attributes": {
+            "label": "_24",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_26",
+          "attributes": {
+            "label": "_26",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_28",
+          "attributes": {
+            "label": "_28",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_31",
+          "attributes": {
+            "label": "_31",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_33",
+          "attributes": {
+            "label": "_33",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_34",
+          "attributes": {
+            "label": "_34",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_35",
+          "attributes": {
+            "label": "_35",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_36",
+          "attributes": {
+            "label": "_36",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_37",
+          "attributes": {
+            "label": "_37",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_38",
+          "attributes": {
+            "label": "_38",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_40",
+          "attributes": {
+            "label": "_40",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_42",
+          "attributes": {
+            "label": "_42",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_45",
+          "attributes": {
+            "label": "_45",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_47",
+          "attributes": {
+            "label": "_47",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_48",
+          "attributes": {
+            "label": "_48",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_49",
+          "attributes": {
+            "label": "_49",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_50",
+          "attributes": {
+            "label": "_50",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_51",
+          "attributes": {
+            "label": "_51",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_53",
+          "attributes": {
+            "label": "_53",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_55",
+          "attributes": {
+            "label": "_55",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_58",
+          "attributes": {
+            "label": "_58",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_60",
+          "attributes": {
+            "label": "_60",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_61",
+          "attributes": {
+            "label": "_61",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_62",
+          "attributes": {
+            "label": "_62",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_63",
+          "attributes": {
+            "label": "_63",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_65",
+          "attributes": {
+            "label": "_65",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_67",
+          "attributes": {
+            "label": "_67",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_70",
+          "attributes": {
+            "label": "_70",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_72",
+          "attributes": {
+            "label": "_72",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_74",
+          "attributes": {
+            "label": "_74",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_77",
+          "attributes": {
+            "label": "_77",
+            "type": "state"
+          }
+        },
+        {
+          "id": "_79",
+          "attributes": {
+            "label": "_79",
+            "type": "state"
+          }
+        }
+      ],
+      "children": [
+        {
+          "id": "general_errors_6",
+          "attributes": {
+            "label": "general_errors",
+            "type": "behavior",
+            "hex_id": "67656e6572616c5f6572726f72735f36"
+          }
+        },
+        {
+          "id": "ss_off_1",
+          "attributes": {
+            "label": "ss_off",
+            "type": "behavior",
+            "hex_id": "73735f6f66665f31"
+          }
+        },
+        {
+          "id": "general_errors_7",
+          "attributes": {
+            "label": "general_errors",
+            "type": "behavior",
+            "hex_id": "67656e6572616c5f6572726f72735f37"
+          }
+        },
+        {
+          "id": "general_errors_8",
+          "attributes": {
+            "label": "general_errors",
+            "type": "behavior",
+            "hex_id": "67656e6572616c5f6572726f72735f38"
+          }
+        },
+        {
+          "id": "general_errors_9",
+          "attributes": {
+            "label": "general_errors",
+            "type": "behavior",
+            "hex_id": "67656e6572616c5f6572726f72735f39"
+          }
+        },
+        {
+          "id": "general_errors_10",
+          "attributes": {
+            "label": "general_errors",
+            "type": "behavior",
+            "hex_id": "67656e6572616c5f6572726f72735f3130"
+          }
+        },
+        {
+          "id": "general_errors_11",
+          "attributes": {
+            "label": "general_errors",
+            "type": "behavior",
+            "hex_id": "67656e6572616c5f6572726f72735f3131"
+          }
+        },
+        {
+          "id": "general_errors_12",
+          "attributes": {
+            "label": "general_errors",
+            "type": "behavior",
+            "hex_id": "67656e6572616c5f6572726f72735f3132"
+          }
+        },
+        {
+          "id": "general_errors_13",
+          "attributes": {
+            "label": "general_errors",
+            "type": "behavior",
+            "hex_id": "67656e6572616c5f6572726f72735f3133"
+          }
+        },
+        {
+          "id": "general_errors_14",
+          "attributes": {
+            "label": "general_errors",
+            "type": "behavior",
+            "hex_id": "67656e6572616c5f6572726f72735f3134"
+          }
+        },
+        {
+          "id": "general_errors_15",
+          "attributes": {
+            "label": "general_errors",
+            "type": "behavior",
+            "hex_id": "67656e6572616c5f6572726f72735f3135"
+          }
+        },
+        {
+          "id": "general_errors_16",
+          "attributes": {
+            "label": "general_errors",
+            "type": "behavior",
+            "hex_id": "67656e6572616c5f6572726f72735f3136"
+          }
+        }
+      ],
+      "start_states": [
+        {
+          "id": "unconnected"
+        }
+      ],
+      "transitions": [
+        {
+          "source": "unconnected",
+          "target": "_1",
+          "attributes": {
+            "label": "!C220_SCRP_READY",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_1",
+          "target": "_2",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_SIGN\"))",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_2",
+          "target": "_10",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_SIGN\") \u0026\u0026 (variable_value\n== \"SS_OFF\"))",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_2",
+          "target": "_10",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_SIGN\") \u0026\u0026 (variable_value\n== \"SS_HALT\"))",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_2",
+          "target": "_5",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_SIGN\") \u0026\u0026 (variable_value\n== \"SS_ON\"))",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_2",
+          "target": "_77",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_5",
+          "target": "_6",
+          "attributes": {
+            "label": "?GET\nif ((get_variable_name ==\n\"CS_ACCNT\"))",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_6",
+          "target": "_7",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_ACCNT\") \u0026\u0026 (variable_value\n== \"AS_IDLE\"))",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_6",
+          "target": "_14",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_ACCNT\") \u0026\u0026 (variable_value\n== \"AS_OPEN\"))",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_6",
+          "target": "_34",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_ACCNT\") \u0026\u0026 (variable_value\n== \"AS_CLOSED\"))",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_6",
+          "target": "_48",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_ACCNT\") \u0026\u0026 (variable_value\n== \"AS_TRANSING\"))",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_6",
+          "target": "_61",
+          "attributes": {
+            "label": "!C210_VAR_RETURN\nif ((return_variable_name ==\n\"CS_ACCNT\") \u0026\u0026 (variable_value\n== \"AS_ENDING\"))",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_6",
+          "target": "_74",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_7",
+          "target": "_8",
+          "attributes": {
+            "label": "?SIGNOFF",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_8",
+          "target": "_10",
+          "attributes": {
+            "label": "!C250_SIGNED_OFF",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_8",
+          "target": "_11",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_10",
+          "target": "_13",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_10",
+          "target": "_33",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_10",
+          "target": "_47",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_10",
+          "target": "_60",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_10",
+          "target": "_72",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_10",
+          "target": "_79",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_14",
+          "target": "_15",
+          "attributes": {
+            "label": "?CLOSE",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_15",
+          "target": "_15",
+          "attributes": {
+            "label": "!C212_ART_DESCRIPTION",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_15",
+          "target": "_18",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_18",
+          "target": "_20",
+          "attributes": {
+            "label": "!C230_ACCOUNT_CLOSED",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_20",
+          "target": "_21",
+          "attributes": {
+            "label": "?TRANS\nif ((trans_id == \"TM_FLUSH\"))",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_21",
+          "target": "_22",
+          "attributes": {
+            "label": "!C240_TRANS_SUCCEEDED",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_22",
+          "target": "_23",
+          "attributes": {
+            "label": "?IDLE",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_23",
+          "target": "_24",
+          "attributes": {
+            "label": "!C233_ACCOUNT_IDLED",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_23",
+          "target": "_26",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_24",
+          "target": "_28",
+          "attributes": {
+            "label": "?SIGNOFF",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_28",
+          "target": "_10",
+          "attributes": {
+            "label": "!C250_SIGNED_OFF",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_28",
+          "target": "_31",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_34",
+          "target": "_35",
+          "attributes": {
+            "label": "?TRANS\nif ((trans_id == \"TM_FLUSH\"))",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_35",
+          "target": "_36",
+          "attributes": {
+            "label": "!C240_TRANS_SUCCEEDED",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_36",
+          "target": "_37",
+          "attributes": {
+            "label": "?IDLE",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_37",
+          "target": "_38",
+          "attributes": {
+            "label": "!C233_ACCOUNT_IDLED",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_37",
+          "target": "_40",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_38",
+          "target": "_42",
+          "attributes": {
+            "label": "?SIGNOFF",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_42",
+          "target": "_10",
+          "attributes": {
+            "label": "!C250_SIGNED_OFF",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_42",
+          "target": "_45",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_48",
+          "target": "_49",
+          "attributes": {
+            "label": "!C240_TRANS_SUCCEEDED",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_49",
+          "target": "_50",
+          "attributes": {
+            "label": "?IDLE",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_50",
+          "target": "_51",
+          "attributes": {
+            "label": "!C233_ACCOUNT_IDLED",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_50",
+          "target": "_53",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_51",
+          "target": "_55",
+          "attributes": {
+            "label": "?SIGNOFF",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_55",
+          "target": "_10",
+          "attributes": {
+            "label": "!C250_SIGNED_OFF",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_55",
+          "target": "_58",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_61",
+          "target": "_62",
+          "attributes": {
+            "label": "?IDLE",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_62",
+          "target": "_63",
+          "attributes": {
+            "label": "!C233_ACCOUNT_IDLED",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_62",
+          "target": "_65",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_63",
+          "target": "_67",
+          "attributes": {
+            "label": "?SIGNOFF",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_67",
+          "target": "_10",
+          "attributes": {
+            "label": "!C250_SIGNED_OFF",
+            "type": "observable"
+          }
+        },
+        {
+          "source": "_67",
+          "target": "_70",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_11",
+          "target": "general_errors_6",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_13",
+          "target": "ss_off_1",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_26",
+          "target": "general_errors_7",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_31",
+          "target": "general_errors_8",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_33",
+          "target": "ss_off_1",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_40",
+          "target": "general_errors_9",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_45",
+          "target": "general_errors_10",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_47",
+          "target": "ss_off_1",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_53",
+          "target": "general_errors_11",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_58",
+          "target": "general_errors_12",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_60",
+          "target": "ss_off_1",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_65",
+          "target": "general_errors_13",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_70",
+          "target": "general_errors_14",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_72",
+          "target": "ss_off_1",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_74",
+          "target": "general_errors_15",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_77",
+          "target": "general_errors_16",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        },
+        {
+          "source": "_79",
+          "target": "ss_off_1",
+          "attributes": {
+            "label": "",
+            "type": "unobservable"
+          }
+        }
+      ],
+      "return_transitions": [
+        {
+          "source": "general_errors_6",
+          "target": "_10",
+          "attributes": {
+            "label": ""
+          }
+        },
+        {
+          "source": "general_errors_7",
+          "target": "_24",
+          "attributes": {
+            "label": ""
+          }
+        },
+        {
+          "source": "general_errors_8",
+          "target": "_10",
+          "attributes": {
+            "label": ""
+          }
+        },
+        {
+          "source": "general_errors_9",
+          "target": "_38",
+          "attributes": {
+            "label": ""
+          }
+        },
+        {
+          "source": "general_errors_10",
+          "target": "_10",
+          "attributes": {
+            "label": ""
+          }
+        },
+        {
+          "source": "general_errors_11",
+          "target": "_51",
+          "attributes": {
+            "label": ""
+          }
+        },
+        {
+          "source": "general_errors_12",
+          "target": "_10",
+          "attributes": {
+            "label": ""
+          }
+        },
+        {
+          "source": "general_errors_13",
+          "target": "_63",
+          "attributes": {
+            "label": ""
+          }
+        },
+        {
+          "source": "general_errors_14",
+          "target": "_10",
+          "attributes": {
+            "label": ""
+          }
+        },
+        {
+          "source": "general_errors_15",
+          "target": "_10",
+          "attributes": {
+            "label": ""
+          }
+        },
+        {
+          "source": "general_errors_16",
+          "target": "_10",
+          "attributes": {
+            "label": ""
+          }
+        }
+      ],
+      "return_state": null,
+      "sts": null
+    }
+  ]
+}

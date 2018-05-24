@@ -1,0 +1,95 @@
+{
+  "test_run_id": "609b6509-db67-4968-89d0-537e3d1fdee2",
+  "test_cases": [
+    {
+      "verdict": "error",
+      "error_message": "Failed to observe results in adapter: Received ERROR: Could not connect to POS at ./tcp localhost 25801",
+      "steps": [
+        {
+          "label": {
+            "name": "error",
+            "direction": "response",
+            "channel": "error"
+          },
+          "timestamp": "2018-02-16T10:13:54.155+0100",
+          "notes": [
+
+          ],
+          "step_number": 0,
+          "state_vector_size": null,
+          "advance_duration_ms": null,
+          "physical_label": null,
+          "label_parameters": {
+          }
+        }
+      ],
+      "last_step": 0,
+      "expected_labels": [
+
+      ],
+      "tags": [
+
+      ]
+    },
+    {
+      "verdict": "error",
+      "error_message": "Failed to observe results in adapter: Received ERROR: Could not connect to POS at ./tcp localhost 25801",
+      "steps": [
+        {
+          "label": {
+            "name": "error",
+            "direction": "response",
+            "channel": "error"
+          },
+          "timestamp": "2018-02-16T10:13:54.381+0100",
+          "notes": [
+
+          ],
+          "step_number": 0,
+          "state_vector_size": null,
+          "advance_duration_ms": null,
+          "physical_label": null,
+          "label_parameters": {
+          }
+        }
+      ],
+      "last_step": 0,
+      "expected_labels": [
+
+      ],
+      "tags": [
+
+      ]
+    },
+    {
+      "verdict": "error",
+      "error_message": "Failed to observe results in adapter: Received ERROR: Could not connect to POS at ./tcp localhost 25801",
+      "steps": [
+        {
+          "label": {
+            "name": "error",
+            "direction": "response",
+            "channel": "error"
+          },
+          "timestamp": "2018-02-16T10:13:54.527+0100",
+          "notes": [
+
+          ],
+          "step_number": 0,
+          "state_vector_size": null,
+          "advance_duration_ms": null,
+          "physical_label": null,
+          "label_parameters": {
+          }
+        }
+      ],
+      "last_step": 0,
+      "expected_labels": [
+
+      ],
+      "tags": [
+
+      ]
+    }
+  ]
+}
