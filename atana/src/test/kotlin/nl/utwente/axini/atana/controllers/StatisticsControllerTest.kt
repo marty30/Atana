@@ -7,7 +7,9 @@ import nl.utwente.axini.atana.repository.TestLogsRepository
 import nl.utwente.axini.atana.repository.TestModelRepository
 import nl.utwente.axini.atana.repository.TestRunRepository
 import nl.utwente.axini.atana.transaction
+import org.hamcrest.core.IsEqual.equalTo
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThat
 import org.junit.Test
 import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
@@ -16,6 +18,8 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
+import org.springframework.http.MediaType
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.test.context.junit4.SpringRunner
 import java.time.LocalDateTime
 import java.util.*
@@ -40,7 +44,34 @@ class StatisticsControllerTest : AbstractControllerTest() {
 	lateinit var analysisResultRepository: AnalysisResultRepository
 
 	@Test
-	fun showPassedTestRuns() {
+	fun testShowStatistics() {
+		lateinit var uuid: UUID
+		for (i in 0..1) {
+			val testrun1 = TestRun(UUID.randomUUID(), setOf(
+					TestCase(1, 1, TestResult.PASSED, null, setOf(Step(Label("Init", "out", null), stepNumber = 1, timestamp = LocalDateTime.now())), 1),
+					TestCase(2, 2, TestResult.FAILED, "Some error", setOf(Step(Label("Init", "out", null), stepNumber = 1, timestamp = LocalDateTime.now())), 1),
+					TestCase(3, 3, TestResult.PASSED, null, setOf(Step(Label("Init", "out", null), stepNumber = 1, timestamp = LocalDateTime.now())), 1)
+			))
+			uuid = testrun1.testRunId
+			testRunRepository.save(testrun1)
+		}
+
+		val converter = MappingJackson2HttpMessageConverter()
+		converter.supportedMediaTypes = Arrays.asList(MediaType.APPLICATION_OCTET_STREAM)
+		testRestTemplate.restTemplate.messageConverters.add(converter)
+
+		val expectedResult = mapOf(
+				"test_run_id" to uuid,
+				"total_count" to 3,
+				"passed_count" to 2,
+				"failed_count" to 1,
+				"passed_percentage" to 0.6666667,
+				"failed_percentage" to 0.33333334
+		)
+
+		val response = testRestTemplate.exchange("/statistics", HttpMethod.GET, HttpEntity.EMPTY, List::class.java)
+		checkResponse(response)
+		assertThat(response.body?.last()?.toString(), equalTo(expectedResult.toString()))
 	}
 
 	@Test

@@ -1,27 +1,50 @@
 package nl.utwente.axini.atana.controllers
 
+import com.fasterxml.jackson.core.JsonFactory
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import nl.utwente.axini.atana.models.TestLogs
 import nl.utwente.axini.atana.models.TestResult
+import nl.utwente.axini.atana.models.TestRun
+import nl.utwente.axini.atana.models.jsonObjectMapper
 import nl.utwente.axini.atana.repository.TestLogsRepository
 import nl.utwente.axini.atana.repository.TestModelRepository
 import nl.utwente.axini.atana.repository.TestRunRepository
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeParseException
 import java.util.*
+import java.util.stream.Stream
+import javax.persistence.EntityManager
+import javax.servlet.http.HttpServletResponse
+
+//data class Statistics(val testRunId: UUID?=null, val totalCount: Long?=null){
+//	constructor(testRunId: UUID):this(testRunId, null)
+//	constructor(totalCount: Long):this(null, totalCount)
+//	constructor():this(null, null)
+//
+//}
 
 @RestController
-class StatisticsController(val testRunRepository: TestRunRepository, val testLogsRepository: TestLogsRepository, val testModelRepository: TestModelRepository) : AbstractController() {
-	@GetMapping("/statistics")
-	@ApiOperation("Show all statistics")
-	fun showStatistics(): List<MutableMap<String, Any>> {
-		val testruns = testRunRepository.findAll().map {
-			val stats = it.testCases.groupBy { it.verdict }
-			return@map mutableMapOf(
+class StatisticsController(val entityManager: EntityManager, val testRunRepository: TestRunRepository, val testLogsRepository: TestLogsRepository, val testModelRepository: TestModelRepository) : AbstractController() {
+
+	fun getBaseStatistics(): Stream<MutableMap<String, out Any>> {
+//		log.warn("3")
+		val crit = entityManager.criteriaBuilder.createQuery(TestRun::class.java)
+		val tr = crit.from(TestRun::class.java)
+//		val tc = crit.from(TestCase::class.java)
+		crit.select(tr)
+
+//		log.warn("4")
+		val result = entityManager.createQuery(crit).resultStream
+//		log.warn("5")
+		return result.map {
+			val stats = it.testCases.groupBy { it.verdict } //TODO replace this group by a database group to speed everything up
+//			log.warn("6")
+			val map	= mutableMapOf(
 					"test_run_id" to it.testRunId,
 					"total_count" to it.testCases.size,
 					"passed_count" to (stats[TestResult.PASSED]?.size ?: 0),
@@ -31,43 +54,71 @@ class StatisticsController(val testRunRepository: TestRunRepository, val testLog
 					"failed_percentage" to ((stats[TestResult.FAILED]?.size
 							?: 0).toFloat() / it.testCases.size.toFloat())
 			)
-		}
-
-		testruns.forEach {
-			val testRunId: UUID = it["test_run_id"] as UUID
-			val logs = testLogsRepository.findAllByTestRunId(testRunId).toList()
-			if (logs.size > 1) {
-				println("Multiple keys found: $logs")
+//			log.warn("7")
+			val logs = testLogsRepository.findAllByTestRunId(it.testRunId).toList()
+//			log.warn("8")
+			if (logs.isNotEmpty()) {
+				if (logs.size > 1) {
+					log.warn("Multiple keys found: $logs")
+				}
+				map["test_set_id"] = logs[0].testsetId
+				map["sut_filename"] = (logs[0].sutFilename ?: "")
 			}
-			it["test_set_id"] = logs[0].testsetId
-			it["sut_filename"] = (logs[0].sutFilename ?: "")
+			log.warn("9")
+			return@map map
 		}
+	}
 
-		return testruns
+	private fun writeToResponse(stream: Stream<out Any>, response : HttpServletResponse) {
+//		log.warn("10")
+		val jsonFactory = JsonFactory()
+		val gen = jsonFactory.createGenerator(response.outputStream)
+		gen.codec = jsonObjectMapper.value
+		response.contentType = MediaType.APPLICATION_JSON_UTF8_VALUE
+//		log.warn("11")
+
+		gen.writeStartArray()
+//		log.warn("12")
+		stream.forEach{
+			gen.writeObject(it)
+			response.flushBuffer()
+//			log.warn("13")
+		}
+		gen.writeEndArray()
+		gen.close()
+//		log.warn("14")
+	}
+
+	@GetMapping("/statistics")
+	@ApiOperation("Show all statistics")
+	fun showStatistics(response : HttpServletResponse) {
+//		log.warn("1")
+		writeToResponse(getBaseStatistics(), response)
+//		log.warn("2")
 	}
 
 	@GetMapping("/statistics/usable")
 	@ApiOperation("Show tests that are usable")
-	fun showUsableTestRuns(): List<MutableMap<String, Any>> {
+	fun showUsableTestRuns(response : HttpServletResponse) {
 		val minPercentage = 0.05
 		val maxPercentage = 0.95
 
-		return showStatistics().filter {
+		writeToResponse(getBaseStatistics().filter {
 			it["failed_percentage"] as Float in minPercentage..maxPercentage &&
 					it["passed_percentage"] as Float in minPercentage..maxPercentage
-		}
+		}, response)
 	}
 
 	@GetMapping("/statistics/unusable")
 	@ApiOperation("Show tests that are NOT usable")
-	fun showUnusableTestRuns(): List<MutableMap<String, Any>> {
+	fun showUnusableTestRuns(response : HttpServletResponse) {
 		val minPercentage = 0.05
 		val maxPercentage = 0.95
 
-		return showStatistics().filter {
+		writeToResponse(getBaseStatistics().filter {
 			it["failed_percentage"] as Float !in minPercentage..maxPercentage &&
 					it["passed_percentage"] as Float !in minPercentage..maxPercentage
-		}
+		}, response)
 	}
 
 	@DeleteMapping("/statistics/unusable")
@@ -76,7 +127,7 @@ class StatisticsController(val testRunRepository: TestRunRepository, val testLog
 		val minPercentage = 0.05
 		val maxPercentage = 0.95
 
-		showStatistics().filter {
+		getBaseStatistics().filter {
 			it["failed_percentage"] as Float !in minPercentage..maxPercentage &&
 					it["passed_percentage"] as Float !in minPercentage..maxPercentage
 		}.forEach {
