@@ -5,12 +5,10 @@ import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import nl.utwente.axini.atana.models.TestLogs
 import nl.utwente.axini.atana.models.TestResult
-import nl.utwente.axini.atana.models.TestRun
 import nl.utwente.axini.atana.models.jsonObjectMapper
 import nl.utwente.axini.atana.repository.TestLogsRepository
 import nl.utwente.axini.atana.repository.TestModelRepository
 import nl.utwente.axini.atana.repository.TestRunRepository
-import nl.utwente.axini.atana.transaction
 import org.hibernate.Session
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -20,7 +18,6 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeParseException
 import java.util.*
 import java.util.function.Function
-import java.util.stream.Collectors
 import java.util.stream.Stream
 import javax.persistence.EntityManager
 import javax.servlet.http.HttpServletResponse
@@ -39,17 +36,8 @@ class StatisticsController(val entityManager: EntityManager, val testRunReposito
 
 	fun getBaseStatistics(): Stream<MutableMap<String, out Any?>> {
 		val session = entityManager.unwrap(Session::class.java)
-//		val q_insert = session.createNativeQuery("CREATE VIEW tmp_view AS SELECT tr.test_run_id, tc.verdict, sum(tc.verdict=1) as verdict1, sum(tc.verdict=0) as verdict0 FROM `test_run` as tr, `test_case` as tc, `test_run_test_cases` as tr_tc WHERE tr.database_id = tr_tc.test_run_database_id AND tc.database_id = tr_tc.test_cases_database_id GROUP BY tr.test_run_id, tc.verdict")
-//		val q = session.createQuery("SELECT tr.testRunId, tc.verdict, sum(case when tc.verdict=1 then 1 else 0 end) as verdict1, sum(case when tc.verdict=0 then 1 else 0 end) as verdict0, (verdict1/verdict0) FROM TestRun as tr join tr.testCases as tc GROUP BY tr.testRunId, tc.verdict")
-		val q = session.createQuery("SELECT new list(tr.testRunId, tc.verdict, count(tc), sum(case when tc.verdict=:passed then 1 else 0 end), sum(case when tc.verdict=:failed then 1 else 0 end)) FROM TestRun as tr join tr.testCases as tc GROUP BY tr.testRunId, tc.verdict").setParameter("passed", TestResult.PASSED).setParameter("failed", TestResult.FAILED)
-//		transaction{
-//			q_insert.executeUpdate()
-//		}
-//		val q = session.createQuery("SELECT l.testRunId, sum(l.verdict1), sum(l.verdict0) FROM tmp_view as l GROUP BY l.testRunId")
-		val res = q.stream().map {it ->
-			val i = it as List<Any?>
-			Statistics(it[0] as UUID, it[1] as TestResult, it[2] as Long, it[3] as Long, it[4] as Long)
-		}.flatMap(object : Function<Statistics, Stream<Statistics>> {
+		val q = session.createQuery("SELECT new nl.utwente.axini.atana.controllers.Statistics(tr.testRunId, tc.verdict, count(tc), sum(case when tc.verdict=:passed then 1 else 0 end), sum(case when tc.verdict=:failed then 1 else 0 end)) FROM TestRun as tr join tr.testCases as tc GROUP BY tr.testRunId, tc.verdict", Statistics::class.java).setParameter("passed", TestResult.PASSED).setParameter("failed", TestResult.FAILED)
+		val res = q.stream().flatMap(object : Function<Statistics, Stream<Statistics>> {
 			var prev: Statistics? = null
 			override fun apply(it: Statistics): Stream<Statistics> {
 				val res = if (prev?.testRunId == it.testRunId) {
@@ -60,15 +48,6 @@ class StatisticsController(val entityManager: EntityManager, val testRunReposito
 				return res
 			}
 		})
-//		log.warn("3")
-//		val crit = entityManager.criteriaBuilder.createQuery(TestRun::class.java)
-//		val tr = crit.from(TestRun::class.java)
-//		val tc = crit.from(TestCase::class.java)
-//		crit.select(tr)
-
-//		log.warn("4")
-//		val result = entityManager.createQuery(crit).resultStream
-//		log.warn("5")
 		return res.map {
 //			log.warn("6")
 			val map	= mutableMapOf(
@@ -79,9 +58,7 @@ class StatisticsController(val entityManager: EntityManager, val testRunReposito
 					"passed_percentage" to ((it.passedCount?:0).toFloat() / (it.totalCount?:0).toFloat()),
 					"failed_percentage" to ((it.failedCount?:0).toFloat() / (it.totalCount?:0).toFloat())
 			)
-//			log.warn("7")
 			val logs = testLogsRepository.findAllByTestRunId(it.testRunId!!).toList()
-//			log.warn("8")
 			if (logs.isNotEmpty()) {
 				if (logs.size > 1) {
 					log.warn("Multiple keys found: $logs")
@@ -89,37 +66,29 @@ class StatisticsController(val entityManager: EntityManager, val testRunReposito
 				map["test_set_id"] = logs[0].testsetId
 				map["sut_filename"] = (logs[0].sutFilename ?: "")
 			}
-			log.warn("9")
 			return@map map
 		}
 	}
 
 	private fun writeToResponse(stream: Stream<out Any>, response : HttpServletResponse) {
-//		log.warn("10")
 		val jsonFactory = JsonFactory()
 		val gen = jsonFactory.createGenerator(response.outputStream)
 		gen.codec = jsonObjectMapper.value
 		response.contentType = MediaType.APPLICATION_JSON_UTF8_VALUE
-//		log.warn("11")
 
 		gen.writeStartArray()
-//		log.warn("12")
 		stream.forEach{
 			gen.writeObject(it)
 			response.flushBuffer()
-//			log.warn("13")
 		}
 		gen.writeEndArray()
 		gen.close()
-//		log.warn("14")
 	}
 
 	@GetMapping("/statistics")
 	@ApiOperation("Show all statistics")
 	fun showStatistics(response : HttpServletResponse) {
-//		log.warn("1")
 		writeToResponse(getBaseStatistics(), response)
-//		log.warn("2")
 	}
 
 	@GetMapping("/statistics/usable")
