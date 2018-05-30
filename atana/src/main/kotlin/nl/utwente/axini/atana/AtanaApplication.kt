@@ -9,10 +9,17 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.apache.maven.model.Model
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader
+import org.springframework.beans.BeansException
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.context.ApplicationContext
+import org.springframework.context.ApplicationContextAware
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.stereotype.Component
+import org.springframework.transaction.PlatformTransactionManager
+import org.springframework.transaction.TransactionDefinition
+import org.springframework.transaction.support.TransactionTemplate
 import org.springframework.web.client.RestTemplate
 import java.io.File
 import java.io.FileNotFoundException
@@ -51,6 +58,35 @@ fun jsonObjectMapper(): ObjectMapper {
 			.registerModule(Jdk8Module())
 			.registerModule(ParameterNamesModule())
 			.findAndRegisterModules()
+}
+
+@Component
+class ApplicationContextProvider : ApplicationContextAware {
+
+	@Throws(BeansException::class)
+	override fun setApplicationContext(ac: ApplicationContext) {
+		context = ac
+	}
+
+	companion object {
+
+		private var context: ApplicationContext? = null
+
+		fun getApplicationContext(): ApplicationContext? {
+			return context
+		}
+	}
+}
+
+fun transaction(codeToRun: () -> Unit) {
+	transaction<Unit>(codeToRun)
+}
+
+fun <T> transaction(codeToRun: () -> T) : T {
+	val transactionManager = ApplicationContextProvider.getApplicationContext()?.getBean(PlatformTransactionManager::class.java)!!
+	val txTemplate = TransactionTemplate(transactionManager)
+	txTemplate.propagationBehavior = TransactionDefinition.PROPAGATION_REQUIRES_NEW
+	return txTemplate.execute({ return@execute codeToRun.invoke() })!!
 }
 
 val mavenModel = lazy {

@@ -15,34 +15,6 @@ import org.springframework.transaction.TransactionDefinition
 import org.springframework.transaction.support.TransactionTemplate
 
 
-fun transaction(codeToRun: () -> Unit) {
-	transaction<Unit>(codeToRun)
-}
-
-fun <T> transaction(codeToRun: () -> T) : T {
-	val transactionManager = ApplicationContextProvider.getApplicationContext()?.getBean(PlatformTransactionManager::class.java)!!
-	val txTemplate = TransactionTemplate(transactionManager)
-	txTemplate.propagationBehavior = TransactionDefinition.PROPAGATION_REQUIRES_NEW
-	return txTemplate.execute({ return@execute codeToRun.invoke() })!!
-}
-
-@Component
-class ApplicationContextProvider : ApplicationContextAware {
-
-	@Throws(BeansException::class)
-	override fun setApplicationContext(ac: ApplicationContext) {
-		context = ac
-	}
-
-	companion object {
-
-		private var context: ApplicationContext? = null
-
-		fun getApplicationContext(): ApplicationContext? {
-			return context
-		}
-	}
-}
 
 private fun filterMap(map: MutableMap<*, *>?, vararg keysToRemove: String) {
 	if (map == null || map.isEmpty() || keysToRemove.isEmpty()) {

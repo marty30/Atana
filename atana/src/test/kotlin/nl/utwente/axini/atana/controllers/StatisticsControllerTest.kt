@@ -71,7 +71,7 @@ class StatisticsControllerTest : AbstractControllerTest() {
 
 		val response = testRestTemplate.exchange("/statistics", HttpMethod.GET, HttpEntity.EMPTY, List::class.java)
 		checkResponse(response)
-		assertThat(response.body?.last()?.toString(), equalTo(expectedResult.toString()))
+		assertThat(response.body?.find { (it as Map<*, *>)["test_run_id"] == uuid.toString() }?.toString(), equalTo(expectedResult.toString()))
 	}
 
 	@Test

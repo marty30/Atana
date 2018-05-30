@@ -10,6 +10,8 @@ import nl.utwente.axini.atana.models.jsonObjectMapper
 import nl.utwente.axini.atana.repository.TestLogsRepository
 import nl.utwente.axini.atana.repository.TestModelRepository
 import nl.utwente.axini.atana.repository.TestRunRepository
+import nl.utwente.axini.atana.transaction
+import org.hibernate.Session
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -17,45 +19,68 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeParseException
 import java.util.*
+import java.util.function.Function
+import java.util.stream.Collectors
 import java.util.stream.Stream
 import javax.persistence.EntityManager
 import javax.servlet.http.HttpServletResponse
 
-//data class Statistics(val testRunId: UUID?=null, val totalCount: Long?=null){
-//	constructor(testRunId: UUID):this(testRunId, null)
-//	constructor(totalCount: Long):this(null, totalCount)
-//	constructor():this(null, null)
-//
-//}
+data class Statistics(val testRunId: UUID?, val verdict: TestResult, val totalCount: Long?, val passedCount: Long?, val failedCount: Long?) {
+	operator fun plus(other: Statistics): Statistics {
+		if (other.testRunId != testRunId){
+			throw IllegalArgumentException("Test run ids do not match")
+		}
+		return Statistics(testRunId, verdict, (totalCount?:0)+(other.totalCount?:0), (passedCount?:0)+(other.passedCount?:0), (failedCount?:0)+(other.failedCount?:0))
+	}
+}
 
 @RestController
 class StatisticsController(val entityManager: EntityManager, val testRunRepository: TestRunRepository, val testLogsRepository: TestLogsRepository, val testModelRepository: TestModelRepository) : AbstractController() {
 
-	fun getBaseStatistics(): Stream<MutableMap<String, out Any>> {
+	fun getBaseStatistics(): Stream<MutableMap<String, out Any?>> {
+		val session = entityManager.unwrap(Session::class.java)
+//		val q_insert = session.createNativeQuery("CREATE VIEW tmp_view AS SELECT tr.test_run_id, tc.verdict, sum(tc.verdict=1) as verdict1, sum(tc.verdict=0) as verdict0 FROM `test_run` as tr, `test_case` as tc, `test_run_test_cases` as tr_tc WHERE tr.database_id = tr_tc.test_run_database_id AND tc.database_id = tr_tc.test_cases_database_id GROUP BY tr.test_run_id, tc.verdict")
+//		val q = session.createQuery("SELECT tr.testRunId, tc.verdict, sum(case when tc.verdict=1 then 1 else 0 end) as verdict1, sum(case when tc.verdict=0 then 1 else 0 end) as verdict0, (verdict1/verdict0) FROM TestRun as tr join tr.testCases as tc GROUP BY tr.testRunId, tc.verdict")
+		val q = session.createQuery("SELECT new list(tr.testRunId, tc.verdict, count(tc), sum(case when tc.verdict=:passed then 1 else 0 end), sum(case when tc.verdict=:failed then 1 else 0 end)) FROM TestRun as tr join tr.testCases as tc GROUP BY tr.testRunId, tc.verdict").setParameter("passed", TestResult.PASSED).setParameter("failed", TestResult.FAILED)
+//		transaction{
+//			q_insert.executeUpdate()
+//		}
+//		val q = session.createQuery("SELECT l.testRunId, sum(l.verdict1), sum(l.verdict0) FROM tmp_view as l GROUP BY l.testRunId")
+		val res = q.stream().map {it ->
+			val i = it as List<Any?>
+			Statistics(it[0] as UUID, it[1] as TestResult, it[2] as Long, it[3] as Long, it[4] as Long)
+		}.flatMap(object : Function<Statistics, Stream<Statistics>> {
+			var prev: Statistics? = null
+			override fun apply(it: Statistics): Stream<Statistics> {
+				val res = if (prev?.testRunId == it.testRunId) {
+					Stream.of(it + prev!!)
+				} else
+					Stream.empty<Statistics>()
+				prev = it
+				return res
+			}
+		})
 //		log.warn("3")
-		val crit = entityManager.criteriaBuilder.createQuery(TestRun::class.java)
-		val tr = crit.from(TestRun::class.java)
+//		val crit = entityManager.criteriaBuilder.createQuery(TestRun::class.java)
+//		val tr = crit.from(TestRun::class.java)
 //		val tc = crit.from(TestCase::class.java)
-		crit.select(tr)
+//		crit.select(tr)
 
 //		log.warn("4")
-		val result = entityManager.createQuery(crit).resultStream
+//		val result = entityManager.createQuery(crit).resultStream
 //		log.warn("5")
-		return result.map {
-			val stats = it.testCases.groupBy { it.verdict } //TODO replace this group by a database group to speed everything up
+		return res.map {
 //			log.warn("6")
 			val map	= mutableMapOf(
 					"test_run_id" to it.testRunId,
-					"total_count" to it.testCases.size,
-					"passed_count" to (stats[TestResult.PASSED]?.size ?: 0),
-					"failed_count" to (stats[TestResult.FAILED]?.size ?: 0),
-					"passed_percentage" to ((stats[TestResult.PASSED]?.size
-							?: 0).toFloat() / it.testCases.size.toFloat()),
-					"failed_percentage" to ((stats[TestResult.FAILED]?.size
-							?: 0).toFloat() / it.testCases.size.toFloat())
+					"total_count" to it.totalCount,
+					"passed_count" to it.passedCount,
+					"failed_count" to it.failedCount,
+					"passed_percentage" to ((it.passedCount?:0).toFloat() / (it.totalCount?:0).toFloat()),
+					"failed_percentage" to ((it.failedCount?:0).toFloat() / (it.totalCount?:0).toFloat())
 			)
 //			log.warn("7")
-			val logs = testLogsRepository.findAllByTestRunId(it.testRunId).toList()
+			val logs = testLogsRepository.findAllByTestRunId(it.testRunId!!).toList()
 //			log.warn("8")
 			if (logs.isNotEmpty()) {
 				if (logs.size > 1) {
