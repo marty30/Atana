@@ -52,8 +52,15 @@ impl AnalysisServiceTrait for AnalysisService {
         send_progress(0.1);
         let matrix = {
             send_progress(0.2);
-            let coverage_information: Vec<TestModel> = (&get_storage_service().coverage_information).to_owned();
-            CoverageMatrix::from_with_progress(coverage_information, None, 0.25, 0.60)
+            if get_settings().analysis.use_steps_instead_of_transitions_for_analysis == true {
+                let storage_service = get_storage_service();
+                let test_cases: Vec<TestCase> = storage_service.failing.iter().chain(storage_service.passing.iter()).map(|it|it.to_owned()).collect::<Vec<TestCase>>();
+                CoverageMatrix::from_traces(test_cases, None, 0.25, 0.60)
+            }
+            else {
+                let coverage_information: Vec<TestModel> = (&get_storage_service().coverage_information).to_owned();
+                CoverageMatrix::from_model(coverage_information, None, 0.25, 0.60)
+            }
         };
 
         let pair_matrix = {
@@ -65,9 +72,15 @@ impl AnalysisServiceTrait for AnalysisService {
                 });
             }
 
-            let transition_pairs = pairs.iter().map(|it| it.iter().filter_map(|it2|it2.to_transition(storage_service.model.as_ref().unwrap())).collect::<Vec<Transition>>()).collect::<Vec<Vec<_>>>();
-            let coverage_information: Vec<TestModel> = (&storage_service.coverage_information).to_owned();
-            CoverageMatrix::from_with_progress(coverage_information, Some(transition_pairs), 0.6, 0.9)
+            if get_settings().analysis.use_steps_instead_of_transitions_for_analysis == true {
+                let test_cases: Vec<TestCase> = storage_service.failing.iter().chain(storage_service.passing.iter()).map(|it|it.to_owned()).collect::<Vec<TestCase>>();
+                CoverageMatrix::from_traces(test_cases, Some(pairs), 0.6, 0.9)
+            }
+            else {
+                let transition_pairs = pairs.iter().map(|it| it.iter().filter_map(|it2| it2.to_transition(storage_service.model.as_ref().unwrap())).collect::<Vec<Transition>>()).collect::<Vec<Vec<_>>>();
+                let coverage_information: Vec<TestModel> = (&storage_service.coverage_information).to_owned();
+                CoverageMatrix::from_model(coverage_information, Some(transition_pairs), 0.6, 0.9)
+            }
         };
         //add transition pairs to the coverage matrix
         let combined = matrix.append(pair_matrix);
@@ -99,13 +112,28 @@ impl AnalysisServiceTrait for AnalysisService {
         let coverage_model_transitions = coverage_model.unwrap_or((model.as_ref().unwrap()).clone()).all_transitions();
         let covered_transitions = coverage_model_transitions.iter().filter(|it|it.attributes.covered.unwrap_or(false) == true).collect::<Vec<_>>();
 
-        for transition in covered_transitions {
-            let step = transition.to_step(&testcase.steps);
-            if step.is_some() && testcase.steps.contains(&step.unwrap()){
-                let similarity_coefficient = self.similarity_coefficient(&transition.to_string(), &storage_service.coverage_matrix.as_ref().unwrap());
-                println!("similarity_coefficient is {} for \tstep {:?}\t in {:?} ", similarity_coefficient, transition.to_string(), testcase.get_steps());
+        if get_settings().analysis.use_steps_instead_of_transitions_for_analysis == true {
+            for step in testcase.steps.iter() {
+                let similarity_coefficient = self.similarity_coefficient(&step.get_full_label(), &storage_service.coverage_matrix.as_ref().unwrap());
+                println!("similarity_coefficient is {} for \tstep {:?}\t in {:?} ", similarity_coefficient, step.get_full_label(), testcase.get_steps());
                 if similarity_coefficient > SETTINGS.analysis.similarity_threshold {
-                    problematic_steps.push(transition.to_owned());
+                    let transition = step.to_transition(model.as_ref().unwrap());
+                    if transition.is_some() {
+                        problematic_steps.push(transition.unwrap().to_owned());
+                    }
+                    else { eprintln!("Could not find a transition for problematic step {:?}", step); }
+                }
+            }
+        }
+        else {
+            for transition in covered_transitions {
+                let step = transition.to_step(&testcase.steps);
+                if step.is_some() && testcase.steps.contains(&step.unwrap()) {
+                    let similarity_coefficient = self.similarity_coefficient(&transition.to_string(), &storage_service.coverage_matrix.as_ref().unwrap());
+                    println!("similarity_coefficient is {} for \tstep {:?}\t in {:?} ", similarity_coefficient, transition.to_string(), testcase.get_steps());
+                    if similarity_coefficient > SETTINGS.analysis.similarity_threshold {
+                        problematic_steps.push(transition.to_owned());
+                    }
                 }
             }
         }
@@ -115,15 +143,28 @@ impl AnalysisServiceTrait for AnalysisService {
             pairs.append(&mut get_pairs_with_length(len as usize, &testcase.steps));
         }
 
-        let transition_pairs = pairs.iter().map(|it| it.iter().filter_map(|it2|it2.to_transition(model.as_ref().unwrap())).collect::<Vec<Transition>>()).collect::<Vec<Vec<_>>>();
-        for mut transition_pair in transition_pairs {
-            let step_pair = transition_pair.iter().map(|transition| transition.to_step(&testcase.steps)).collect::<Vec<Option<Step>>>();
-            if step_pair.iter().all(|step| step.is_some() && testcase.steps.contains(step.as_ref().unwrap())) {
-                let string_pair = transition_pair.iter().map(|it| it.to_string()).collect::<Vec<_>>().join(" ");
+        if get_settings().analysis.use_steps_instead_of_transitions_for_analysis == true {
+            for step_pair in pairs {
+                let string_pair = step_pair.iter().map(|it| it.get_full_label()).collect::<Vec<_>>().join(" -> ");
                 let similarity_coefficient = self.similarity_coefficient(&string_pair, &storage_service.coverage_matrix.as_ref().unwrap());
                 println!("similarity_coefficient is {} for \tstep {:?}\t in {:?} ", similarity_coefficient, string_pair, testcase.get_steps());
                 if similarity_coefficient > SETTINGS.analysis.similarity_threshold {
+                    let mut transition_pair = step_pair.iter().filter_map(|it|it.to_transition(model.as_ref().unwrap())).collect::<Vec<Transition>>();
                     problematic_steps.append(&mut transition_pair);
+                }
+            }
+        }
+        else {
+            let transition_pairs = pairs.iter().map(|it| it.iter().filter_map(|it2| it2.to_transition(model.as_ref().unwrap())).collect::<Vec<Transition>>()).collect::<Vec<Vec<_>>>();
+            for mut transition_pair in transition_pairs {
+                let step_pair = transition_pair.iter().map(|transition| transition.to_step(&testcase.steps)).collect::<Vec<Option<Step>>>();
+                if step_pair.iter().all(|step| step.is_some() && testcase.steps.contains(step.as_ref().unwrap())) {
+                    let string_pair = transition_pair.iter().map(|it| it.to_string()).collect::<Vec<_>>().join(" ");
+                    let similarity_coefficient = self.similarity_coefficient(&string_pair, &storage_service.coverage_matrix.as_ref().unwrap());
+                    println!("similarity_coefficient is {} for \tstep {:?}\t in {:?} ", similarity_coefficient, string_pair, testcase.get_steps());
+                    if similarity_coefficient > SETTINGS.analysis.similarity_threshold {
+                        problematic_steps.append(&mut transition_pair);
+                    }
                 }
             }
         }
@@ -443,10 +484,19 @@ pub mod tests {
         get_settings().analysis.number_of_pairs_to_include_for_order = 0;
         let test_testcase = TestCase::new(Some(3), Some(TestResult::failed), Some(String::from("There is a failure")), vec![step_init.clone(), step_b_in.clone(), step_a_out.clone(), step_c_out.clone()], 6, None, None);
         get_analysis_service().unwrap().train();
-        let analysis_result = get_analysis_service().unwrap().analyse(test_testcase);
+        let analysis_result = get_analysis_service().unwrap().analyse(test_testcase.clone());
+        get_storage_service().coverage_matrix.as_ref().unwrap().to_coverage_table().printstd();
+        //When
+        reset_progress();
+        get_settings().analysis.use_steps_instead_of_transitions_for_analysis = true;
+        get_analysis_service().unwrap().train();
+        let analysis_result_steps = get_analysis_service().unwrap().analyse(test_testcase);
+        get_storage_service().coverage_matrix.as_ref().unwrap().to_coverage_table().printstd();
 
         //Then
-        assert_eq!(analysis_result.unwrap(), AnalysisResult::new(String::from("Transition ?b"), None, Some(transition_b_in), Some(vec![step_b_in.clone()])))
+        assert_eq!(analysis_result.unwrap(), AnalysisResult::new(String::from("Transition ?b"), None, Some(transition_b_in.clone()), Some(vec![step_b_in.clone()])));
+        eprintln!("analysis_result_steps = {:?}", analysis_result_steps);
+        assert_eq!(analysis_result_steps.unwrap(), AnalysisResult::new(String::from("Transition ?b"), None, Some(transition_b_in), Some(vec![step_b_in.clone()])));
     }
 
     #[test]
@@ -602,15 +652,27 @@ pub mod tests {
         get_settings().analysis.number_of_pairs_to_include_for_order = 2;
         let test_testcase = TestCase::new(Some(4), Some(TestResult::failed), Some(String::from("There is a failure")), vec![step_init.clone(), step_a_in.clone(), step_a_out.clone(), step_d_out.clone()], 6, None, None);
         get_analysis_service().unwrap().train();
-        let analysis_result = get_analysis_service().unwrap().analyse(test_testcase);
+        let analysis_result = get_analysis_service().unwrap().analyse(test_testcase.clone());
+        get_storage_service().coverage_matrix.as_ref().unwrap().to_coverage_table().printstd();
+        //When
+        reset_progress();
+        get_settings().analysis.use_steps_instead_of_transitions_for_analysis = true;
+        get_analysis_service().unwrap().train();
+        let analysis_result_steps = get_analysis_service().unwrap().analyse(test_testcase);
+        get_storage_service().coverage_matrix.as_ref().unwrap().to_coverage_table().printstd();
 
         //Then
         //Require that both a? and d! are in the results and preferably at most one more
         let unwrapped_result = analysis_result.unwrap();
+        let unwrapped_result_steps = analysis_result_steps.unwrap();
         eprintln!("unwrapped_result = {:?}", unwrapped_result);
+        eprintln!("unwrapped_result_steps = {:?}", unwrapped_result_steps);
         assert!(&unwrapped_result.root_cause_steps.len() <= &3, format!("The analysis result contains more than 3 steps, i.e. {:?}. The result: {:?}", unwrapped_result.root_cause_steps.len(), unwrapped_result));
+        assert!(&unwrapped_result_steps.root_cause_steps.len() <= &3, format!("The analysis result contains more than 3 steps, i.e. {:?}. The result: {:?}", unwrapped_result_steps.root_cause_steps.len(), unwrapped_result_steps));
         assert!(&unwrapped_result.root_cause_steps.contains(&step_a_out), format!("The analysis result does not contain the step !a. The result: {:?}", unwrapped_result));
+        assert!(&unwrapped_result_steps.root_cause_steps.contains(&step_a_out), format!("The analysis result does not contain the step !a. The result: {:?}", unwrapped_result_steps));
         assert!(&unwrapped_result.root_cause_steps.contains(&step_d_out), format!("The analysis result does not contain the step !d. The result: {:?}", unwrapped_result));
+        assert!(&unwrapped_result_steps.root_cause_steps.contains(&step_d_out), format!("The analysis result does not contain the step !d. The result: {:?}", unwrapped_result_steps));
 //        assert_eq!(analysis_result.unwrap(), AnalysisResult::new(String::from("Transition !d"), None, Some(transition_d_out.clone()), Some(vec![step_d_out.clone()])));
     }
 
@@ -727,6 +789,7 @@ pub mod tests {
 
     use glob::glob;
     use std::result::Result;
+    use reset_progress;
 
     #[test]
 //    fn real_testcase_example() {

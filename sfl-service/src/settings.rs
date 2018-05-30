@@ -15,7 +15,8 @@ pub struct Analysis {
     pub progress_endpoint: String,
     pub use_thread_for_progress: bool,
     pub use_thread_for_training: bool,
-    pub number_of_pairs_to_include_for_order: i32
+    pub number_of_pairs_to_include_for_order: i32,
+    pub use_steps_instead_of_transitions_for_analysis: bool,
 }
 
 impl Analysis {
@@ -49,6 +50,16 @@ impl Analysis {
                     get_settings().analysis.set_use_thread_for_training(*use_thread_for_training);
                 },
                 _ => println!("use_thread_for_training is not a boolean: {}", use_thread_for_training)
+            }
+        }
+        if settings_map.contains_key("use_steps_instead_of_transitions_for_analysis") {
+            let use_steps_instead_of_transitions_for_analysis = &settings_map["use_steps_instead_of_transitions_for_analysis"];
+            match use_steps_instead_of_transitions_for_analysis {
+                &Value::Bool(ref use_steps_instead_of_transitions_for_analysis) => {
+                    println!("Set use_steps_instead_of_transitions_for_analysis to {}", use_steps_instead_of_transitions_for_analysis);
+                    get_settings().analysis.use_steps_instead_of_transitions_for_analysis = *use_steps_instead_of_transitions_for_analysis;
+                },
+                _ => println!("use_steps_instead_of_transitions_for_analysis is not a boolean: {}", use_steps_instead_of_transitions_for_analysis)
             }
         }
     }
@@ -119,6 +130,7 @@ impl Settings {
                         use_thread_for_progress: false,
                         use_thread_for_training: false,
                         number_of_pairs_to_include_for_order: 0,
+                        use_steps_instead_of_transitions_for_analysis: false
                     },
                 }
             }

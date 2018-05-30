@@ -11,6 +11,7 @@ use storage_service::get_storage_service;
 use std::collections::HashMap;
 use uuid::Uuid;
 use serde_json::value::Value;
+use std::cmp::Ordering;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct TestRun {
@@ -181,7 +182,19 @@ impl Hash for Step {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+impl Ord for Step{
+    fn cmp(&self, other: &Self) -> Ordering {
+        (&self.label, &self.step_number, &self.timestamp, &self.notes, &self.state_vector_size, &self.advance_duration_ms, &self.physical_label).cmp(&(&other.label, &other.step_number, &other.timestamp, &other.notes, &other.state_vector_size, &other.advance_duration_ms, &other.physical_label))
+    }
+}
+
+impl PartialOrd for Step{
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(&other))
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash, Ord, PartialOrd)]
 pub struct Label {
     pub name: String,
     direction: String,

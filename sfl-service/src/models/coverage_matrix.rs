@@ -6,6 +6,10 @@ use prettytable::Table;
 use send_progress;
 use std::collections::HashMap;
 use std::vec::Vec;
+use models::test_case::TestCase;
+use models::test_case::Step;
+use std::collections::HashSet;
+use models::test_case::TestResult;
 
 #[derive(Debug, Clone, Derivative)]
 #[derivative(PartialEq, Eq)]
@@ -67,7 +71,68 @@ impl CoverageMatrix {
         table
     }
 
-    pub fn from_with_progress(val: Vec<TestModel>, transitions_to_include: Option<Vec<Vec<Transition>>>, min_progress: f32, max_progress: f32) -> CoverageMatrix {
+    pub fn from_traces(test_cases: Vec<TestCase>, steps_to_include: Option<Vec<Vec<Step>>>, min_progress: f32, max_progress: f32) -> CoverageMatrix {
+        let send_progress_updates = max_progress > min_progress;
+        let mut coverage_matrix: HashMap<String, Vec<bool>> = HashMap::new();
+        let mut error_vector: Vec<bool> = vec![];
+        let mut test_id_vector: Vec<i64> = vec![];
+        if send_progress_updates { send_progress(min_progress); }
+
+        match steps_to_include {
+            Some(mut step_pairs) => {
+                step_pairs.sort();
+                step_pairs.dedup();
+                for step_pair in step_pairs.iter() {
+                    for test in test_cases.iter() {
+                        let step_pair_covered = step_pair.iter().all(|s| test.steps.contains(s));
+                        let string_pair = step_pair.iter().map(|it| it.get_full_label()).collect::<Vec<_>>().join(" -> ");
+                        let mut cov_vec = coverage_matrix.entry(string_pair).or_insert(vec![]);
+                        cov_vec.push(step_pair_covered);
+                    }
+                }
+            },
+            None => {
+                let mut steps: HashSet<&Step> = HashSet::new();
+                for test in test_cases.iter() {
+                    for step in &test.steps {
+                        steps.insert(step);
+                    }
+                }
+                let mut step_labels: HashSet<String> = steps.iter().map(|it| it.get_full_label()).collect();
+
+                for (i, test) in test_cases.iter().enumerate() {
+                    error_vector.push((&test).verdict.as_ref().unwrap_or(&TestResult::unknown) != &TestResult::passed);
+                    test_id_vector.push(test.id.unwrap_or(-1));
+
+                    for step in step_labels.iter() {
+                        let is_covered = test.steps.iter().find(|s| s.get_full_label() == *step).is_some();
+                        let mut cov_vec = coverage_matrix.entry(step.to_string()).or_insert(vec![]);
+                        cov_vec.push(is_covered);
+                    }
+
+                    if send_progress_updates { send_progress((i as f32 / test_cases.len() as f32) * (max_progress - min_progress) + min_progress); }
+                }
+            }
+        }
+        if send_progress_updates { send_progress(max_progress); }
+
+        //Do some checks to validate the integrity of the data
+        let number_of_tests = coverage_matrix.values().next().unwrap_or(&vec![]).len();
+        let number_of_steps = coverage_matrix.keys().len();
+        for tests in coverage_matrix.values() {
+            assert_eq!(tests.len(), number_of_tests);
+        }
+
+        CoverageMatrix {
+            error_vector,
+            test_id_vector,
+            data: coverage_matrix,
+            number_of_tests,
+            number_of_steps,
+        }
+    }
+
+    pub fn from_model(val: Vec<TestModel>, transitions_to_include: Option<Vec<Vec<Transition>>>, min_progress: f32, max_progress: f32) -> CoverageMatrix {
         let send_progress_updates = max_progress > min_progress;
         let mut coverage_matrix: HashMap<String, Vec<bool>> = HashMap::new();
         let mut error_vector: Vec<bool> = vec![];
@@ -148,7 +213,13 @@ impl CoverageMatrix {
 
 impl From<Vec<TestModel>> for CoverageMatrix {
     fn from(val: Vec<TestModel>) -> CoverageMatrix {
-        CoverageMatrix::from_with_progress(val, None, 0.0,0.0)
+        CoverageMatrix::from_model(val, None, 0.0,0.0)
+    }
+}
+
+impl From<Vec<TestCase>> for CoverageMatrix {
+    fn from(val: Vec<TestCase>) -> CoverageMatrix {
+        CoverageMatrix::from_traces(val, None, 0.0,0.0)
     }
 }
 
