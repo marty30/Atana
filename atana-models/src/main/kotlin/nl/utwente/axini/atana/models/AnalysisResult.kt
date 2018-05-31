@@ -28,6 +28,8 @@ data class AnalysisResult(
 		@get:Min(0)
 		var testCaseIndex: Int?,
 
+		var sut_filename: String?,
+
 		@get:NotEmpty
 		@Type(type = "text")
 		val groupName: String,

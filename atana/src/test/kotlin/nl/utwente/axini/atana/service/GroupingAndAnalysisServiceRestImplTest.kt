@@ -267,7 +267,7 @@ class GroupingAndAnalysisServiceRestImplTest {
 		initService()
 		server.reset()
 
-		val expectedResult = AnalysisResult(null, null, "State and transition fault", State("some id", StateAttribute("Some label", "Some type", null)), null, setOf())
+		val expectedResult = AnalysisResult(null, null, null, "State and transition fault", State("some id", StateAttribute("Some label", "Some type", null)), null, setOf())
 		server.expect(once(),
 				requestTo("${configurationService.config.endpoint}/analyse"))
 				.andExpect(method(HttpMethod.POST))

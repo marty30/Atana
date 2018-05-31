@@ -15,7 +15,7 @@ class ValidationUtilsKtTest {
 
 	@Test
 	fun validateValidObject() {
-		validate(AnalysisResult(UUID.randomUUID(), 1, "State and transition fault", null, null, setOf()))
+		validate(AnalysisResult(UUID.randomUUID(), 1, null, "State and transition fault", null, null, setOf()))
 		validate(Configuration(URL("http://localhost"), GroupingAndAnalysisServiceDummyImpl::class))
 		validate(TestLogs(UUID.randomUUID(), null, UUID.randomUUID(), "first log", "second log", "third log"))
 		validate(TestModel(UUID.randomUUID(), null, setOf(Sts("Some name", setOf(State("some id", StateAttribute("Some label", "Some type", null))), setOf(ChildModel("Some id", ChildModelAttribute("Some label", "Some type", "Some id", null))), setOf(StartState("Some id", null)), setOf(Transition("Some id", "Some id", TransitionAttribute("Some label", "Some type", null))), setOf(Transition("Some id", "Some id", TransitionAttribute("Some label", "Some type", null))), "some id", null, null)), null))
@@ -26,7 +26,7 @@ class ValidationUtilsKtTest {
 	@Test
 	fun validateInvalidObject() {
 		assertAll(
-				{ assertThrows<InvalidRequestDataException>("AnalysisResult was unexpectedly valid") { validate(AnalysisResult(UUID.randomUUID(), -10, "", null, null, setOf())) } },
+				{ assertThrows<InvalidRequestDataException>("AnalysisResult was unexpectedly valid") { validate(AnalysisResult(UUID.randomUUID(), -10, null,"", null, null, setOf())) } },
 				{ assertThrows<InvalidRequestDataException>("Configuration was unexpectedly valid") { validate(Configuration(URL("http://localhost"), Any::class)) } },
 				{ assertThrows<InvalidRequestDataException>("TestModel was unexpectedly valid") { validate(TestModel(UUID.randomUUID(), null, setOf(Sts("", setOf(), setOf(), setOf(), setOf(), setOf(), "", null, null)), null)) } },
 				{ assertThrows<InvalidRequestDataException>("TestRun was unexpectedly valid") { validate(TestRun(UUID.randomUUID(), setOf(TestCase(-10, null, TestResult.PASSED, null, setOf(Step(Label("", "", ""), null, LocalDateTime.now().plusDays(1), setOf(), -1)), 1, setOf(), setOf())))) } }

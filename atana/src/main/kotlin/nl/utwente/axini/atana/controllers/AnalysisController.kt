@@ -6,6 +6,7 @@ import nl.utwente.axini.atana.models.AnalysisResult
 import nl.utwente.axini.atana.models.TestCase
 import nl.utwente.axini.atana.models.TestResult
 import nl.utwente.axini.atana.repository.AnalysisResultRepository
+import nl.utwente.axini.atana.repository.TestLogsRepository
 import nl.utwente.axini.atana.repository.TestModelRepository
 import nl.utwente.axini.atana.repository.TestRunRepository
 import nl.utwente.axini.atana.service.ConfigurationService
@@ -16,7 +17,8 @@ import java.util.*
 
 @RestController
 class AnalysisController(val testModelRepository: TestModelRepository, val testRunRepository: TestRunRepository, val configurationService: ConfigurationService,
-						 val analysisResultRepository: AnalysisResultRepository, val groupingAndAnalysisService: List<GroupingAndAnalysisService>) : AbstractController() {
+						 val analysisResultRepository: AnalysisResultRepository, val groupingAndAnalysisService: List<GroupingAndAnalysisService>,
+						 val testLogsRepository: TestLogsRepository) : AbstractController() {
 
 	var trainingProgress: Float = 0f
 
@@ -70,12 +72,22 @@ class AnalysisController(val testModelRepository: TestModelRepository, val testR
 			throw IllegalArgumentException("There is no test set with this test run id, please provide a proper test set first")
 		}
 		val testTrace = testTraces.first()
+		var testLogs = testLogsRepository.findAllByTestRunId(testRunId).toList()
+        if (testLogs.size > 1) {
+            testLogs = testLogs.distinctBy { it.sutFilename }
+            if (testLogs.size > 1)
+                throw IllegalArgumentException("There are too many different test logs with this test run id, please remove the wrong test logs.")
+        }else if (testLogs.isEmpty()) {
+            throw IllegalArgumentException("There is no test log with this test run id, please provide a proper test log first")
+        }
+        val testLog = testLogs.first()
 		trainingProgress = 0f //Reset the training progress counter
 		if (testCaseIndex == -1) { //Analyse all failing tests
 			return testTrace.testCases.filter { it.verdict == TestResult.FAILED }.map {
 				val result = groupingAndAnalysisServiceImpl.submitTest(it)
 				result.testRunId = testRunId
 				result.testCaseIndex = it.caseindex
+				result.sut_filename = testLog.sutFilename
 				analysisResultRepository.save(result)
 				return@map result
 			}

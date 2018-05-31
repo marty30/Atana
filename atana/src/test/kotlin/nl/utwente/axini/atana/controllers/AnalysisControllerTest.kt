@@ -163,10 +163,10 @@ class AnalysisControllerTest : AbstractControllerTest() {
 		//Given
 		val testRunId = UUID.randomUUID()
 		val model = TestModel(testRunId, null, setOf(Sts("TestSts", setOf(State("init", StateAttribute("init", "pos", null)), State("finish", StateAttribute("finish", "pos", null))), setOf(), setOf(StartState("init", null)), setOf(Transition("init", "finish", TransitionAttribute("go", null, null))), setOf(), null, null, null)), null)
-		val analysisResult1 = AnalysisResult(testRunId, 1, "group1", null, null, setOf())
-		val analysisResult2 = AnalysisResult(testRunId, 2, "group1", null, null, setOf())
-		val analysisResult3 = AnalysisResult(testRunId, 3, "group2", null, null, setOf())
-		val analysisResult4 = AnalysisResult(testRunId, 4, "group3", null, null, setOf())
+		val analysisResult1 = AnalysisResult(testRunId, 1, null, "group1", null, null, setOf())
+		val analysisResult2 = AnalysisResult(testRunId, 2, null, "group1", null, null, setOf())
+		val analysisResult3 = AnalysisResult(testRunId, 3, null, "group2", null, null, setOf())
+		val analysisResult4 = AnalysisResult(testRunId, 4, null, "group3", null, null, setOf())
 
 		testModelRepository.deleteAll()
 		testModelRepository.save(model)

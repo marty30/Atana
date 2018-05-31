@@ -17,7 +17,7 @@ class LastStepGroupingAndAnalysisServiceImpl : GroupingAndAnalysisService() {
 
 	override fun submitTest(run: TestCase): AnalysisResult {
 		val problematicStep = run.steps.sortedBy { it.stepNumber.toInt() }.last()
-		return AnalysisResult(null, run.caseindex, "Transition ${problematicStep.fullLabel}", null, null, setOf(problematicStep.copy(labelParameters = HashMap(problematicStep.labelParameters), notes = HashSet(problematicStep.notes))))
+		return AnalysisResult(null, run.caseindex, null,"Transition ${problematicStep.fullLabel}", null, null, setOf(problematicStep.copy(labelParameters = HashMap(problematicStep.labelParameters), notes = HashSet(problematicStep.notes))))
 	}
 
 }

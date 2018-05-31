@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger
 @Service
 class GroupingAndAnalysisServiceDummyImpl : GroupingAndAnalysisService() {
 	var configured: Boolean = false
-	var nextAnalysisResultToReturn: AnalysisResult = AnalysisResult(null, 0, "State and transition fault", State("last state", StateAttribute("last state", "string", null)), null, setOf())
+	var nextAnalysisResultToReturn: AnalysisResult = AnalysisResult(null, 0, null,"State and transition fault", State("last state", StateAttribute("last state", "string", null)), null, setOf())
 	//Some statistical variables
 	var configureIsCalled: AtomicInteger = AtomicInteger()
 	var submittedModel: TestModel? = null
