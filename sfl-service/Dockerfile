@@ -1,13 +1,18 @@
 FROM rustlang/rust:nightly
 
-WORKDIR /usr/src/sfl_dd_service
+#Pre-populate cargo cache
+RUN cargo install cargo-build-deps
+RUN cd /usr/src && USER=root cargo new --bin sfl-service
+WORKDIR /usr/src/sfl-service
+COPY ./Cargo.toml ./Cargo.toml
+COPY ./Cargo.lock ./Cargo.lock
+
+RUN cargo build-deps --release
 
 COPY ./resources ./resources
 COPY ./src ./src
-COPY ./Cargo.toml ./Cargo.toml
-COPY ./Cargo.lock ./Cargo.lock
 COPY ./Settings.toml ./Settings.toml
 
-RUN  cargo install
+RUN  cargo install --path .
 
-CMD ["sfl_dd_service"]
+CMD ["sfl-service"]

@@ -23,7 +23,7 @@ impl Analysis {
     pub fn parse_from_map(settings_map: Map<String, Value>){
         println!("Parse map!");
         if settings_map.contains_key("similarity_threshold") {
-            let similarity_threshold = Analysis::extract_similarity_threshold(&settings_map["similarity_threshold"]);
+            let similarity_threshold = Analysis::parse_f32(&settings_map["similarity_threshold"]);
             match similarity_threshold {
                 Ok(similarity_threshold) => {
                     println!("Set similarity to {}", similarity_threshold);
@@ -43,31 +43,42 @@ impl Analysis {
             }
         }
         if settings_map.contains_key("use_thread_for_training") {
-            let use_thread_for_training = &settings_map["use_thread_for_training"];
+            let use_thread_for_training = Analysis::parse_bool(&settings_map["use_thread_for_training"]);
             match use_thread_for_training {
-                &Value::Bool(ref use_thread_for_training) => {
+                Ok(ref use_thread_for_training) => {
                     println!("Set use_thread_for_training to {}", use_thread_for_training);
                     get_settings().analysis.set_use_thread_for_training(*use_thread_for_training);
                 },
-                _ => println!("use_thread_for_training is not a boolean: {}", use_thread_for_training)
+                Err(e) => println!("use_thread_for_training is not a boolean: {}", e)
             }
         }
         if settings_map.contains_key("use_steps_instead_of_transitions_for_analysis") {
-            let use_steps_instead_of_transitions_for_analysis = &settings_map["use_steps_instead_of_transitions_for_analysis"];
+            let use_steps_instead_of_transitions_for_analysis = Analysis::parse_bool(&settings_map["use_steps_instead_of_transitions_for_analysis"]);
             match use_steps_instead_of_transitions_for_analysis {
-                &Value::Bool(ref use_steps_instead_of_transitions_for_analysis) => {
+                Ok(ref use_steps_instead_of_transitions_for_analysis) => {
                     println!("Set use_steps_instead_of_transitions_for_analysis to {}", use_steps_instead_of_transitions_for_analysis);
                     get_settings().analysis.use_steps_instead_of_transitions_for_analysis = *use_steps_instead_of_transitions_for_analysis;
                 },
-                _ => println!("use_steps_instead_of_transitions_for_analysis is not a boolean: {}", use_steps_instead_of_transitions_for_analysis)
+                Err(e) => println!("use_steps_instead_of_transitions_for_analysis is not a boolean: {}", e)
             }
         }
     }
 
-    fn extract_similarity_threshold(val: &Value) -> Result<f32, String> {
+    fn parse_f32(val: &Value) -> Result<f32, String> {
         return match val {
-            &Value::Number(ref similarity_threshold) => Ok(similarity_threshold.as_f64().unwrap() as f32),
+            &Value::Number(ref value) => Ok(value.as_f64().unwrap() as f32),
             &Value::String(ref similarity_threshold_string) => match similarity_threshold_string.parse::<f32>() {
+                Ok(s) => Ok(s),
+                Err(e) => Err(e.to_string())
+            },
+            _ => Err(format!("No could not parse to f32. Found: {:?}.", val).to_string())
+        }
+    }
+
+    fn parse_bool(val: &Value) -> Result<bool, String> {
+        return match val {
+            &Value::Bool(ref value) => Ok(*value),
+            &Value::String(ref similarity_threshold_string) => match similarity_threshold_string.parse::<bool>() {
                 Ok(s) => Ok(s),
                 Err(e) => Err(e.to_string())
             },

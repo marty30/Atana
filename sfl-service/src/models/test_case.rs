@@ -81,14 +81,14 @@ pub struct Step {
     timestamp: DateTime<Utc>,
     notes: Option<Vec<String>>,
     pub step_number: i32,
-    state_vector_size: Option<i32>,
-    advance_duration_ms: Option<i64>,
+    state_vector_size: Option<String>,
+    advance_duration_ms: Option<String>,
     physical_label: Option<String>,
     pub label_parameters: Option<Map<String, Value>>,
 }
 
 impl Step {
-    pub fn new(label: Label, timestamp: DateTime<Utc>, notes: Option<Vec<String>>, step_number: i32, state_vector_size: Option<i32>, advance_duration_ms: Option<i64>, physical_label: Option<String>, label_parameters: Option<Map<String, Value>>) -> Step {
+    pub fn new(label: Label, timestamp: DateTime<Utc>, notes: Option<Vec<String>>, step_number: i32, state_vector_size: Option<String>, advance_duration_ms: Option<String>, physical_label: Option<String>, label_parameters: Option<Map<String, Value>>) -> Step {
         Step {
             label,
             timestamp,
@@ -250,8 +250,8 @@ pub mod tests {
             DateTime::from(SystemTime::now()),
             Some(vec![]),
             8,
-            Some(1),
-            Some(1),
+            Some("1".to_string()),
+            Some("1".to_string()),
             Some(String::from("MjUxIFNpZ25lZCBPbg==\n")),
             Some(Map::new()),
         );
@@ -270,8 +270,8 @@ pub mod tests {
             DateTime::from(SystemTime::now()),
             Some(vec![]),
             2,
-            Some(1),
-            Some(1),
+            Some("1".to_string()),
+            Some("1".to_string()),
             Some(String::from("MjEwIENTX1NJR046U1NfT04=\n")),
             Some(label_parameters),
         );
