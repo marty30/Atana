@@ -11,6 +11,7 @@ services:
           - spring.datasource.password=developer
         links:
           - db:db
+          - sfl:sfl
         networks:
             - default
     db:
