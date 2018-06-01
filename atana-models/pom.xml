@@ -25,6 +25,12 @@
             <version>${hibernate.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jpamodelgen</artifactId>
+            <version>${hibernate.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>${hibernate-validator.version}</version>
@@ -83,7 +89,37 @@
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
+
         <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <compilerArguments>
+                        <processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</processor>
+                    </compilerArguments>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>target/generated-sources/annotations</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
@@ -98,6 +134,26 @@
                     <jvmTarget>${java.version}</jvmTarget>
                 </configuration>
                 <executions>
+                    <execution>
+                        <id>kapt</id>
+                        <goals>
+                            <goal>kapt</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>src/main/kotlin</sourceDir>
+                                <sourceDir>src/main/java</sourceDir>
+                            </sourceDirs>
+                            <annotationProcessorPaths>
+                                <!-- Specify your annotation processors here. -->
+                                <annotationProcessorPath>
+                                    <groupId>org.hibernate</groupId>
+                                    <artifactId>hibernate-jpamodelgen</artifactId>
+                                    <version>${hibernate.version}</version>
+                                </annotationProcessorPath>
+                            </annotationProcessorPaths>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>compile</id>
                         <phase>compile</phase>
