@@ -16,11 +16,13 @@ services:
             - default
     db:
         image: mysql
+        ports:
+          - 3306:3306
         environment:
           - MYSQL_DATABASE=atana
           - MYSQL_USER=atana
           - MYSQL_PASSWORD=developer
-          - MYSQL_RANDOM_ROOT_PASSWORD=yes
+          - MYSQL_ROOT_PASSWORD=nhjasfljhsdfakhfad
         volumes:
             - ./database_setup:/docker-entrypoint-initdb.d
             - persistent:/var/lib/mysql
