@@ -80,10 +80,10 @@ impl CoverageMatrix {
 
         match steps_to_include {
             Some(mut step_pairs) => {
-                step_pairs.sort();
-                step_pairs.dedup();
-                for step_pair in step_pairs.iter() {
-                    for test in test_cases.iter() {
+                step_pairs.sort_by_key(|step_pair|step_pair.iter().map(|it| it.get_full_label()).collect::<Vec<_>>().join(" -> "));
+                step_pairs.dedup_by_key(|step_pair|step_pair.iter().map(|it| it.get_full_label()).collect::<Vec<_>>().join(" -> "));
+                for test in test_cases.iter() {
+                    for step_pair in step_pairs.iter() {
                         let step_pair_covered = step_pair.iter().all(|s| test.steps.contains(s));
                         let string_pair = step_pair.iter().map(|it| it.get_full_label()).collect::<Vec<_>>().join(" -> ");
                         let mut cov_vec = coverage_matrix.entry(string_pair).or_insert(vec![]);

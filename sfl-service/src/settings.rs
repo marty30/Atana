@@ -62,6 +62,16 @@ impl Analysis {
                 Err(e) => println!("use_steps_instead_of_transitions_for_analysis is not a boolean: {}", e)
             }
         }
+        if settings_map.contains_key("number_of_pairs_to_include_for_order") {
+            let number_of_pairs_to_include_for_order = Analysis::parse_i32(&settings_map["number_of_pairs_to_include_for_order"]);
+            match number_of_pairs_to_include_for_order {
+                Ok(ref number_of_pairs_to_include_for_order) => {
+                    println!("Set number_of_pairs_to_include_for_order to {}", number_of_pairs_to_include_for_order);
+                    get_settings().analysis.number_of_pairs_to_include_for_order = *number_of_pairs_to_include_for_order;
+                },
+                Err(e) => println!("number_of_pairs_to_include_for_order is not an integer: {}", e)
+            }
+        }
     }
 
     fn parse_f32(val: &Value) -> Result<f32, String> {
@@ -72,6 +82,16 @@ impl Analysis {
                 Err(e) => Err(e.to_string())
             },
             _ => Err(format!("No could not parse to f32. Found: {:?}.", val).to_string())
+        }
+    }
+    fn parse_i32(val: &Value) -> Result<i32, String> {
+        return match val {
+            &Value::Number(ref value) => Ok(value.as_i64().unwrap() as i32),
+            &Value::String(ref similarity_threshold_string) => match similarity_threshold_string.parse::<i32>() {
+                Ok(s) => Ok(s),
+                Err(e) => Err(e.to_string())
+            },
+            _ => Err(format!("No could not parse to i32. Found: {:?}.", val).to_string())
         }
     }
 
