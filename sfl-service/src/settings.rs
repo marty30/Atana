@@ -17,6 +17,7 @@ pub struct Analysis {
     pub use_thread_for_training: bool,
     pub number_of_pairs_to_include_for_order: i32,
     pub use_steps_instead_of_transitions_for_analysis: bool,
+    pub use_transition_data: bool,
 }
 
 impl Analysis {
@@ -60,6 +61,16 @@ impl Analysis {
                     get_settings().analysis.use_steps_instead_of_transitions_for_analysis = *use_steps_instead_of_transitions_for_analysis;
                 },
                 Err(e) => println!("use_steps_instead_of_transitions_for_analysis is not a boolean: {}", e)
+            }
+        }
+        if settings_map.contains_key("use_transition_data") {
+            let use_transition_data = Analysis::parse_bool(&settings_map["use_transition_data"]);
+            match use_transition_data {
+                Ok(ref use_transition_data) => {
+                    println!("Set use_transition_data to {}", use_transition_data);
+                    get_settings().analysis.use_transition_data = *use_transition_data;
+                },
+                Err(e) => println!("use_transition_data is not a boolean: {}", e)
             }
         }
         if settings_map.contains_key("number_of_pairs_to_include_for_order") {
@@ -161,7 +172,8 @@ impl Settings {
                         use_thread_for_progress: false,
                         use_thread_for_training: false,
                         number_of_pairs_to_include_for_order: 0,
-                        use_steps_instead_of_transitions_for_analysis: false
+                        use_steps_instead_of_transitions_for_analysis: false,
+                        use_transition_data: false
                     },
                 }
             }

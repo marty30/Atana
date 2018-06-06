@@ -12,6 +12,7 @@ use std::collections::HashMap;
 use uuid::Uuid;
 use serde_json::value::Value;
 use std::cmp::Ordering;
+use get_settings;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct TestRun {
@@ -163,7 +164,7 @@ impl Step {
         return full_label;
     }
     pub fn get_full_label(&self) -> String {
-        self.get_full_label_with_params(false)
+        self.get_full_label_with_params(get_settings().analysis.use_transition_data)
     }
 }
 

@@ -247,10 +247,15 @@ fn extract_state_from_transitions(transition1: &Transition, transition2: &Transi
     targets.insert(&transition1.target);
     targets.insert(&transition2.target);
 
-    let state_ids = sources.intersection(&targets).map(|it| it.to_owned()).cloned().collect::<Vec<String>>();
-    let state_id = &state_ids[0];
-    let states = model.stss.iter().map(|it| it.states.to_owned()).flatten().filter(|it| it.id == *state_id).collect::<Vec<State>>();
-    return Ok(states[0].to_owned());
+    let mut state_ids = sources.intersection(&targets).map(|it| it.to_owned());
+    let state_id = state_ids.next();
+    if state_id.is_some() {
+        let states = model.stss.iter().map(|it| it.states.to_owned()).flatten().filter(|it| it.id == *(state_id.unwrap())).collect::<Vec<State>>();
+        return Ok(states[0].to_owned());
+    }
+    else {
+        Err("No intersection found between the sources and the targets".to_string())
+    }
 }
 
 #[cfg(test)]

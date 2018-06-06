@@ -2,6 +2,7 @@ use models::test_case::Step;
 use uuid::Uuid;
 use std::collections::HashMap;
 use serde_json::Value;
+use get_settings;
 
 #[derive(Debug, Clone, Serialize, Deserialize, Derivative)]
 #[derivative(PartialEq)]
@@ -148,7 +149,12 @@ impl Transition {
     }
 
     pub fn to_string(&self) -> String {
-        format!("{}--{}-->{}", self.source, self.attributes.label, self.target)
+        if get_settings().analysis.use_transition_data {
+            format!("{}--{}-->{}", self.source, self.attributes.label, self.target)
+        } else {
+            let dataless_label = self.attributes.label.split_whitespace().next();
+            format!("{}--{}-->{}", self.source, dataless_label.unwrap_or("UNKNOWN TRANSITION LABEL"), self.target)
+        }
     }
 
     //noinspection RsTypeCheck

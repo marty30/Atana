@@ -9,3 +9,4 @@ use_thread_for_training = false
 similarity_threshold = 0.75
 number_of_pairs_to_include_for_order = 1
 use_steps_instead_of_transitions_for_analysis = false
+use_transition_data = false
