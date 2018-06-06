@@ -38,6 +38,7 @@ class StatisticsController(val entityManager: EntityManager, val testRunReposito
 		val session = entityManager.unwrap(Session::class.java)
 		val q = session.createQuery("SELECT new nl.utwente.axini.atana.controllers.Statistics(tr.testRunId, tc.verdict, count(tc), sum(case when tc.verdict=:passed then 1 else 0 end), sum(case when tc.verdict=:failed then 1 else 0 end)) FROM TestRun as tr join tr.testCases as tc GROUP BY tr.testRunId, tc.verdict", Statistics::class.java).setParameter("passed", TestResult.PASSED).setParameter("failed", TestResult.FAILED)
 		val res = q.stream().flatMap(object : Function<Statistics, Stream<Statistics>> {
+			//Combine the statistics for passing and failing test cases
 			var prev: Statistics? = null
 			override fun apply(it: Statistics): Stream<Statistics> {
 				val res = if (prev?.testRunId == it.testRunId) {

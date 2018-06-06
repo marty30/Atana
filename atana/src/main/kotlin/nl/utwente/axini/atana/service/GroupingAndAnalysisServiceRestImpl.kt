@@ -1,6 +1,7 @@
 package nl.utwente.axini.atana.service
 
 import nl.utwente.axini.atana.jsonObjectMapper
+import nl.utwente.axini.atana.logger
 import nl.utwente.axini.atana.models.AnalysisResult
 import nl.utwente.axini.atana.models.TestCase
 import nl.utwente.axini.atana.models.TestModel
@@ -12,6 +13,7 @@ import org.springframework.web.client.RestTemplate
 
 @Service
 class GroupingAndAnalysisServiceRestImpl(val configurationService: ConfigurationService, val restTemplate: RestTemplate) : GroupingAndAnalysisService() {
+	val log by logger()
 	val MAX_TESTS_TO_SEND_AT_ONCE: Int = 10
 
 	lateinit var restServicebaseurl: String
@@ -56,28 +58,20 @@ class GroupingAndAnalysisServiceRestImpl(val configurationService: Configuration
 		val responseModel = catchRemoteException { restTemplate.postForEntity("$restServicebaseurl/model", HttpEntity<TestModel>(model, jsonHeader), String::class.java) }
 
 		var responsePassing: ResponseEntity<String> = ResponseEntity.ok("")
-		if (passingTests.size > MAX_TESTS_TO_SEND_AT_ONCE) {
 			passingTests.forEach {
 				responsePassing = catchRemoteException { restTemplate.postForEntity("$restServicebaseurl/passing_test", HttpEntity<TestCase>(it, jsonHeader), String::class.java) }
 				if (responsePassing.statusCode != HttpStatus.OK) {
 					return@forEach
 				}
 			}
-		} else {
-			responsePassing = catchRemoteException { restTemplate.postForEntity("$restServicebaseurl/passing_tests", HttpEntity<Array<TestCase>>(passingTests, jsonHeader), String::class.java) }
-		}
 
 		var responseFailing: ResponseEntity<String> = ResponseEntity.ok("")
-		if (failingTests.size > MAX_TESTS_TO_SEND_AT_ONCE) {
 			failingTests.forEach {
 				responseFailing = catchRemoteException { restTemplate.postForEntity("$restServicebaseurl/failing_test", HttpEntity<TestCase>(it, jsonHeader), String::class.java) }
 				if (responseFailing.statusCode != HttpStatus.OK) {
 					return@forEach
 				}
 			}
-		} else {
-			responseFailing = catchRemoteException { restTemplate.postForEntity("$restServicebaseurl/failing_tests", HttpEntity<Array<TestCase>>(failingTests, jsonHeader), String::class.java) }
-		}
 
 		var responseCoverage: ResponseEntity<String> = ResponseEntity.ok("")
 		if (coverageInformation.size > MAX_TESTS_TO_SEND_AT_ONCE) {

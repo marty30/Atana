@@ -31,8 +31,9 @@ class AnalysisController(val testModelRepository: TestModelRepository, val testR
 			isUUID(testRunId) -> testModelRepository.findAllByTestRunId(UUID.fromString(testRunId)).distinct()
 			else -> throw InvalidRequestDataException("invalid test run id")
 		}
-		val coverageInformation = model.filter { it.testcaseId != null }
+		val coverageInformation = model.filter { it.stss.all { it.trace_properties?.passed != null } }
 		model -= coverageInformation
+		model = model.distinctBy { it.copy() }
 		if (model.size > 1)
 			throw IllegalStateException("There are too many different models with this test run id, please remove the wrong models or specify a database id as a long.")
 		else if (model.isEmpty()) {

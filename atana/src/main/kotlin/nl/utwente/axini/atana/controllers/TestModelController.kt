@@ -59,7 +59,8 @@ class TestModelController(val testModelRepository: TestModelRepository) : Abstra
 			isLong(id) -> testModelRepository.findAllById(listOf(id.toLong()))
 			else -> throw IllegalArgumentException("id is not one of [UUID, or Long]")
 		}
-		return models as List<TestModel>
+		val coverageInformation = models.filter { it.stss.all { it.trace_properties?.passed != null } }
+		return models - coverageInformation
 	}
 
 	@DeleteMapping("/results/model/{id}")
