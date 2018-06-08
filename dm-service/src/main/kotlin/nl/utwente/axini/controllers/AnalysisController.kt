@@ -112,7 +112,7 @@ class AnalysisController(val storageService: StorageService) {
 		val maxOccurances = occurancesOfAttributes.values.max()
 		val maxOccurredAttributes = occurancesOfAttributes.filter { it.value == maxOccurances }.map { it.key.name() }
 		val problematicSteps = test.steps.filter { it.fullLabel in maxOccurredAttributes }.map { it.copy(label = it.label.copy(), labelParameters = HashMap(it.labelParameters), notes = HashSet(it.notes)) }
-		return AnalysisResult(null, test.caseindex, "Group $classification", null, null, problematicSteps.toSet())
+		return AnalysisResult(null, test.caseindex, null,"Group $classification", null, null, problematicSteps.toSet())
 	}
 
 	/**

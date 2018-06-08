@@ -23,47 +23,47 @@ class ComparisonTest {
 	fun compareDifferentDataformattingMethods() {
 		val model = TestModel(UUID.randomUUID(), null, setOf(
 				Sts("example", setOf(
-						State("state 0", StateAttribute("0", "node")),
-						State("state 1", StateAttribute("1", "node")),
-						State("state 2", StateAttribute("2", "node")),
-						State("state 3a", StateAttribute("3a", "node")),
-						State("state 3b", StateAttribute("3b", "node")),
-						State("state 4", StateAttribute("4", "node")),
-						State("state 5", StateAttribute("5", "node")),
-						State("state 6", StateAttribute("6", "node")),
-						State("unused", StateAttribute("unused", "node"))
-				), setOf(), setOf(StartState("state 1")), setOf(
-						Transition("state 0", "state 1", TransitionAttribute("!init", "out")),
-						Transition("state 1", "state 2", TransitionAttribute("?a", "in")),
-						Transition("state 1", "state 3a", TransitionAttribute("?b", "in")),
-						Transition("state 3a", "state 3b", TransitionAttribute("", "tau")),
-						Transition("state 2", "state 4", TransitionAttribute("!a", "out")),
-						Transition("state 3b", "state 4", TransitionAttribute("!b", "out")),
-						Transition("state 4", "state 5", TransitionAttribute("!c", "out")),
-						Transition("state 4", "state 6", TransitionAttribute("!d", "out")),
-						Transition("state 0", "unused", TransitionAttribute("", "tau"))
-				), setOf(), null, null)
-		))
+						State("state 0", StateAttribute("0", "node", null)),
+						State("state 1", StateAttribute("1", "node", null)),
+						State("state 2", StateAttribute("2", "node", null)),
+						State("state 3a", StateAttribute("3a", "node", null)),
+						State("state 3b", StateAttribute("3b", "node", null)),
+						State("state 4", StateAttribute("4", "node", null)),
+						State("state 5", StateAttribute("5", "node", null)),
+						State("state 6", StateAttribute("6", "node", null)),
+						State("unused", StateAttribute("unused", "node", null))
+				), setOf(), setOf(StartState("state 1", null)), setOf(
+						Transition("state 0", "state 1", TransitionAttribute("!init", "out", null)),
+						Transition("state 1", "state 2", TransitionAttribute("?a", "in", null)),
+						Transition("state 1", "state 3a", TransitionAttribute("?b", "in", null)),
+						Transition("state 3a", "state 3b", TransitionAttribute("", "tau",null)),
+						Transition("state 2", "state 4", TransitionAttribute("!a", "out", null)),
+						Transition("state 3b", "state 4", TransitionAttribute("!b", "out", null)),
+						Transition("state 4", "state 5", TransitionAttribute("!c", "out", null)),
+						Transition("state 4", "state 6", TransitionAttribute("!d", "out", null)),
+						Transition("state 0", "unused", TransitionAttribute("", "tau",null))
+				), setOf(), null, null, null)
+		), null)
 		val testRun = TestRun(model.testRunId!!, setOf(
-				TestCase(0, TestResult.PASSED, null, setOf(
+				TestCase(0,null, TestResult.PASSED, null, setOf(
 						Step(Label("init", "out", "pos"), timestamp = LocalDateTime.now(), stepNumber = 0),
 						Step(Label("a", "in", "pos"), timestamp = LocalDateTime.now(), stepNumber = 0),
 						Step(Label("a", "out", "pos"), timestamp = LocalDateTime.now(), stepNumber = 0),
 						Step(Label("c", "out", "pos"), timestamp = LocalDateTime.now(), stepNumber = 0)
 				), 4),
-				TestCase(1, TestResult.PASSED, null, setOf(
+				TestCase(1,null, TestResult.PASSED, null, setOf(
 						Step(Label("init", "out", "pos"), timestamp = LocalDateTime.now(), stepNumber = 0),
 						Step(Label("a", "in", "pos"), timestamp = LocalDateTime.now(), stepNumber = 0),
 						Step(Label("a", "out", "pos"), timestamp = LocalDateTime.now(), stepNumber = 0),
 						Step(Label("d", "out", "pos"), timestamp = LocalDateTime.now(), stepNumber = 0)
 				), 4),
-				TestCase(2, TestResult.FAILED, null, setOf(
+				TestCase(2,null, TestResult.FAILED, null, setOf(
 						Step(Label("init", "out", "pos"), timestamp = LocalDateTime.now(), stepNumber = 0),
 						Step(Label("b", "in", "pos"), timestamp = LocalDateTime.now(), stepNumber = 0),
 						Step(Label("b", "out", "pos"), timestamp = LocalDateTime.now(), stepNumber = 0),
 						Step(Label("c", "out", "pos"), timestamp = LocalDateTime.now(), stepNumber = 0)
 				), 4),
-				TestCase(3, TestResult.FAILED, null, setOf(
+				TestCase(3,null, TestResult.FAILED, null, setOf(
 						Step(Label("init", "out", "pos"), timestamp = LocalDateTime.now(), stepNumber = 0),
 						Step(Label("b", "in", "pos"), timestamp = LocalDateTime.now(), stepNumber = 0),
 						Step(Label("b", "out", "pos"), timestamp = LocalDateTime.now(), stepNumber = 0),
