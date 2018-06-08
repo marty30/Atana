@@ -140,8 +140,8 @@ impl CoverageMatrix {
         if send_progress_updates { send_progress(min_progress); }
         match transitions_to_include {
             Some(mut transition_pairs) => {
-                transition_pairs.sort();
-                transition_pairs.dedup();
+                transition_pairs.sort_by_key(|transition_pair|transition_pair.iter().map(|it| it.to_string()).collect::<Vec<_>>().join(" "));
+                transition_pairs.dedup_by_key(|transition_pair|transition_pair.iter().map(|it| it.to_string()).collect::<Vec<_>>().join(" "));
                 for transition_pair in transition_pairs.iter() {
                     for test in val.iter() {
                         let transition_pair_covered = test.all_transitions().iter().filter(|transition| transition_pair.contains(transition)).map(|transition| transition.attributes.covered.unwrap_or(false))
@@ -162,7 +162,10 @@ impl CoverageMatrix {
                             }
                         }
 
-                        for transition in &sts.transitions {
+                        let mut relevant_transitions = (&sts).transitions.clone();
+                        relevant_transitions.sort_by_key(|it|it.to_string());
+                        relevant_transitions.dedup_by_key(|it|it.to_string());
+                        for transition in relevant_transitions.iter() {
                             let is_covered = transition.attributes.covered.unwrap_or(false);
                             let mut cov_vec = coverage_matrix.entry(transition.to_string()).or_insert(vec![]);
                             cov_vec.push(is_covered);
