@@ -6,12 +6,15 @@ import nl.utwente.axini.model.Config
 import nl.utwente.axini.model.ConversionMethod
 import nl.utwente.axini.utils.InvalidatableLazyImpl
 import org.springframework.stereotype.Service
-import weka.core.*
+import weka.core.Attribute
+import weka.core.DenseInstance
+import weka.core.Instance
+import weka.core.Instances
 
 @Service
 class StorageService {
-	private final val specialNumericAttributes = listOf("nr_of_steps", "nr_of_reoccurring_steps")
-	private final val specialStringAttributes = listOf("first_step", "last_step")
+	final val specialNumericAttributes = listOf("nr_of_steps", "nr_of_reoccurring_steps")
+	final val specialStringAttributes = listOf("first_step", "last_step")
 
 	var config: Config? = null
 

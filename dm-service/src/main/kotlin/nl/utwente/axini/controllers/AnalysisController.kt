@@ -5,6 +5,7 @@ import nl.utwente.axini.atana.models.AnalysisResult
 import nl.utwente.axini.atana.models.TestCase
 import nl.utwente.axini.atana.models.TestModel
 import nl.utwente.axini.model.Config
+import nl.utwente.axini.model.ConversionMethod
 import nl.utwente.axini.service.StorageService
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
@@ -71,6 +72,14 @@ class AnalysisController(val storageService: StorageService) {
 		storageService.addAllFailingTests(test, true)
 	}
 
+	@PostMapping("/coverages")
+	@ResponseBody
+	fun coverages(@RequestBody test: List<TestModel>) {}
+
+	@PostMapping("/coverage")
+	@ResponseBody
+	fun coverage(@RequestBody test: TestModel) {}
+
 	@PostMapping("/done")
 	@ResponseBody
 	fun done() {
@@ -98,7 +107,27 @@ class AnalysisController(val storageService: StorageService) {
 		val instance = DenseInstance(headerAttributes.size)
 		instance.setDataset(storageService.instances)
 		headerAttributes.forEach { attribute ->
-			instance.setValue(attribute, test.steps.map { it.fullLabel }.filter { it == attribute.name() }.count().toDouble() * -1)
+			if (attribute.name() in storageService.specialStringAttributes || attribute.name() in storageService.specialNumericAttributes) {
+				when (attribute.name()) {
+					"nr_of_steps" -> instance.setValue(attribute, test.steps.size.toDouble())
+					"nr_of_reoccurring_steps" -> instance.setValue(attribute, test.steps.groupBy { it.fullLabel }.filter { it.value.size > 1 }.count().toDouble())
+					"first_step" -> instance.setValue(attribute, test.steps.first().fullLabel)
+					"last_step" -> instance.setValue(attribute, test.steps.last().fullLabel)
+				}
+			} else {
+				when (storageService.config?.conversionMethod) {
+					ConversionMethod.NEGATIVE_COUNT -> {
+						val stepCount = test.steps.map { it.fullLabel }.filter { it == attribute.name() }.count()
+						instance.setValue(attribute, stepCount.toDouble() * -1)
+					}
+					ConversionMethod.PRESENCE -> {
+						instance.setValue(attribute, if (test.steps.map { it.fullLabel }.contains(attribute.name())) 1.0 else 0.0)
+					}
+					ConversionMethod.INDEX -> {
+						instance.setValue(attribute, test.steps.map { it.fullLabel }.indexOf(attribute.name()).toDouble())
+					}
+				}
+			}
 		}
 
 		val classification = storageService.classifiedInstances.entries.find { it.key.toDoubleArray()!!.contentEquals(instance.toDoubleArray()) }?.value
