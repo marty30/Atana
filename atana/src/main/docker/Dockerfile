@@ -2,6 +2,8 @@ FROM openjdk:8-jdk-alpine
 LABEL PROJECT=${project.artifactId}
 
 ENV PROFILE="docker"
+ENV JAVA_ARGS=""
+ENV ATANA_ARGS=""
 
 EXPOSE 8080
 
@@ -9,4 +11,4 @@ EXPOSE 8080
 # and need to be added manually
 COPY maven/ /webapps/
 
-CMD exec java -Dspring.profiles.active=$PROFILE -Djava.security.egd=file:/dev/./urandom -jar /webapps/${project.build.finalName}.jar
+CMD exec java -Dspring.profiles.active=$PROFILE -Djava.security.egd=file:/dev/./urandom ${JAVA_ARGS} -jar /webapps/${project.build.finalName}.jar ${ATANA_ARGS}
