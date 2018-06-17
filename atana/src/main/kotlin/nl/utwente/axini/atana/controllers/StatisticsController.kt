@@ -139,6 +139,16 @@ class StatisticsController(val entityManager: EntityManager, val testRunReposito
 		return testruns.map { testLogsRepository.findAllByTestRunId(it.testRunId) }.flatten().distinctBy { Triple(it.testRunId, it.sutFilename, it.testsetId) }
 	}
 
+    @GetMapping("/statistics/run/step_count/{test_run_id}")
+    @ApiOperation("Show the number of steps for a specified test")
+    fun showStepCount(@PathVariable test_run_id: UUID): Any? {
+        val session = entityManager.unwrap(Session::class.java)
+        val q = session.createQuery("SELECT count(ts) FROM TestRun as tr join tr.testCases as tc join tc.steps as ts WHERE tr.testRunId = :trid GROUP BY tc").setParameter("trid", test_run_id)
+        q.maxResults = 1
+
+        return q.list().first()
+    }
+
 	@GetMapping("/statistics/run/failed")
 	@ApiOperation("Show all test logs of runs that have failed test cases")
 	fun showFailedTestRuns(): List<TestLogs> {
