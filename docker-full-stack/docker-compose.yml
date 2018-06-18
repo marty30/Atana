@@ -1,7 +1,7 @@
 version: "2"
 services:
     atana:
-        image: axini/atana:latest
+        image: marty30/atana:latest
         ports:
           - 8090:8080
         environment:
@@ -9,6 +9,9 @@ services:
           - spring.datasource.url=jdbc:mysql://db:3306/atana?useSSL=false
           - spring.datasource.username=root
           - spring.datasource.password=developer
+        volumes:
+          - ./application.properties:/webapps/application-docker.properties
+          - ./application.properties:/webapps/application.properties
         links:
           - db:db
           - sfl:sfl
@@ -38,7 +41,8 @@ services:
             MYSQL_USER: atana
             MYSQL_PASSWORD: developer
     sfl:
-        build: ../sfl-service/
+        image: marty30/sfl
+#        build: ../sfl-service/
         ports:
             - 8000:8000
         networks:
