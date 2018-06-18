@@ -1,7 +1,7 @@
 version: "2"
 services:
     atana:
-        image: axini/atana:latest
+        image: marty30/atana:latest
         ports:
           - 8090:8080
         environment:
@@ -17,7 +17,7 @@ services:
     db:
         image: mysql
         ports:
-          - 3306:3306
+          - 3308:3306
         environment:
           - MYSQL_DATABASE=atana
           - MYSQL_USER=atana
@@ -38,7 +38,8 @@ services:
             MYSQL_USER: atana
             MYSQL_PASSWORD: developer
     sfl:
-        build: ../sfl-service/
+        #build: ../sfl-service/
+        image: marty30/sfl
         ports:
             - 8000:8000
         networks:
