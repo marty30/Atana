@@ -9,6 +9,9 @@ services:
           - spring.datasource.url=jdbc:mysql://db:3306/atana?useSSL=false
           - spring.datasource.username=root
           - spring.datasource.password=developer
+        volumes:
+          - ./application.properties:/webapps/application.properties
+          - ./application.properties:/webapps/application-docker.properties
         links:
           - db:db
           - sfl:sfl
