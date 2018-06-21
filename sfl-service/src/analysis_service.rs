@@ -111,11 +111,19 @@ impl AnalysisServiceTrait for AnalysisService {
         let model = &storage_service.model;
         let coverage_model_transitions = coverage_model.unwrap_or((model.as_ref().unwrap()).clone()).all_transitions();
         let covered_transitions = coverage_model_transitions.iter().filter(|it|it.attributes.covered.unwrap_or(false) == true).collect::<Vec<_>>();
+        let mut max_similarity: (Vec<Transition>,f32) = (vec![], 0.0);
 
         if get_settings().analysis.use_steps_instead_of_transitions_for_analysis == true {
             for step in testcase.steps.iter() {
                 let similarity_coefficient = self.similarity_coefficient(&step.get_full_label(), &storage_service.coverage_matrix.as_ref().unwrap());
                 println!("similarity_coefficient is {} for \tstep {:?}\t in {:?} ", similarity_coefficient, step.get_full_label(), testcase.get_steps());
+                if get_settings().analysis.return_highest_similarity_if_nothing_found && similarity_coefficient > max_similarity.1 {
+                    let transition = step.to_transition(model.as_ref().unwrap());
+                    if transition.is_some() {
+                        max_similarity = (vec![transition.unwrap().to_owned()], similarity_coefficient);
+                    }
+                    else { eprintln!("Could not find a transition for problematic step {:?}", step); }
+                }
                 if similarity_coefficient > SETTINGS.analysis.similarity_threshold {
                     let transition = step.to_transition(model.as_ref().unwrap());
                     if transition.is_some() {
@@ -131,6 +139,9 @@ impl AnalysisServiceTrait for AnalysisService {
                 if step.is_some() && testcase.steps.contains(&step.unwrap()) {
                     let similarity_coefficient = self.similarity_coefficient(&transition.to_string(), &storage_service.coverage_matrix.as_ref().unwrap());
                     println!("similarity_coefficient is {} for \tstep {:?}\t in {:?} ", similarity_coefficient, transition.to_string(), testcase.get_steps());
+                    if get_settings().analysis.return_highest_similarity_if_nothing_found && similarity_coefficient > max_similarity.1 {
+                        max_similarity = (vec![transition.to_owned()], similarity_coefficient);
+                    }
                     if similarity_coefficient > SETTINGS.analysis.similarity_threshold {
                         problematic_steps.push(transition.to_owned());
                     }
@@ -148,6 +159,10 @@ impl AnalysisServiceTrait for AnalysisService {
                 let string_pair = step_pair.iter().map(|it| it.get_full_label()).collect::<Vec<_>>().join(" -> ");
                 let similarity_coefficient = self.similarity_coefficient(&string_pair, &storage_service.coverage_matrix.as_ref().unwrap());
                 println!("similarity_coefficient is {} for \tstep {:?}\t in {:?} ", similarity_coefficient, string_pair, testcase.get_steps());
+                if get_settings().analysis.return_highest_similarity_if_nothing_found && similarity_coefficient > max_similarity.1 {
+                    let mut transition_pair = step_pair.iter().filter_map(|it|it.to_transition(model.as_ref().unwrap())).collect::<Vec<Transition>>();
+                    max_similarity = (transition_pair.clone(), similarity_coefficient);
+                }
                 if similarity_coefficient > SETTINGS.analysis.similarity_threshold {
                     let mut transition_pair = step_pair.iter().filter_map(|it|it.to_transition(model.as_ref().unwrap())).collect::<Vec<Transition>>();
                     problematic_steps.append(&mut transition_pair);
@@ -162,6 +177,9 @@ impl AnalysisServiceTrait for AnalysisService {
                     let string_pair = transition_pair.iter().map(|it| it.to_string()).collect::<Vec<_>>().join(" ");
                     let similarity_coefficient = self.similarity_coefficient(&string_pair, &storage_service.coverage_matrix.as_ref().unwrap());
                     println!("similarity_coefficient is {} for \tstep {:?}\t in {:?} ", similarity_coefficient, string_pair, testcase.get_steps());
+                    if get_settings().analysis.return_highest_similarity_if_nothing_found && similarity_coefficient > max_similarity.1 {
+                        max_similarity = (transition_pair.clone(), similarity_coefficient);
+                    }
                     if similarity_coefficient > SETTINGS.analysis.similarity_threshold {
                         problematic_steps.append(&mut transition_pair);
                     }
@@ -177,7 +195,18 @@ impl AnalysisServiceTrait for AnalysisService {
         step_labels.dedup();
 
         if problematic_steps.len() == 0 {
-            return Some(AnalysisResult::new(String::from("No problematic steps found"), None, None, None));
+            if get_settings().analysis.return_highest_similarity_if_nothing_found {
+                let faulty_transitions = max_similarity.0;
+                if faulty_transitions.len() == 1 {
+                    return Some(AnalysisResult::new(String::from("Transition ") + &faulty_transitions[0].attributes.label, None, Some(faulty_transitions[0].to_owned()), Some(faulty_transitions.iter().filter_map(|it| it.to_step(&testcase.steps)).collect::<Vec<_>>())));
+                }
+                else {
+                    return Some(AnalysisResult::new(format!("Multiple steps: {:?}", faulty_transitions), None, None, Some(faulty_transitions.iter().filter_map(|it| it.to_step(&testcase.steps)).collect::<Vec<_>>())));
+                }
+            } else {
+                return Some(AnalysisResult::new(String::from("No problematic steps found"), None, None, None));
+            }
+
         } else if problematic_steps.len() == 1 {
             let faulty_transition_val = problematic_steps[0].to_owned();
             return Some(AnalysisResult::new(String::from("Transition ") + &faulty_transition_val.attributes.label, None, Some(faulty_transition_val), Some(problematic_steps.iter().filter_map(|it| it.to_step(&testcase.steps)).collect::<Vec<_>>())));

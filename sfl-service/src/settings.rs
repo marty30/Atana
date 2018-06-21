@@ -18,6 +18,7 @@ pub struct Analysis {
     pub number_of_pairs_to_include_for_order: i32,
     pub use_steps_instead_of_transitions_for_analysis: bool,
     pub use_transition_data: bool,
+    pub return_highest_similarity_if_nothing_found: bool,
 }
 
 impl Analysis {
@@ -81,6 +82,16 @@ impl Analysis {
                     get_settings().analysis.number_of_pairs_to_include_for_order = *number_of_pairs_to_include_for_order;
                 },
                 Err(e) => println!("number_of_pairs_to_include_for_order is not an integer: {}", e)
+            }
+        }
+        if settings_map.contains_key("return_highest_similarity_if_nothing_found") {
+            let return_highest_similarity_if_nothing_found = Analysis::parse_bool(&settings_map["return_highest_similarity_if_nothing_found"]);
+            match return_highest_similarity_if_nothing_found {
+                Ok(ref return_highest_similarity_if_nothing_found) => {
+                    println!("Set return_highest_similarity_if_nothing_found to {}", return_highest_similarity_if_nothing_found);
+                    get_settings().analysis.return_highest_similarity_if_nothing_found = *return_highest_similarity_if_nothing_found;
+                },
+                Err(e) => println!("return_highest_similarity_if_nothing_found is not a boolean: {}", e)
             }
         }
     }
@@ -173,7 +184,8 @@ impl Settings {
                         use_thread_for_training: false,
                         number_of_pairs_to_include_for_order: 0,
                         use_steps_instead_of_transitions_for_analysis: false,
-                        use_transition_data: false
+                        use_transition_data: false,
+                        return_highest_similarity_if_nothing_found: false,
                     },
                 }
             }
