@@ -10,8 +10,8 @@ services:
           - spring.datasource.username=root
           - spring.datasource.password=developer
         volumes:
-          - ./application.properties:/webapps/application-docker.properties
           - ./application.properties:/webapps/application.properties
+          - ./application.properties:/webapps/application-docker.properties
         links:
           - db:db
           - sfl:sfl
@@ -20,7 +20,7 @@ services:
     db:
         image: mysql
         ports:
-          - 3306:3306
+          - 3308:3306
         environment:
           - MYSQL_DATABASE=atana
           - MYSQL_USER=atana
