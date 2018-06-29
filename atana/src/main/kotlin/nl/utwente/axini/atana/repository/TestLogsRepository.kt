@@ -8,10 +8,10 @@ import java.util.*
 
 @Repository
 interface TestLogsRepository : CrudRepository<TestLogs, Long> {
-	@Transactional
-	fun deleteByTestRunId(testRunId: UUID)
+    @Transactional
+    fun deleteByTestRunId(testRunId: UUID)
 
-	fun findAllByTestRunId(testRunId: UUID): Iterable<TestLogs>
+    fun findAllByTestRunId(testRunId: UUID): Iterable<TestLogs>
 
-	fun findAllBySutFilename(filename: String): Iterable<TestLogs>
+    fun findAllBySutFilename(filename: String): Iterable<TestLogs>
 }

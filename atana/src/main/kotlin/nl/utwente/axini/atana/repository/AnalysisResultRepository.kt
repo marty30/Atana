@@ -7,5 +7,5 @@ import java.util.*
 
 @Repository
 interface AnalysisResultRepository : CrudRepository<AnalysisResult, Long> {
-	fun findAllByTestRunId(testRunId: UUID?): Iterable<AnalysisResult>
+    fun findAllByTestRunId(testRunId: UUID?): Iterable<AnalysisResult>
 }

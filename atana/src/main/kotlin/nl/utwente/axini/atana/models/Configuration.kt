@@ -11,15 +11,15 @@ import java.net.URL
 import kotlin.reflect.KClass
 
 data class Configuration(
-		@ApiModelProperty(notes = "Endpoint for the implementation of the grouping and analysis service", required = false, example = "http://localhost:8090/rest")
-		val endpoint: URL? = null,
+        @ApiModelProperty(notes = "Endpoint for the implementation of the grouping and analysis service", required = false, example = "http://localhost:8090/rest")
+        val endpoint: URL? = null,
 
-		@ApiModelProperty(notes = "Class of the implementation of the grouping and analysis service", required = true, example = "nl.utwente.axini.atana.service.GroupingAndAnalysisServiceDummyImpl")
-		@get:SubclassOf(GroupingAndAnalysisService::class)
-		@JsonSerialize(using = KClassSerializer::class)
-		@JsonDeserialize(using = KClassDeserializer::class)
-		val groupingAndAnalysisServiceImplementation: KClass<out Any>,
+        @ApiModelProperty(notes = "Class of the implementation of the grouping and analysis service", required = true, example = "nl.utwente.axini.atana.service.GroupingAndAnalysisServiceDummyImpl")
+        @get:SubclassOf(GroupingAndAnalysisService::class)
+        @JsonSerialize(using = KClassSerializer::class)
+        @JsonDeserialize(using = KClassDeserializer::class)
+        val groupingAndAnalysisServiceImplementation: KClass<out Any>,
 
-		@ApiModelProperty(notes = "A set of key-value pairs as config for the grouping and analysis service", required = false, example = "{\"key\": \"value\"}")
-		val groupingAndAnalysisServiceConfiguration: Map<String, String>? = mapOf()
+        @ApiModelProperty(notes = "A set of key-value pairs as config for the grouping and analysis service", required = false, example = "{\"key\": \"value\"}")
+        val groupingAndAnalysisServiceConfiguration: Map<String, String>? = mapOf()
 )

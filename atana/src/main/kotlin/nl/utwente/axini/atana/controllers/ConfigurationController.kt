@@ -14,18 +14,18 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class ConfigurationController(val configurationService: ConfigurationService) : AbstractController() {
-	override val log by logger()
+    override val log by logger()
 
-	@PostMapping("/config")
-	@ApiOperation("Submit a new configuration")
-	fun setConfig(@ApiParam("A configuration object with key value pairs") @RequestBody config: Configuration) {
-		validate(config) //Generic validation of the data
-		configurationService.config = config
-		configurationService.freshConfig.set(true)
-		log.debug("Setting config to %s".format(config))
-	}
+    @PostMapping("/config")
+    @ApiOperation("Submit a new configuration")
+    fun setConfig(@ApiParam("A configuration object with key value pairs") @RequestBody config: Configuration) {
+        validate(config) //Generic validation of the data
+        configurationService.config = config
+        configurationService.freshConfig.set(true)
+        log.debug("Setting config to %s".format(config))
+    }
 
-	@GetMapping("/config")
-	@ApiOperation("Show the current configuration")
-	fun showConfig() = configurationService.config
+    @GetMapping("/config")
+    @ApiOperation("Show the current configuration")
+    fun showConfig() = configurationService.config
 }

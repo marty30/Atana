@@ -15,12 +15,12 @@ annotation class SubclassOf(val value: KClass<out Any>, val message: String = "{
 
 
 class SubclassOfValidator : ConstraintValidator<SubclassOf, KClass<out Any>> {
-	private lateinit var expectedClass: KClass<out Any>
-	override fun initialize(constraintAnnotation: SubclassOf) {
-		expectedClass = constraintAnnotation.value
-	}
+    private lateinit var expectedClass: KClass<out Any>
+    override fun initialize(constraintAnnotation: SubclassOf) {
+        expectedClass = constraintAnnotation.value
+    }
 
-	override fun isValid(value: KClass<out Any>, context: ConstraintValidatorContext?): Boolean {
-		return value.isSubclassOf(expectedClass)
-	}
+    override fun isValid(value: KClass<out Any>, context: ConstraintValidatorContext?): Boolean {
+        return value.isSubclassOf(expectedClass)
+    }
 }

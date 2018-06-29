@@ -10,12 +10,12 @@ import java.util.*
 
 @Repository
 interface TestRunRepository : CrudRepository<TestRun, Long> {
-	@Transactional
-	fun deleteByTestRunId(testRunId: UUID)
+    @Transactional
+    fun deleteByTestRunId(testRunId: UUID)
 
-	fun findAllByTestRunId(testRunId: UUID): Iterable<TestRun>
+    fun findAllByTestRunId(testRunId: UUID): Iterable<TestRun>
 
-	fun findAllByTestCases_Verdict(verdict: TestResult): Iterable<TestRun>
+    fun findAllByTestCases_Verdict(verdict: TestResult): Iterable<TestRun>
 
-	fun findAllByTestCases_Steps_TimestampBetween(starttime: LocalDateTime, endtime: LocalDateTime): Iterable<TestRun>
+    fun findAllByTestCases_Steps_TimestampBetween(starttime: LocalDateTime, endtime: LocalDateTime): Iterable<TestRun>
 }

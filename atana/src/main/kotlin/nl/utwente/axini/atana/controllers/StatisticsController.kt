@@ -50,7 +50,6 @@ class StatisticsController(val entityManager: EntityManager, val testRunReposito
 			}
 		})
 		return res.map {
-//			log.warn("6")
 			val map	= mutableMapOf(
 					"test_run_id" to it.testRunId,
 					"total_count" to it.totalCount,

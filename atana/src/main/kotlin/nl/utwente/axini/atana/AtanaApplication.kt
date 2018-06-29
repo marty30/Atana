@@ -36,93 +36,93 @@ class AtanaApplication
 
 @Configuration
 class Config {
-	@Bean
-	fun restTemplate() = RestTemplate()
+    @Bean
+    fun restTemplate() = RestTemplate()
 }
 
 @Converter(autoApply = true)
 class LocalDateTimeAttributeConverter : AttributeConverter<LocalDateTime, Timestamp> {
 
-	override fun convertToDatabaseColumn(locDateTime: LocalDateTime?): Timestamp? {
-		return if (locDateTime == null) null else Timestamp.valueOf(locDateTime)
-	}
+    override fun convertToDatabaseColumn(locDateTime: LocalDateTime?): Timestamp? {
+        return if (locDateTime == null) null else Timestamp.valueOf(locDateTime)
+    }
 
-	override fun convertToEntityAttribute(sqlTimestamp: Timestamp?): LocalDateTime? {
-		return sqlTimestamp?.toLocalDateTime()
-	}
+    override fun convertToEntityAttribute(sqlTimestamp: Timestamp?): LocalDateTime? {
+        return sqlTimestamp?.toLocalDateTime()
+    }
 }
 
 fun jsonObjectMapper(): ObjectMapper {
-	return jacksonObjectMapper()
-			.registerModule(JavaTimeModule())
-			.registerModule(Jdk8Module())
-			.registerModule(ParameterNamesModule())
-			.findAndRegisterModules()
+    return jacksonObjectMapper()
+            .registerModule(JavaTimeModule())
+            .registerModule(Jdk8Module())
+            .registerModule(ParameterNamesModule())
+            .findAndRegisterModules()
 }
 
 @Component
 class ApplicationContextProvider : ApplicationContextAware {
 
-	@Throws(BeansException::class)
-	override fun setApplicationContext(ac: ApplicationContext) {
-		context = ac
-	}
+    @Throws(BeansException::class)
+    override fun setApplicationContext(ac: ApplicationContext) {
+        context = ac
+    }
 
-	companion object {
+    companion object {
 
-		private var context: ApplicationContext? = null
+        private var context: ApplicationContext? = null
 
-		fun getApplicationContext(): ApplicationContext? {
-			return context
-		}
-	}
+        fun getApplicationContext(): ApplicationContext? {
+            return context
+        }
+    }
 }
 
 fun transaction(codeToRun: () -> Unit) {
-	transaction<Unit>(codeToRun)
+    transaction<Unit>(codeToRun)
 }
 
-fun <T> transaction(codeToRun: () -> T) : T {
-	val transactionManager = ApplicationContextProvider.getApplicationContext()?.getBean(PlatformTransactionManager::class.java)!!
-	val txTemplate = TransactionTemplate(transactionManager)
-	txTemplate.propagationBehavior = TransactionDefinition.PROPAGATION_REQUIRES_NEW
-	return txTemplate.execute({ return@execute codeToRun.invoke() })!!
+fun <T> transaction(codeToRun: () -> T): T {
+    val transactionManager = ApplicationContextProvider.getApplicationContext()?.getBean(PlatformTransactionManager::class.java)!!
+    val txTemplate = TransactionTemplate(transactionManager)
+    txTemplate.propagationBehavior = TransactionDefinition.PROPAGATION_REQUIRES_NEW
+    return txTemplate.execute({ return@execute codeToRun.invoke() })!!
 }
 
 val mavenModel = lazy {
-	try {
-		return@lazy MavenXpp3Reader().read(FileReader(File("pom.xml")))
-	} catch (e: FileNotFoundException) {
-		if (File("/META-INF/maven/nl.utwente.axini/atana/pom.xml").exists()) {
-			return@lazy MavenXpp3Reader().read(FileReader(File("/META-INF/maven/nl.utwente.axini/atana/pom.xml")))
-		} else {
-			val m = Model()
-			m.version = when {
-				!AtanaApplication::class.java.`package`.implementationVersion.isNullOrBlank() -> AtanaApplication::class.java.`package`.implementationVersion
-				else -> {
-					e.printStackTrace()
-					"Unknown"
-				}
-			}
-			return@lazy m
-		}
-	}
+    try {
+        return@lazy MavenXpp3Reader().read(FileReader(File("pom.xml")))
+    } catch (e: FileNotFoundException) {
+        if (File("/META-INF/maven/nl.utwente.axini/atana/pom.xml").exists()) {
+            return@lazy MavenXpp3Reader().read(FileReader(File("/META-INF/maven/nl.utwente.axini/atana/pom.xml")))
+        } else {
+            val m = Model()
+            m.version = when {
+                !AtanaApplication::class.java.`package`.implementationVersion.isNullOrBlank() -> AtanaApplication::class.java.`package`.implementationVersion
+                else -> {
+                    e.printStackTrace()
+                    "Unknown"
+                }
+            }
+            return@lazy m
+        }
+    }
 }
 
 fun main(args: Array<String>) {
-	runApplication<AtanaApplication>(*args)
+    runApplication<AtanaApplication>(*args)
 }
 
 
 fun <R : Any> R.logger(): Lazy<Logger> {
-	return lazy { LogManager.getLogger(unwrapCompanionClass(this.javaClass).name) }
+    return lazy { LogManager.getLogger(unwrapCompanionClass(this.javaClass).name) }
 }
 
 // unwrap companion class to enclosing class given a Java Class
 private fun <T : Any> unwrapCompanionClass(ofClass: Class<T>): Class<*> {
-	return if (ofClass.enclosingClass != null && ofClass.enclosingClass.kotlin.companionObject?.java == ofClass) {
-		ofClass.enclosingClass
-	} else {
-		ofClass
-	}
+    return if (ofClass.enclosingClass != null && ofClass.enclosingClass.kotlin.companionObject?.java == ofClass) {
+        ofClass.enclosingClass
+    } else {
+        ofClass
+    }
 }
