@@ -32,6 +32,7 @@ impl CoverageMatrix {
         }
     }
 
+    /// This method converts the coverage matrix to a table with a header
     pub fn to_coverage_table(&self) -> Table {
         let mut table = Table::new();
         { //Table header
@@ -55,6 +56,7 @@ impl CoverageMatrix {
             matrix_values.push(row);
         }
 
+        //Add the data to the table
         for (i, (coverage_row, test_id)) in (matrix_values.iter()).zip(self.test_id_vector.iter()).enumerate() {
             let mut table_row: Vec<Cell> = vec![];
             table_row.push(Cell::new(&format!("T{}", test_id)));
@@ -71,6 +73,10 @@ impl CoverageMatrix {
         table
     }
 
+    /// Create a coverage matrix from test traces (a vec of test cases).
+    /// Optionally some steps can be specified to be included in the coverage matrix. This feature is used to add step-pairs to the coverage matrix.
+    /// If send progress updates is set to true, the min and max progress floats are used to send progress updates.
+    /// See also `from_model`.
     pub fn from_traces(test_cases: Vec<TestCase>, steps_to_include: Option<Vec<Vec<Step>>>, min_progress: f32, max_progress: f32) -> CoverageMatrix {
         let send_progress_updates = max_progress > min_progress;
         let mut coverage_matrix: HashMap<String, Vec<bool>> = HashMap::new();
@@ -78,10 +84,13 @@ impl CoverageMatrix {
         let mut test_id_vector: Vec<i64> = vec![];
         if send_progress_updates { send_progress(min_progress); }
 
+        //Check if there are steps to include specified
         match steps_to_include {
             Some(mut step_pairs) => {
+                //remove duplicates by the label of the step
                 step_pairs.sort_by_key(|step_pair|step_pair.iter().map(|it| it.get_full_label()).collect::<Vec<_>>().join(" -> "));
                 step_pairs.dedup_by_key(|step_pair|step_pair.iter().map(|it| it.get_full_label()).collect::<Vec<_>>().join(" -> "));
+                //Loop over the test cases and the unique steps (by labels) to create pairs and add these to the coverage matrix.
                 for test in test_cases.iter() {
                     for step_pair in step_pairs.iter() {
                         let step_pair_covered = step_pair.iter().all(|s| test.steps.contains(s));
@@ -92,14 +101,18 @@ impl CoverageMatrix {
                 }
             },
             None => {
+                //Just go over the test cases and the steps to create the coverage matrix
                 let mut steps: HashSet<&Step> = HashSet::new();
+                //Fill a set with all steps
                 for test in test_cases.iter() {
                     for step in &test.steps {
                         steps.insert(step);
                     }
                 }
+                //Find the unique labels for the set of steps
                 let mut step_labels: HashSet<String> = steps.iter().map(|it| it.get_full_label()).collect();
 
+                //For each test case, fill the error vector, the test id vector and finally the matrix itself for each step_label
                 for (i, test) in test_cases.iter().enumerate() {
                     error_vector.push((&test).verdict.as_ref().unwrap_or(&TestResult::unknown) != &TestResult::passed);
                     test_id_vector.push(test.id.unwrap_or(-1));
@@ -132,18 +145,27 @@ impl CoverageMatrix {
         }
     }
 
+    /// Create a coverage matrix from a set of coverage information models.
+    /// Optionally some transitions can be specified to be included in the coverage matrix. This feature is used to add transition-pairs to the coverage matrix.
+    /// If send progress updates is set to true, the min and max progress floats are used to send progress updates.
+    /// See also `from_traces`.
     pub fn from_model(val: Vec<TestModel>, transitions_to_include: Option<Vec<Vec<Transition>>>, min_progress: f32, max_progress: f32) -> CoverageMatrix {
         let send_progress_updates = max_progress > min_progress;
         let mut coverage_matrix: HashMap<String, Vec<bool>> = HashMap::new();
         let mut error_vector: Vec<bool> = vec![];
         let mut test_id_vector: Vec<i64> = vec![];
         if send_progress_updates { send_progress(min_progress); }
+
+        //Check if there are transitions to include specified
         match transitions_to_include {
             Some(mut transition_pairs) => {
+                //remove duplicates by the label of the transition
                 transition_pairs.sort_by_key(|transition_pair|transition_pair.iter().map(|it| it.to_string()).collect::<Vec<_>>().join(" "));
                 transition_pairs.dedup_by_key(|transition_pair|transition_pair.iter().map(|it| it.to_string()).collect::<Vec<_>>().join(" "));
+                //Loop over the test cases and the unique transitions (by labels) to create pairs and add these to the coverage matrix.
                 for transition_pair in transition_pairs.iter() {
                     for test in val.iter() {
+                        //Check if the current transition is actually fully covered
                         let transition_pair_covered = test.all_transitions().iter().filter(|transition| transition_pair.contains(transition)).map(|transition| transition.attributes.covered.unwrap_or(false))
                             .all(|cov| cov == true);
                         let string_pair = transition_pair.iter().map(|it| it.to_string()).collect::<Vec<_>>().join(" ");
@@ -153,18 +175,22 @@ impl CoverageMatrix {
                 }
             },
             None => {
+                //Loop over the models that contain coverage information
                 for (i, test) in val.iter().enumerate() {
                     let mut passed = true;
                     for sts in &test.stss {
                         if let Some(ref props) = sts.trace_properties {
+                            //Check if every sts shows that the test has passed
                             if let Some(props_passed) = props.passed {
                                 passed = passed && props_passed
                             }
                         }
 
+                        //Create a unique vector of transitions that are unique by their label
                         let mut relevant_transitions = (&sts).transitions.clone();
                         relevant_transitions.sort_by_key(|it|it.to_string());
                         relevant_transitions.dedup_by_key(|it|it.to_string());
+                        //Check the coverage of the pairs
                         for transition in relevant_transitions.iter() {
                             let is_covered = transition.attributes.covered.unwrap_or(false);
                             let mut cov_vec = coverage_matrix.entry(transition.to_string()).or_insert(vec![]);
@@ -196,11 +222,13 @@ impl CoverageMatrix {
         }
     }
 
+    ///Append a coverage matrix to the current coverage matrix which results in a new coverage matrix while the original remains untouched
     pub fn append(&self, to_append: CoverageMatrix) -> Result<CoverageMatrix, String> {
         //do some checks
         if to_append.number_of_tests != self.number_of_tests { return Err("number_of_tests was not equal for both coverage matrices".to_string()); }
         let mut new_data = HashMap::new();
 
+        //Loop over the data to create the new coverage matrix
         self.data.iter().chain(to_append.data.iter()).for_each(|entry| {
             new_data.insert(entry.0.to_string(), entry.1.clone());
         });

@@ -37,6 +37,7 @@ use std::sync::Mutex;
 use std::sync::MutexGuard;
 
 lazy_static! {
+    //storage for the settings singleton and the current progress
     static ref SETTINGS: Mutex<Settings> = Mutex::new(Settings::unwrap(Settings::new()));
     static ref PROGRESS: Mutex<f32> = Mutex::new(0.0 as f32);
 }

@@ -1,8 +1,8 @@
-use models::test_case::Step;
-use uuid::Uuid;
-use std::collections::HashMap;
-use serde_json::Value;
 use get_settings;
+use models::test_case::Step;
+use serde_json::Value;
+use std::collections::HashMap;
+use uuid::Uuid;
 
 #[derive(Debug, Clone, Serialize, Deserialize, Derivative)]
 #[derivative(PartialEq)]
@@ -148,6 +148,7 @@ impl Transition {
         return new_self;
     }
 
+    ///Create a string representation of the current transition. Depending on whether data should be included, the label consists of only the first word, or the full label.
     pub fn to_string(&self) -> String {
         if get_settings().analysis.use_transition_data {
             format!("{}--{}-->{}", self.source, self.attributes.label, self.target)
@@ -158,27 +159,18 @@ impl Transition {
     }
 
     //noinspection RsTypeCheck
+    ///Convert the transition in a step, if possible, by finding the matching step based on as many parameters as possible.
     pub fn to_step(&self, steps: &Vec<Step>) -> Option<Step> {
-//        let mut possible_steps = steps.iter().filter(|it| it.get_full_label_with_params(false).starts_with(&self.attributes.label)).collect::<Vec<&Step>>();
-//        possible_steps.dedup_by_key(|it| it.get_full_label_with_params(true));
-//        if possible_steps.len() == 1 {
-//            return Some(possible_steps[0].to_owned());
-//        } else if possible_steps.is_empty() {
-//            eprintln!("No possible steps found for {:?}", self);
-//            return None;
-//        } else {
-//            eprintln!("possible steps for {:?} => {:?}", self, possible_steps);
-//            return Some(possible_steps[0].to_owned());
-//        }
-
-
+        //First check if there is a full match
         for step in steps {
             if self.attributes.label == step.get_full_label_with_params(true) {
                 return Some(step.clone());
             }
         }
+        //If there is not a full match, check if there are steps that start with the transition's label.
         let mut alternatives = steps.iter().filter(|it|self.attributes.label.starts_with(&it.get_full_label())).collect::<Vec<&Step>>();
         alternatives.dedup();
+        //Rank the alternatives based on how much the labels match (based on the label parameters)
         let alternatives_counted: HashMap<Step, usize> = alternatives.iter().map(|it|{
             let label = &self.attributes.label;
             let mut all_variables: Vec<String> = vec![];
@@ -196,6 +188,7 @@ impl Transition {
             }
             (it.clone().clone(), all_variables.iter().filter(|it2| label.contains(*it2)).count())
         }).collect();
+        //Find the best (max) option and log it
         let result = alternatives_counted.iter().max_by(|first, second| first.1.cmp(&second.1));
         if result.is_some() {
             println!("No exactly matching step found for {:?}. Fallback to {:?}.", self.attributes.label, result);

@@ -22,6 +22,7 @@ pub struct Analysis {
 }
 
 impl Analysis {
+    ///Parse the map of keys and values and store it in the settings
     pub fn parse_from_map(settings_map: Map<String, Value>){
         println!("Parse map!");
         if settings_map.contains_key("similarity_threshold") {
@@ -29,7 +30,7 @@ impl Analysis {
             match similarity_threshold {
                 Ok(similarity_threshold) => {
                     println!("Set similarity to {}", similarity_threshold);
-                    get_settings().analysis.set_similarity_threshold(similarity_threshold);
+                    get_settings().analysis.similarity_threshold = similarity_threshold;
                 },
                 Err(er) => println!("{}", er)
             }
@@ -39,7 +40,7 @@ impl Analysis {
             match progress_endpoint {
                 &Value::String(ref progress_endpoint) => {
                     println!("Set progress_endpoint to {}", progress_endpoint);
-                    get_settings().analysis.set_progress_endpoint(progress_endpoint.to_string());
+                    get_settings().analysis.progress_endpoint=progress_endpoint.to_string();
                 },
                 _ => println!("progress_endpoint is not a string: {}", progress_endpoint)
             }
@@ -49,7 +50,7 @@ impl Analysis {
             match use_thread_for_training {
                 Ok(ref use_thread_for_training) => {
                     println!("Set use_thread_for_training to {}", use_thread_for_training);
-                    get_settings().analysis.set_use_thread_for_training(*use_thread_for_training);
+                    get_settings().analysis.use_thread_for_training = *use_thread_for_training;
                 },
                 Err(e) => println!("use_thread_for_training is not a boolean: {}", e)
             }
@@ -96,6 +97,7 @@ impl Analysis {
         }
     }
 
+    ///Parse a float or give an error message
     fn parse_f32(val: &Value) -> Result<f32, String> {
         return match val {
             &Value::Number(ref value) => Ok(value.as_f64().unwrap() as f32),
@@ -106,6 +108,7 @@ impl Analysis {
             _ => Err(format!("No could not parse to f32. Found: {:?}.", val).to_string())
         }
     }
+    ///Parse an integer or give an error message
     fn parse_i32(val: &Value) -> Result<i32, String> {
         return match val {
             &Value::Number(ref value) => Ok(value.as_i64().unwrap() as i32),
@@ -116,7 +119,7 @@ impl Analysis {
             _ => Err(format!("No could not parse to i32. Found: {:?}.", val).to_string())
         }
     }
-
+    ///Parse a boolean or give an error message
     fn parse_bool(val: &Value) -> Result<bool, String> {
         return match val {
             &Value::Bool(ref value) => Ok(*value),
@@ -126,16 +129,6 @@ impl Analysis {
             },
             _ => Err("No similarity_threshold found.".to_string())
         }
-    }
-
-    pub fn set_similarity_threshold(&mut self, x: f32) {
-        self.similarity_threshold = x;
-    }
-    pub fn set_progress_endpoint(&mut self, x: String) {
-        self.progress_endpoint = x;
-    }
-    pub fn set_use_thread_for_training(&mut self, x: bool) {
-        self.use_thread_for_training = x;
     }
 }
 

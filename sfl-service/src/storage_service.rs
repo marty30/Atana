@@ -56,9 +56,12 @@ impl StorageService {
         self.coverage_matrix = Some(coverage_matrix);
     }
 
+    ///Clear the model and make the passing and failing tests an empty vector. Also remove the coverage information
     pub fn reset(&mut self) {
         self.set_model(None);
         self.set_passing_tests(vec![]);
         self.set_failing_tests(vec![]);
+        self.coverage_matrix = None;
+        self.coverage_information = vec![];
     }
 }

@@ -19,13 +19,16 @@ use models::test_case::Step;
 use std::cmp::max;
 use std::fs::File;
 
+//The default analysis service instance
 const SERVICE: AnalysisService = AnalysisService {};
 
 lazy_static! {
+    //The actual implementation that will be used during analysis
     static ref TEMP_ANALYSIS_SERVICE: Mutex<Option<&'static (AnalysisServiceTrait + Sync)>> = Mutex::new(Some(&SERVICE));
     static ref SETTINGS: Settings = Settings::unwrap(Settings::new());
 }
 
+///Return the singleton analysis service
 pub fn get_analysis_service<'a>() -> MutexGuard<'a, Option<&'static (AnalysisServiceTrait + Sync)>> {
     return match TEMP_ANALYSIS_SERVICE.lock() {
         Ok(service) => service,
@@ -44,10 +47,13 @@ pub trait AnalysisServiceTrait {
     fn similarity_coefficient(&self, step_j: &str, coverage_matrix: &CoverageMatrix) -> f32;
 }
 
+///Analysis service interface
 pub struct AnalysisService {}
 
 impl AnalysisServiceTrait for AnalysisService {
     //noinspection RsTypeCheck
+    ///The training stage of the analysis.
+    /// This stage creates the coverage matrix and possibly create pairs if this was configured in the settings.
     fn train(&self) {
         send_progress(0.1);
         let matrix = {
@@ -98,13 +104,16 @@ impl AnalysisServiceTrait for AnalysisService {
     }
 
     //noinspection RsTypeCheck
+    ///The analysis stage goes over a test case. For each step in the test case, the fault probability is calculated.
+    /// If the calulated proabability is higher than the threshold, a step is added to the vector of problematic steps.
+    /// During the analysis proces, the highest similarity is stored for when the max_similarity setting is used
     fn analyse(&self, testcase: TestCase) -> Option<AnalysisResult> {
         //Do not analyse test cases that have passed
         if testcase.verdict == Some(TestResult::passed) {
             return Some(AnalysisResult::new(String::from("Correct"), None, None, None));
         }
 
-        //Extract the relevant problematic steps
+        //Extract the relevant information
         let mut problematic_steps: Vec<Transition> = vec![];
         let coverage_model = { testcase.to_coverage_model() };
         let storage_service = get_storage_service();
@@ -114,9 +123,12 @@ impl AnalysisServiceTrait for AnalysisService {
         let mut max_similarity: (Vec<Transition>,f32) = (vec![], 0.0);
 
         if get_settings().analysis.use_steps_instead_of_transitions_for_analysis == true {
+            //Go over the steps
             for step in testcase.steps.iter() {
+                //Find the similarity coefficient
                 let similarity_coefficient = self.similarity_coefficient(&step.get_full_label(), &storage_service.coverage_matrix.as_ref().unwrap());
                 println!("similarity_coefficient is {} for \tstep {:?}\t in {:?} ", similarity_coefficient, step.get_full_label(), testcase.get_steps());
+                //Handle the found similarity coefficient according to the settings
                 if get_settings().analysis.return_highest_similarity_if_nothing_found && similarity_coefficient > max_similarity.1 {
                     let transition = step.to_transition(model.as_ref().unwrap());
                     if transition.is_some() {
@@ -134,11 +146,14 @@ impl AnalysisServiceTrait for AnalysisService {
             }
         }
         else {
+            //Go over the transitions
             for transition in covered_transitions {
                 let step = transition.to_step(&testcase.steps);
                 if step.is_some() && testcase.steps.contains(&step.unwrap()) {
+                    //Find the similarity coefficient
                     let similarity_coefficient = self.similarity_coefficient(&transition.to_string(), &storage_service.coverage_matrix.as_ref().unwrap());
                     println!("similarity_coefficient is {} for \tstep {:?}\t in {:?} ", similarity_coefficient, transition.to_string(), testcase.get_steps());
+                    //Handle the found similarity coefficient according to the settings
                     if get_settings().analysis.return_highest_similarity_if_nothing_found && similarity_coefficient > max_similarity.1 {
                         max_similarity = (vec![transition.to_owned()], similarity_coefficient);
                     }
@@ -149,11 +164,13 @@ impl AnalysisServiceTrait for AnalysisService {
             }
         }
 
+        //Create the pairs
         let mut pairs = vec![];
         for len in 2..(get_settings().analysis.number_of_pairs_to_include_for_order+2) {
             pairs.append(&mut get_pairs_with_length(len as usize, &testcase.steps));
         }
 
+        //Analyse the pairs
         if get_settings().analysis.use_steps_instead_of_transitions_for_analysis == true {
             for step_pair in pairs {
                 let string_pair = step_pair.iter().map(|it| it.get_full_label()).collect::<Vec<_>>().join(" -> ");
@@ -187,6 +204,7 @@ impl AnalysisServiceTrait for AnalysisService {
             }
         }
 
+        //Remove duplicates
         problematic_steps.sort();
         problematic_steps.dedup();
         let mut step_tuples: Vec<(String, String)> = problematic_steps.iter().map(|x| (x.source.clone(), x.attributes.label.clone())).collect::<Vec<_>>();
@@ -194,6 +212,7 @@ impl AnalysisServiceTrait for AnalysisService {
         let mut step_labels = step_tuples.iter().map(|ref x| &x.1).collect::<Vec<_>>();
         step_labels.dedup();
 
+        //Create the return analysis result
         if problematic_steps.len() == 0 {
             if get_settings().analysis.return_highest_similarity_if_nothing_found {
                 let faulty_transitions = max_similarity.0;
@@ -225,6 +244,8 @@ impl AnalysisServiceTrait for AnalysisService {
         }
     }
 
+
+    ///Calculate the similarity coefficient using the Ochiai similarity coefficient
     fn similarity_coefficient(&self, step_j: &str, coverage_matrix: &CoverageMatrix) -> f32 {
         //Ochiai similarity coefficient
         // a_pq(j) = |{ i | o_ij = p ∧ e_i = q }|, where p and q are either 0 or 1.
@@ -254,6 +275,7 @@ impl AnalysisServiceTrait for AnalysisService {
     }
 }
 
+///Create all combinations of clonable objects of a certain length for the given vector of these objects
 fn get_pairs_with_length<T: Clone>(pair_len: usize, haystack: &Vec<T>) -> Vec<Vec<T>> {
     let mut all_pairs = vec![];
     let number_of_loops = if haystack.len() < pair_len { 0 } else { max(haystack.len() + 1 - pair_len, 0) };
@@ -267,7 +289,9 @@ fn get_pairs_with_length<T: Clone>(pair_len: usize, haystack: &Vec<T>) -> Vec<Ve
     all_pairs
 }
 
+///Find the state between two transitions
 fn extract_state_from_transitions(transition1: &Transition, transition2: &Transition, model: &TestModel) -> Result<State, String> {
+    //Create two sets with the sources and targets
     let mut sources = HashSet::new();
     let mut targets = HashSet::new();
 
@@ -276,6 +300,7 @@ fn extract_state_from_transitions(transition1: &Transition, transition2: &Transi
     targets.insert(&transition1.target);
     targets.insert(&transition2.target);
 
+    //Find the state that is both a target and a source, which is in between two transitions.
     let mut state_ids = sources.intersection(&targets).map(|it| it.to_owned());
     let state_id = state_ids.next();
     if state_id.is_some() {

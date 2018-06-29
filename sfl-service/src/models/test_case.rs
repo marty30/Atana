@@ -44,14 +44,17 @@ impl TestCase {
         }
     }
 
+    ///Returns all steps as their string representation
     pub fn get_steps(&self) -> Vec<String> {
         self.steps.iter().map(|it| it.get_full_label()).collect()
     }
 
+    #[deprecated( note="please use `analysis_service#get_pairs_with_length` instead")]
     pub fn get_step_tuples(&self) -> Vec<(Step, Step)> {
         self.get_step_combinations(2).iter().map(|it| (it[0].to_owned(), it[1].to_owned())).collect::<Vec<(Step, Step)>>()
     }
 
+    ///Create all combinations of steps of a certain length for the current test case
     pub fn get_step_combinations(&self, len: usize) -> Vec<Vec<Step>> {
         let mut step_combos = vec![];
         let mut prev = vec![];
@@ -64,6 +67,7 @@ impl TestCase {
                 prev.push(step.to_owned());
             }
         }
+        //Add at least an empty vector if there are no combinations to be made
         if step_combos.len() == 0 {
             step_combos.push(vec![]);
         }
@@ -71,6 +75,7 @@ impl TestCase {
     }
 
     //noinspection RsTypeCheck
+    ///Find the matching coverage model by comparing test case ids
     pub fn to_coverage_model(&self) -> Option<TestModel> {
         get_storage_service().coverage_information.iter().find(|it| it.testcase_id == self.id).map(|it| it.to_owned())
     }
@@ -102,7 +107,9 @@ impl Step {
         }
     }
 
+    ///Map the current step to a transition in the given test model
     pub fn to_transition(&self, model: &TestModel) -> Option<Transition> {
+        //Check if there is an exact match
         for sts in &model.stss {
             for transition in &sts.transitions {
                 if transition.attributes.label == self.get_full_label_with_params(true) {
@@ -110,8 +117,10 @@ impl Step {
                 }
             }
         }
+        //If there is not a full match, check if there are steps that start with the transition's label.
         let mut alternatives = model.stss.iter().map(|it|&it.transitions).flatten().filter(|it|it.attributes.covered.unwrap_or(false) && it.attributes.label.starts_with(&self.get_full_label())).collect::<Vec<&Transition>>();
         alternatives.dedup();
+        //Rank the alternatives based on how much the labels match (based on the label parameters)
         let alternatives_counted: HashMap<Transition, usize> = alternatives.iter().map(|it|{
             let label = &it.attributes.label.clone();
             let mut all_variables: Vec<String> = vec![];
@@ -130,6 +139,7 @@ impl Step {
             (it.clone().clone(), all_variables.iter().filter(|it2| label.contains(*it2)).count())
         }).collect();
         let result = alternatives_counted.iter().max_by(|first, second| first.1.cmp(&second.1));
+        //Find the best (max) option and log it
         if result.is_some() {
             println!("No exactly matching transition found for {:?}. Fallback to {:?}.", self.get_full_label_with_params(true), result);//model.stss.iter().map(|it| it.transitions.clone()).flatten().map(|it| it.attributes.label).collect::<Vec<_>>());
         }
@@ -139,6 +149,7 @@ impl Step {
         result.map(|it| it.0.clone())
     }
 
+    ///Return the full label of the step, optionally with parameters.
     pub fn get_full_label_with_params(&self, include_parameters: bool) -> String {
         let mut full_label = String::new();
         if &self.label.direction == "in" || &self.label.direction == "stimulus" {
@@ -163,6 +174,8 @@ impl Step {
         }
         return full_label;
     }
+
+    ///Convienience method that automatically includes the data in the label, if this is set in the settings
     pub fn get_full_label(&self) -> String {
         self.get_full_label_with_params(get_settings().analysis.use_transition_data)
     }
@@ -179,7 +192,7 @@ impl Hash for Step {
         self.state_vector_size.hash(state);
         self.advance_duration_ms.hash(state);
         self.physical_label.hash(state);
-        //TODO optionally include the label_parameters as well
+        //optionally include the label_parameters as well
     }
 }
 

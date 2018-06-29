@@ -22,6 +22,7 @@ fn configure(config: Json<Map<String, Value>>) {
     let config_map = config.into_inner();
     println!("Received config: {:?}", &config_map);
 
+    //Store config from Json to the settings
     Analysis::parse_from_map(config_map);
 
     if let Ok(mut x) = IS_CONFIGURED.lock() {
