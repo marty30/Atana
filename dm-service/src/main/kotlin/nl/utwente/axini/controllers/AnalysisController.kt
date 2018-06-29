@@ -107,6 +107,7 @@ class AnalysisController(val storageService: StorageService) {
 		val instance = DenseInstance(headerAttributes.size)
 		instance.setDataset(storageService.instances)
 		headerAttributes.forEach { attribute ->
+            //First handle the special attributes that require special treatment, like counting the number of steps
 			if (attribute.name() in storageService.specialStringAttributes || attribute.name() in storageService.specialNumericAttributes) {
 				when (attribute.name()) {
 					"nr_of_steps" -> instance.setValue(attribute, test.steps.size.toDouble())
@@ -114,7 +115,9 @@ class AnalysisController(val storageService: StorageService) {
 					"first_step" -> instance.setValue(attribute, test.steps.first().fullLabel)
 					"last_step" -> instance.setValue(attribute, test.steps.last().fullLabel)
 				}
-			} else {
+			}
+            //Then handle the regular attributes, which are steps in the trace. How they are handled is dependent on the configuration.
+            else {
 				when (storageService.config?.conversionMethod) {
 					ConversionMethod.NEGATIVE_COUNT -> {
 						val stepCount = test.steps.map { it.fullLabel }.filter { it == attribute.name() }.count()
