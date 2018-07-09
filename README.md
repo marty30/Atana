@@ -1,6 +1,6 @@
 # Atana
 
-Atana is a toolset created to help in my master thesis. See the [full thesis here](http://some-url.todo)
+Atana is a toolset created to help in my master thesis. See the [full thesis here](http://purl.utwente.nl/essays/75676)
 
 Contents:
 - What is Atana and what does it do?
